@@ -145,7 +145,8 @@ throws java.sql.SQLException
     {
         case JT400   :
             java.sql.DriverManager.registerDriver
-            (new com.ibm.as400.access.AS400JDBCDriver());
+//            (new com.ibm.as400.access.AS400JDBCDriver());
+        (null);
             sync_announce("SQLSession using Jt400 Jdbc.");
             break;
             
@@ -349,18 +350,10 @@ public boolean isConnected() {
     return result;
 }
 
-  /**
-   * @see com.SoftWoehr.verbose
-   * @see com.SoftWoehr.verbosity
-   */
 public boolean isVerbose () {
     return isverbose;
 }
 
-  /**
-   * @see com.SoftWoehr.verbose
-   * @see com.SoftWoehr.verbosity
-   */
 public void announce (String s) {
     sync_announce(s);
 }
@@ -370,10 +363,6 @@ private static synchronized void sync_announce(String s) {
     v.announce(s);
 }
 
-  /**
-   * @see com.SoftWoehr.verbose
-   * @see com.SoftWoehr.verbosity
-   */
 public void setVerbose (boolean b) {
     isverbose = b;
 }

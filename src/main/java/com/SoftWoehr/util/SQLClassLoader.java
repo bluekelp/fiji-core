@@ -14,10 +14,9 @@
 
 package com.SoftWoehr.util;
 
+import javax.sql.RowSet;
 import java.io.*;
 import java.sql.*;
-import javax.sql.*;
-import com.ibm.as400.access.*;
 
 /** Store and load Java classes to and from a database.
  *
@@ -32,7 +31,7 @@ public class SQLClassLoader extends java.lang.ClassLoader{
     private String my_userid = null;
     private int my_session_type = SQLSession.NO_SESSION_TYPE;
     
-    private AS400JDBCRowSet my_rowset = null;
+    private RowSet my_rowset = null;
     
     /** Free the RowSet connection resource */
     public void close_rowset() {
@@ -75,7 +74,7 @@ public class SQLClassLoader extends java.lang.ClassLoader{
         
         switch (session_type) {
             case SQLSession.JT400   :
-                my_rowset = new AS400JDBCRowSet(my_server_url, my_userid, password);
+                my_rowset = null; // new AS400JDBCRowSet(my_server_url, my_userid, password);
                 break;
                 
             case SQLSession.JDBCODBC:

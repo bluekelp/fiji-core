@@ -16,11 +16,11 @@ package com.SoftWoehr.JaXWT;
 
 import java.io.*;
 import javax.swing.JTextArea;
-import com.ibm.as400.access.AS400;
-import com.ibm.as400.access.AS400SecurityException;
-import com.ibm.as400.access.IFSJavaFile;
-import com.ibm.as400.access.IFSTextFileInputStream;
-import com.ibm.as400.access.IFSTextFileOutputStream;
+//import com.ibm.as400.access.AS400;
+//import com.ibm.as400.access.AS400SecurityException;
+//import com.ibm.as400.access.IFSJavaFile;
+//import com.ibm.as400.access.IFSTextFileInputStream;
+//import com.ibm.as400.access.IFSTextFileOutputStream;
 
 /**
  *
@@ -28,6 +28,37 @@ import com.ibm.as400.access.IFSTextFileOutputStream;
  * @version $Id: IFSTextFiler.java,v 1.1.1.1 2001/08/21 02:43:27 jwoehr Exp $
  */
 public class IFSTextFiler extends Object implements TextFiler {
+
+  private class AS400 {}
+
+  private static class IFSTextFileInputStream extends FileInputStream {
+
+    IFSTextFileInputStream(AS400 a, IFSJavaFile f, int x) throws FileNotFoundException {
+      super("");
+    }
+
+    static int SHARE_ALL = 0;
+
+    String read(int n) throws UnsupportedEncodingException { return ""; }
+  }
+
+  private static class IFSTextFileOutputStream extends FileOutputStream {
+    IFSTextFileOutputStream(AS400 a, IFSJavaFile f, int x, boolean b) throws FileNotFoundException {
+      super("");
+    }
+
+    void setCCSID(int x) throws java.beans.PropertyVetoException {}
+
+    void write(String x) {}
+
+    static int SHARE_ALL = 0;
+  }
+
+  private class AS400SecurityException extends RuntimeException {}
+
+  private static class IFSJavaFile extends File {
+    IFSJavaFile() { super(""); }
+  }
 
   private EditPanel my_edit_panel;
   private AS400 my_as400;
