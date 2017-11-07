@@ -18,7 +18,7 @@ package com.SoftWoehr.FIJI;
  * @author  jax
  * @version $Id: FIJI.java,v 1.1.1.1 2001/08/21 02:35:20 jwoehr Exp $
  */
-public class FIJI extends Object {
+public class FIJI {
     
   /** Creates new FIJI */
     public FIJI() {

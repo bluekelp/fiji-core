@@ -75,7 +75,7 @@ public class interpreter implements SoftWoehr, verbose {
     /** Stack needed so we can nest interpretation, e.g.,
      * when we load a file.
      */
-    private Stack tokenizerStack;
+    private Stack<StringTokenizer> tokenizerStack;
     
     /** We want to exit if this is true. */
     private boolean killFlag = false;
@@ -101,13 +101,13 @@ public class interpreter implements SoftWoehr, verbose {
     }
     
     /**
-     * @return  */
+     */
     public String toString()
     {return super.toString();}
     
     /** shutdown() here closes the output streams.
      * @see com.SoftWoehr.SoftWoehr#
-     * @return  */
+     */
     public int shutdown() {
         closeCurrentInput();
         closeCurrentOutput();
@@ -115,13 +115,13 @@ public class interpreter implements SoftWoehr, verbose {
     }
     
     /** Get the engine associated with this interpreter.
-     * @return  */
+     */
     public engine getEngine() {
         return myEngine;
     }
     
     /** Close current input stream. */
-    public void closeCurrentInput() {
+    private void closeCurrentInput() {
         try {
             if (null != currentInput) {
                 currentInput.close();
@@ -134,7 +134,7 @@ public class interpreter implements SoftWoehr, verbose {
     }
     
     /** Close current output stream. */
-    public void closeCurrentOutput() {
+    private void closeCurrentOutput() {
         try {
             if (null != currentOutput) {
                 currentOutput.close();
@@ -146,32 +146,30 @@ public class interpreter implements SoftWoehr, verbose {
         }                                                        /* End catch*/
     }
     
-    /**
-     * @throws Throwable  */
     protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
         super.finalize();
     }
     
     /** Set the kill flag.
      * @param tf  */
-    public void setKillFlag(boolean tf) {
+    void setKillFlag(boolean tf) {
         killFlag = tf;
     }
     
     /** Get the kill flag.
-     * @return  */
+     */
     public boolean getKillFlag() {
         return killFlag;
     }
     
     /** Set the quit flag.
      * @param tf  */
-    public void setQuitFlag(boolean tf) {
+    void setQuitFlag(boolean tf) {
         quitFlag = tf;
     }
     
     /** Get the quit flag.
-     * @return  */
+     */
     public boolean getQuitFlag() {
         return quitFlag;
     }
@@ -183,7 +181,7 @@ public class interpreter implements SoftWoehr, verbose {
     }
     
     /** Get the interpreter numeric base.
-     * @return  */
+     */
     public int getBase() {
         return base;
     }
@@ -195,7 +193,7 @@ public class interpreter implements SoftWoehr, verbose {
     }
     
     /** Get the string tokenizing default delimiters.
-     * @return  */
+     */
     public String getDefaultDelimiters() {
         return defaultDelimiters;
     }
@@ -207,7 +205,7 @@ public class interpreter implements SoftWoehr, verbose {
     }
     
     /** Get the current input
-     * @return  */
+     */
     public InputStream getInput() {
         return currentInput;
     }
@@ -233,14 +231,14 @@ public class interpreter implements SoftWoehr, verbose {
     }
     
     /** Get the current output
-     * @return  */
+     */
     public OutputStream getOutput() {
         return currentOutput;
     }
     
     /** Get the output stream writer
-     * @return  */
-    protected OutputStreamWriter getOutputStreamWriter() {
+     */
+    private OutputStreamWriter getOutputStreamWriter() {
         return outputStreamWriter;
     }
     
@@ -248,15 +246,14 @@ public class interpreter implements SoftWoehr, verbose {
      * One must subsequently do a <code>setOutput()</code> to make
      * the codepage take effect.
      *
-     * @see setOutput#
      * @param codepage  */
-    public void setOutputStreamEncoding(String codepage) {
+    private void setOutputStreamEncoding(String codepage) {
         outputStreamEncoding = codepage;
     }
     
     /** Get output stream codepage name.
-     * @return  */
-    public String getOutputStreamEncoding() {
+     */
+    private String getOutputStreamEncoding() {
         return outputStreamEncoding;
     }
     
@@ -264,8 +261,8 @@ public class interpreter implements SoftWoehr, verbose {
      * using the delimiter set passed in the 'delims'
      * argument.
      * @param delims
-     * @return  */
-    public String nextLexeme(String delims) {
+     */
+    String nextLexeme(String delims) {
         String s = null;
         if (null != st) {
             try {
@@ -281,8 +278,8 @@ public class interpreter implements SoftWoehr, verbose {
     }                            /* public String nextLexeme(String delims)*/
     
     /** Get next lexeme in string being interpret()'ed using default delims.
-     * @return  */
-    public String nextLexeme() {
+     */
+    String nextLexeme() {
         return nextLexeme(defaultDelimiters);
     }                                         /* public String nextLexeme()*/
     
@@ -298,15 +295,15 @@ public class interpreter implements SoftWoehr, verbose {
      * and before is not a full-bodied lexing facility.
      * @param delims
      * @param consumeDelim
-     * @return  */
-    public String nextLexeme(String delims, boolean consumeDelim) {
+     */
+    String nextLexeme(String delims, boolean consumeDelim) {
         String s = null;
         if (null != st) {
             s = st.nextToken(delims);                         /* Get actual token*/
             if (null != s) {
                 s = s.substring(1, s.length());              /* Strip leading blank*/
             }                                                         /* End if*/
-            if ((0 != st.countTokens()) && (true == consumeDelim))/* Consume delim.*/ {
+            if ((0 != st.countTokens()) && (consumeDelim))/* Consume delim.*/ {
                 st.nextToken(defaultDelimiters);
             }                                                         /* End if*/
         }                                                           /* End if*/
@@ -314,8 +311,8 @@ public class interpreter implements SoftWoehr, verbose {
     }                    /* nextLexeme(String delims, boolean consumeDelim)*/
     
     /** Number of lexemes left in string being interpret()'ed .
-     * @return  */
-    public int countLexemes() {
+     */
+    private int countLexemes() {
         int count = 0;
         if (null != st) {
             count = st.countTokens();
@@ -338,7 +335,7 @@ public class interpreter implements SoftWoehr, verbose {
     /** Issue the prompt as appropriate */
     public void prompt() {
         if (engine.INTERPRETING == myEngine.state)       /* We're interpreting*/ {
-            output("\noK ");
+            output("\nok ");
         }
         else                                               /* We're compiling.*/ {
             output("\n(...) ");
@@ -346,9 +343,9 @@ public class interpreter implements SoftWoehr, verbose {
     }
     
     /** Something for the engine to call when it does a warm(). */
-    public void warmReset()  {
+    void warmReset()  {
         st = null;
-        tokenizerStack = new Stack();
+        tokenizerStack = new Stack<>();
         setKillFlag(false);
         setQuitFlag(false);
         setBase(10);
@@ -427,7 +424,7 @@ public class interpreter implements SoftWoehr, verbose {
                         try                                  /* Try to make it a long.*/ {
                             a = Long.parseLong(aLexeme);
                             try            /* Try to compile the long as a literal Long.*/ {
-                                myEngine.compileLiteral(new Long(a));
+                                myEngine.compileLiteral(a);
                             }                                               /* End try*/
                             catch (Exception x) {
                                 announce("interpreter had problem compiling literal Long.");
@@ -452,7 +449,7 @@ public class interpreter implements SoftWoehr, verbose {
             }                                                     /* End while*/
             try {
                 if (!tokenizerStack.isEmpty()) {
-                    st = (StringTokenizer) tokenizerStack.pop();/* Previous tokenizer.*/
+                    st = tokenizerStack.pop();/* Previous tokenizer.*/
                 }
             }                                                       /* End try*/
             catch (Exception e) {
@@ -484,7 +481,7 @@ public class interpreter implements SoftWoehr, verbose {
     /**
      * @see com.SoftWoehr.util.verbose#
      * @see com.SoftWoehr.util.verbosity#
-     * @return  */
+     */
     public boolean isVerbose()              {return isverbose;}
     
     /**
@@ -543,7 +540,7 @@ public class interpreter implements SoftWoehr, verbose {
             else if (a.option.equals("-b")) {
                 if (a.argument != null ) {
                     try {
-                        i.setBase(Integer.decode(a.argument).intValue());
+                        i.setBase(Integer.decode(a.argument));
                     }                                                  /* End try*/
                     catch (Exception e) {
                         e.printStackTrace(System.err);
@@ -567,7 +564,7 @@ public class interpreter implements SoftWoehr, verbose {
                 }                                                     /* End if*/
             }                                                       /* End if*/
             else if (a.option.equals("-h") || a.option.equals("--")) {
-                i.usage();
+                usage();
                 return;
             }                                                       /* End if*/
             else {
@@ -654,9 +651,6 @@ public class interpreter implements SoftWoehr, verbose {
             e.printStackTrace(System.err);
         }                                                       /* End catch*/
         
-        // -------------------
-        
-        return;
     }
 }                                               /* End of interpreter class*/
 
