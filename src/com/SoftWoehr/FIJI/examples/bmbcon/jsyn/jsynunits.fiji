@@ -1,0 +1,29 @@
+\ jsynunits.fiji ... jSyn unit generators \
+\ Published by B M B con. See accompanying readme.1st file\
+\ Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl \
+\ Last modified: 1 Feb 2001 rt \
+
+cr " loading unit generators ..." .
+
+\ the unit generators\
+: sine-oscillator	\ -- o \
+	com.softsynth.jsyn.SineOscillator class new ( ) ;
+
+: adder	\ -- o \
+	com.softsynth.jsyn.MultiplyAddUnit class new ( ) ;
+
+: delay-unit	\ double -- o \
+	com.softsynth.jsyn.InterpolatingDelayUnit class new ( 3 roll (primitive) , ) ;
+	
+: envelope-player	\ -- o \
+	com.softsynth.jsyn.EnvelopePlayer class new ( ) ;
+
+: envelope \ darray -- o \
+	com.softsynth.jsyn.SynthEnvelope class new ( 3 roll , ) ;
+	
+: line-out \ -- o \
+	com.softsynth.jsyn.LineOut class new ( ) ;
+
+cr " ... unit generators loaded" .
+
+\ *****************************eof******************************\

@@ -1,0 +1,18 @@
+\ Implements key? for FIJI console, submitted by Roelf Toxopeus   \
+\ We're probably going to put key? and key in FIJI itself as soon \
+\ as we get around to it ...                                      \
+
+value none
+value inbuffer
+
+in java.lang.System class @ to inbuffer  \ get our inputstream instance \
+
+: #keys     \ - returns  number of keys available \
+    inbuffer available ( ) ;
+
+#keys to none    \ need '0' object from BufferedInputStream instance for test \
+
+: key?            \ - returns true or false \
+    #keys none = not ;
+
+: tt begin cr " stop this by hitting a key" . key? until ;  \ an example... \

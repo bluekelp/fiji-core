@@ -1,0 +1,26 @@
+\ timing.fiji ... jSyn timing words\
+\ Published by B M B con. See accompanying readme.1st file\
+\ Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl \
+\ Last modified: 1 Feb 2001 rt \
+
+cr " loading jSyn timing words ... " .
+
+value synth
+com.softsynth.jsyn.Synth class to synth
+
+: get-ticks \ - #ticks \
+	synth getTickCount ( )
+	longValue ( ) ;
+
+\ sleep till  #ticks is reached\
+: sleep-till \ #ticks - \
+	intValue ( ) synth sleepUntilTick ( 3 roll  (primitive) , )  drop ;
+
+\ sleep for at least #ticks from now on\
+: sleep	\ #ticks - \
+	get-ticks + sleep-till ;
+
+cr " ... timing words loaded" .
+
+\ *******************************eof****************\
+		

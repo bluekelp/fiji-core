@@ -1,0 +1,10 @@
+include extensions.fiji
+include doubles.fiji
+include convertors.fiji
+include xarrays.fiji
+include randoms.fiji
+include mousemap.fiji
+
+cr " Fiji extras loaded" .
+
+\ **********************eof***********************\

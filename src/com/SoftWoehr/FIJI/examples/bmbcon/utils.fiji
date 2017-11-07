@@ -1,0 +1,32 @@
+\ utils.fiji ... some much used utilities for Fiji \
+\ Published by B M B con. See accompanying readme.1st file\
+\ Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl \
+\ Last modified: 1 Feb 2001 rt \
+
+cr " loading some utilities ..." .
+
+value none 
+value inbuffer 
+
+in java.lang.System class @ to inbuffer  \ get our inputstream instance \
+
+: #keys     \ - returns  number of keys available \ 
+    inbuffer available ( ) ; 
+
+#keys to none    \ need '0' object from BufferedInputStream instance for test \ 
+
+: key?            \ - returns true or false \ 
+    #keys none = not ; 
+
+value working		\ put your working directory here \
+Experiments/fiji/mijn/ to working  \ is my setup \
+
+: include \ <spaces>string - \
+	working ' + load ;
+
+: see	\ <spaces>string - \
+	' find dup null <> if decompile else . then ;
+
+cr " ... loaded utilities:    key?   include    see" .
+
+\ ***************************eof***************************\

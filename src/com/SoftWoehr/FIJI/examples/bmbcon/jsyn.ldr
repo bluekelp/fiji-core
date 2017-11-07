@@ -1,0 +1,19 @@
+\ jsyn.ldr ... load file for jSyn usage\
+\ Published by B M B con. See accompanying readme.2nd file\
+\ Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl \
+\ Last modified: 18 April 2001 rt \
+
+cr " will load all needed files to run jSyn"
+
+include jsyn/jsyncore.fiji
+include jsyn/jsynunits.fiji
+include jsyn/timing.fiji
+include jsyn/mousein.fiji
+include jsyn/beep9.fiji
+
+setup-map
+setup-system
+
+cr " jSyn setup loaded and initialised" .
+
+\ **********************eof***********************\

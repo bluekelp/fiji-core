@@ -1,0 +1,34 @@
+\ convertors.fiji ... convert one type to another and mapping\
+\ Published by B M B con. See accompanying readme.1st file\
+\ Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl \
+\ Last modified: 1 Feb 2001 rt \
+
+cr " loading converters ..." .
+
+\ ****************************Type converting****************************\
+: >int \ byte/short/long/double/float - int \
+	intValue ( )  ;
+
+: >long \ byte/short/int/double/float - long \
+	longValue ( )  ;
+
+\ everything not recognized as a word or a number(long) is put on the stack as a string object\
+\ 2.22 typed from the keyboard, is not recognized as a double number, but as a string "2.22"\
+: >double	\ ??? - double \
+	dup >class java.lang.String class = if
+		java.lang.Double class new ( 3 roll , )
+	else doubleValue ( ) then  ;
+
+\ ****************************Range converting***************************\
+\ map long1 from region 0-long2 into region 0-long3 \
+: mapvalue \ long1 long2 long3 -- long4 \
+	rot * swap / ;
+
+\ map double1 from region 0-double2 into region 0-double3 \
+\ we don't care about overflow so no Forth's */  \
+: dmapvalue \ d1 d2 d3 -- d4 \
+	rot d* swap d/ ;
+
+cr " ... type and range convertors loaded. " . 
+
+\ ***********************eof********************* \

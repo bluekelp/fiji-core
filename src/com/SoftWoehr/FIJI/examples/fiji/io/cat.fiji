@@ -1,0 +1,56 @@
+\ cat.fiji ... output the contents of a file \
+\ Part of FIJI http://www.well.com/user/jax/SoftWoehr \
+\ GPL'ed Free Software .. NO WARRANTY .. see COPYING. \
+\ author: Jack J. Woehr jax@well.com                  \
+\ $Id: cat.fiji,v 1.1.1.1 2001/08/21 02:41:29 jwoehr Exp $ \
+\ usage:                                     \
+\    " filename "  cat                       \
+
+value MyFileName
+value MyFile
+value MyFileInputStream
+value MyInputStreamReader
+value MyCharArray
+
+: file \ fileName -- \
+   to MyFileName                           \ Store the filename.    \
+   java.io.File class new ( MyFileName , ) \ Use the filename.      \
+   to MyFile                               \ Store the File object. \
+   ;
+
+: fileInputStream \ -- \
+   java.io.FileInputStream class new ( MyFile , ) \ Open stream.  \
+   to MyFileInputStream                           \ Store stream. \
+   ;
+
+: inputStreamReader \ -- \
+   java.io.InputStreamReader class
+     new ( MyFileInputStream java.io.InputStream () , ) \ Open reader.  \
+   to MyInputStreamReader                               \ Store reader. \
+   ;
+
+: charArray \ size -- \
+    java.lang.Character class primitive array to MyCharArray
+    ;
+
+: cat  \ filename -- \
+   file fileInputStream inputStreamReader
+   MyFile length ( ) charArray
+   MyInputStreamReader read
+     (
+     MyCharArray  ,
+     0 Long>intparam ,
+     MyFile length ( ) Long>intparam ,
+     )                                                    \ -- numread \
+     toString ( ) "  characters read from " +
+     MyFile toString ( ) +
+     . cr                                                 \ --         \
+   java.lang.String class new ( MyCharArray , ) .
+   MyInputStreamReader close ( ) drop             \ drop the 'null' return \
+   MyFileInputStream close ( ) drop               \ drop the 'null' return \
+   ;
+
+" To list a file named 'filename' type" . cr
+"    filename cat" . cr
+
+\ End of cat.fiji \

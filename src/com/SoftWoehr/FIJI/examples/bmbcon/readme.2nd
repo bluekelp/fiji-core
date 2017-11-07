@@ -1,0 +1,111 @@
+*****************Official Statements****************************
+Published by B M B con. http://this.is/bmbcon
+Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl
+Last modified: 18 April 2001 rt
+
+*****************Distribution Rights****************************
+Everything published by B M B con. may be reproduced or stored
+by digital or analogue systems, and distributed in any form and
+by electronic, mechanical, photocopy, record, tape, or other means,
+without the need to obtain permission from B M B con.. 
+(except microfilm) 
+
+*****************Disclaimer**********************************
+Stichting Leaving the 20th Century - B M B con. - does not assume
+any liability arising out of any use of information, in whatever form,
+given in our publications ( i.e. use it at your own risk).
+We imagine all people and companies mentioned in our publications
+have similar disclaimers. 
+
+*****************Now Get On**********************************
+
+'beepkrgh' is a collection of Fiji files aimed to create beeps.
+Actually they implement an interface to Phil Burk's SoftSynth jSyn package,
+found at:          http://www.softsynth.com/
+-You should download this package and follow its install instructions, if you
+  want to use beepkrgh.
+-It is assumed Fiji is installed as prescribed in:
+  http://www.bmbcon2.demon.nl/toolshed/fiji/install.html
+
+=============================Lets play================================
+
+-Move or copy all unzipped files and folders to the bmbcon directory
+
+-Run Fiji as instructed in the Fiji docs.
+
+- If not done allready type:   whateverpathleadsto/bmbcon/utils.fiji load
+  followed by pressing the return key, from now on denoted by: <ret>
+  Some information will pass on the screen.
+  Assuming all went well type:       whateverpathleadsto/bmbcon/ to working <ret>
+  And type:     include miscutil.ldr <ret>
+  More information will pass
+-Type:    include jsyn.ldr <ret>
+  Again a lot of info about loading and such is passed and a window is opened:
+  our map.
+  Activate the Java console and type:        beep <ret>
+  Soundvolume was on of course and it didn't sound like a beep at all: krgh
+  Type:     tt <ret>
+  and move the mouse without pressing any buttons over the map ...
+  ... I assume you'll find out by playing, what's going on.
+  (for those not used to B M B con., the crackles, glitches etc. are intentional)
+  Keeping the mouse button pressed will freeze the current settings.
+  You can stop it by activating the Java console and hitting any key.
+
+-Don't forget to type:     stop-system <ret>
+  when you're done with jSyn.
+
+-That's it.
+  To see how normal Java differs from Fiji, compare beep.fiji with TJ_Beep.java
+  found in Phil Burk's jSyn package. It's a nearly one-to-one translation.
+
+=============================About the 'sound'==========================
+
+Essentially the sound path is as follows:
+
+1     -Sine Generator              
+2     -Adder
+3     -Delay, feedback into Adder
+4     -Envelope, split into
+5/6 -Delayout1  + Delayout2
+7     -Output
+ 
+ All parameters are randomly choosen from a predefined range, apart from the
+sine frequency, which is controlled by the x-position from the mouse.
+The mouse y-position determines, more or less, the moment when another beep
+can occur, beep's distribution. Changing the map(window) size will change the
+resolution of the parameters being send: fine or coarse.
+
+ The speed of the system is very much determining the overall effect, so not very
+portable! It suites my situation (iMac G3 400 mHz with Mac OS 9.1).
+The topright section of the map, in my system, is like 'burning charcoal': ConcretPH
+
+========================beepkrgh file collection:=====================
+
+readme.2nd						 you're reading this
+jsyn.ldr									the socalled load-file to compile/load in one go
+                              ( will load and initialize:)
+
+-jsyn subdirectory:			  
+jsyncore.fiji					 some jSyn core stuff
+jsynunits.fiji					some of the jSyn unit generators
+timing.fiji	            one could do without, but handy to have
+mousein.fiji						using mouse to change parameters
+beep9.fiji								putting my little instrument together and play it
+beep.fiji									the initial example
+
+Copy or move everything to the main bmbcon directory
+
+As stated earlier, there is no copyright or whatsoever on the above files,
+do what ever you want with them. I certainly will.
+
+=================================bye============================
+
+For any questions, remarks etc.
+email to: postbus@bmbcon2.demon.nl
+
+You could check http://www.bmbcon2.demon.nl/toolshed/fiji/
+to see if anything new is up.
+
+salut
+Roelf
+

@@ -1,0 +1,32 @@
+\ doubles.fiji ... math words for Java doubles\
+\ Interfaces to doubleMath.class\
+\ Distributed with Jack Woehr's Fiji package \
+\ Published by B M B con. See accompanying readme.1st file\
+\ Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl \
+\ Last modified: 1 Feb 2001 rt \
+
+cr " loading doublemath words ..." .
+
+\ add two Java doubles \
+: d+ \ d1 d2 - d3\
+	doubleMath class dmPlus ( 3 roll (primitive) , 3 roll (primitive) , ) ;
+
+\ subtract two Java doubles \
+: d- \ d1 d2 - d3\
+	doubleMath class dmMin ( 3 roll (primitive) , 3 roll (primitive) , ) ;
+
+\ multiply two Java doubles \
+: d* \ d1 d2 - d3\
+	doubleMath class dmMul ( 3 roll (primitive) , 3 roll (primitive) , ) ;
+
+\ divide two Java doubles and return quotient\
+: d/ \ d1 d2 - d3\
+	doubleMath class dmDiv ( 3 roll (primitive) , 3 roll (primitive) , ) ;
+
+\ divide two Java doubles and return remainder \
+: dmod \ d1 d2 - d3\
+	doubleMath class dmMod ( 3 roll (primitive) , 3 roll (primitive) , ) ;
+
+cr " ... doublemath words loaded " .
+
+\ *************************eof***************************\

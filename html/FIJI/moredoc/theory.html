@@ -1,0 +1,478 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; SunOS 5.8 sun4u) [Netscape]">
+   <meta name="Author" content="Jack J. Woehr">
+   <meta name="Description" content="Top-level description of the com.SoftWoehrJava class library hierarchy.">
+   <title>Theory of com.SoftWoehr</title>
+</head>
+<body>
+
+<center>
+<h1>
+<a NAME="Theory of com.SoftWoehr"></a>Theory of <tt>com.SoftWoehr</tt></h1></center>
+
+<center>All "<a href="http://www.well.com/~jax/SoftWoehr">SoftWoehr</a>"
+Free Software packages and&nbsp; documentation pages are
+<br>Copyright &copy; 1998, 2001
+<br>by
+<br><a href="mailto:jax@well.com">Jack J. Woehr</a>
+<br>P.O. Box 51
+<br>Golden, Colorado 80402-0051 USA</center>
+
+<p>All "<a href="http://www.well.com/~jax/SoftWoehr">SoftWoehr</a>" Free
+Software packages are provided Without Warranty of Any Kind per the <a href="COPYING">Gnu
+Public License</a> and/or the <a href="COPYING.LIB">Gnu</a>
+<br><a href="COPYING.LIB">Library Public License</a>, whichever is appropriate.
+For more information on Free Software, please visit the <a href="http://www.gnu.org">Gnu
+Home Page</a>.
+<p><a href="http://www.javasoft.com">Java</a> <sup>TM</sup> is a trademark
+of <a href="http://www.sun.com">Sun Microsystems</a>.
+<p><b>Please note</b>: This document is being developed somewhat independently
+of the release level of <tt><font size=+1>com.SoftWoehr</font></tt> ...
+some packages and tools described herein may not yet be found in the <tt><font size=+1>com.SoftWoehr</font></tt>
+distribution archive.
+<p><a href="../index.html">[BACK TO TOP-LEVEL INDEX]</a>
+<h2>
+<a NAME="Table of Contents"></a>Table of Contents</h2>
+
+<ul>
+<li>
+<a href="http://www.softwoehr.com/oss/">Where do I get the latest?</a></li>
+
+<li>
+<a href="#What is the purpose of this document">What is the purpose of
+this document?</a></li>
+
+<li>
+<a href="#What is the purpose of the com.SoftWoehr class library">What
+is the purpose of the <tt><font size=+1>com.SoftWoehr</font></tt> class
+library?</a></li>
+
+<li>
+<a href="#What is in the com.SoftWoehr class library">What is in the <tt><font size=+1>com.SoftWoehr</font></tt>
+class library?</a></li>
+
+<li>
+<a href="#Where is the source code">Where is the source code?</a></li>
+
+<li>
+<a href="#Where is the programmer's documentation">Where is the programmer's
+documentation?</a></li>
+
+<li>
+<a href="#FIJI">FIJI</a></li>
+
+<ul>
+<li>
+<a href="#What is FIJI">What is FIJI?</a></li>
+
+<li>
+<a href="#What can I do with FIJI">What can I do with FIJI?</a></li>
+
+<li>
+<a href="#What can I not do with FIJI">What can I not do with FIJI?</a></li>
+
+<li>
+<a href="#How does FIJI work">How does FIJI work?</a></li>
+
+<ul>
+<li>
+<a href="#The Virtual Machine">The Virtual Machine</a></li>
+
+<li>
+<a href="#The Outer Interpreter">The Outer Interpreter</a></li>
+
+<li>
+<a href="#The Inner Interpreter">The Inner Interpreter</a></li>
+
+<li>
+<a href="#Dual Stack Architecture">Dual Stack Architecture</a></li>
+
+<ul>
+<li>
+<a href="#Object Reference Stack">Object Reference Stack</a></li>
+
+<li>
+<a href="#Return Stack">Return Stack</a></li>
+</ul>
+
+<li>
+<a href="#Words">Words</a></li>
+
+<li>
+<a href="#Wordlists">Wordlists</a></li>
+
+<ul>
+<li>
+<a href="#Persistence of Wordlists">Persistence of Wordlists</a></li>
+</ul>
+</ul>
+
+<li>
+<a href="#How Does FIJI Call Java">How Does FIJI Call Java?</a></li>
+
+<ul>
+<li>
+<a href="#Methods">Methods</a></li>
+
+<li>
+<a href="#Class Methods">Class Methods</a></li>
+
+<li>
+<a href="#Constructors">Constructors</a></li>
+
+<li>
+<a href="#Fields">Fields</a></li>
+</ul>
+</ul>
+</ul>
+
+<hr WIDTH="100%">
+<h2>
+<a NAME="What is the purpose of this document"></a>What is the purpose
+of this document?</h2>
+<a href="#Table of Contents">[Return to Table of Contents]</a>
+<p>This document describes:
+<ul>
+<li>
+The overall theory of the com.SoftWoehr java class libraries.</li>
+
+<li>
+The in-depth theory of specific packages.</li>
+</ul>
+
+<hr WIDTH="100%">
+<h2>
+<a NAME="What is the purpose of the com.SoftWoehr class library"></a>What
+is the purpose of the <tt>com.SoftWoehr</tt> class library?</h2>
+<a href="#Table of Contents">[Return to Table of Contents]</a>
+<p><tt><font size=+1>com.SoftWoehr</font></tt> is <a href="moredoc/COPYING">Free
+Software</a> for Java programmers work on Java computers using Java toolsets
+in wholly or mostly Java environments.
+<br>
+<hr WIDTH="100%">
+<h2>
+<a NAME="What is in the com.SoftWoehr class library"></a>What is in the
+<tt>com.SoftWoehr</tt>
+class library?</h2>
+<a href="#Table of Contents">[Return to Table of Contents]</a>
+<p>Currently <tt><font size=+1>com.SoftWoehr</font></tt> presents the following
+features:
+<ul>
+<li>
+A simple object-oriented desktop.</li>
+
+<li>
+FIJI, an interpretive shell with a <a href="http://www.well.com/user/jax/rcfb/forth.html">Forth</a>-like
+syntax, which allows you to interact with Java as if Java were an interpreter
+like classic Smalltalk.</li>
+
+<li>
+Many utility classes dealing with such subjects as:</li>
+
+<ul>
+<li>
+SQL</li>
+
+<li>
+Argument parsing</li>
+
+<li>
+Java class file decomposition</li>
+
+<li>
+Directories and files</li>
+
+<li>
+Binary formatting</li>
+</ul>
+
+<li>
+A simple text editor with external language macro capability.</li>
+</ul>
+
+<hr WIDTH="100%">
+<h2>
+<a NAME="Where is the source code"></a>Where is the source code?</h2>
+<a href="#Table of Contents">[Return to Table of Contents]</a>
+<p>The source code is archived in the same <tt><font size=+1>.jar</font></tt>
+archive in which the java class files were distributed. Please consult
+the Sun JDK documentation for instructions on how to list and extract files
+from a <tt><font size=+1>.jar</font></tt> archive.
+<br>
+<hr WIDTH="100%">
+<h2>
+<a NAME="Where is the programmer's documentation"></a>Where is the programmer's
+documentation?</h2>
+<a href="#Table of Contents">[Return to Table of Contents]</a>
+<p>It's in the normal 'javadoc' format starting at <a href="packages.html">All
+Packages</a>, but read the current document first, please.
+<br>
+<hr WIDTH="100%">
+<h2>
+<a NAME="FIJI"></a>FIJI</h2>
+<a href="#Table of Contents">[Return to Table of Contents]</a>
+<h3>
+<a NAME="What is FIJI"></a>What is FIJI?</h3>
+FIJI is a ForthIsh Java Interpreter. It consists of packages which together
+implement an interpretive, interactive language providing a procedural
+language which is reminiscent of <a href="http://www.well.com/~jax/rcfb/forth.html">Forth</a>
+and which allows one to manipulate Java objects and classes on an object
+reference stack.
+<h3>
+<a NAME="What can I do with FIJI"></a>What can I do with FIJI?</h3>
+Using FIJI, you can:
+<ul>
+<li>
+Instance precompiled Java classes and objects from class files which you
+or others have compiled in the usual Java fashion</li>
+
+<li>
+Invoke methods on Java classes and objects and examine their fields subject
+to the normal access rules of Java</li>
+
+<li>
+Write procedural programs, either simple programs which invoke no Java
+objects or classes external to FIJI, or which do invoke and manipulate
+external precompiled classes. You may interactively enter such procedural
+programs, or load them from FIJI source code files which you edit with
+a normal text editor.</li>
+</ul>
+
+<h3>
+<a NAME="What can I not do with FIJI"></a>What can I not do with FIJI?</h3>
+There are some useful things that FIJI should do but currently does not
+do. Most of what FIJI does not do has to do with deficiencies of Java 1.1
+versus Java 1.2. When FIJI is ported to Java 1.2, one or more of these
+deficiencies may be remedied.
+<ul>
+<li>
+Currently, FIJI does not internally produce new Java class files. Any classes
+you use must be internal to FIJI or reside normal Java class files. You
+may certainly develop your own new Java classes using the Sun JDK and then
+manipulate the finished classes in FIJI.</li>
+
+<li>
+Currently, you may not save your FIJI program in a compiled form. You must
+reload any FIJI code you wish to execute each time you reload FIJI itself.</li>
+</ul>
+
+<h3>
+<a NAME="How does FIJI work"></a>How does FIJI work?</h3>
+For the following discussion, you should already know how to use FIJI,
+so read the <a href="fiji.html">FIJI User's Guide</a> first.
+<p>The terminology used is this discussion is reminiscent of <a href="http://www.well.com/user/jax/rcfb/forth.html">Forth</a>,
+especially&nbsp; <a href="ftp://ftp.uu.net/vendor/minerva/uathena.htm">American
+National Standard Forth</a>. Keep in mind, though, that&nbsp; FIJI is quite
+a bit different from Forth.
+<h4>
+<a NAME="The Virtual Machine"></a>The Virtual Machine</h4>
+FIJI is virtual machine modelled on the Forth virtual machine. The Forth
+virtual machine is an ancestor of the Java virtual machine. Sun Microsystems'
+designers had a great deal of exposure to Forth through Sun OpenBoot<sup>TM</sup>
+in the years prior to creating the Java virtual machine.
+<p>The FIJI virtual machine is implemented in the package <tt><font size=+1>com.SoftWoehr.desktop.shel</font></tt>l
+of which all files mentioned in this discussion are package members unless
+otherwise noted. The fully-qualified name of any object that is part of
+the FIJI virtual machine consists of the name used in this discussion with
+<tt><font size=+1>com.SoftWoehr.desktop.shel</font></tt>l
+prepended to, e.g., the fully-qualified name of <tt><font size=+1>Definition</font></tt>
+is <tt><font size=+1>com.SoftWoehr.desktop.shell.Definition</font></tt>.
+<h4>
+<a NAME="The Outer Interpreter"></a>The Outer Interpreter</h4>
+FIJI has an outer interpreter which is the interpreter of text input from
+the user and from FIJI source code files. The outer interpreter is implemented
+in the file <tt><font size=+1>interpreter.java</font></tt>.
+<p>Essentially, the outer interpreter is passed a string and it process
+the string by the rules described in the <a href="fiji.html#Input Stream">FIJI
+User's Guide</a>. The command line form of FIJI is implemented by a very
+simple Java static <tt><font size=+1>main()</font></tt> function which
+loops getting input in strings and passing the strings to <tt><font size=+1>interpreter.interpret().</font></tt>
+<h4>
+<a NAME="The Inner Interpreter"></a>The Inner Interpreter</h4>
+FIJI has an inner interpreter that processes FIJI compiled functions by
+stepping through vectors of type <tt><font size=+1>Semantic</font></tt>
+, vectors which constitute FIJI <tt><font size=+1>Definitions</font></tt>
+analogous to Forth "colon definitions".
+<ul>
+<li>
+The <tt><font size=+1>InnerInterpreter</font></tt> is implemented in the
+file <tt><font size=+1>InnerInterpreter.java</font></tt>.</li>
+
+<li>
+<tt><font size=+1>Semantic</font></tt> which is the base class of all FIJI
+functions is implemented in <tt><font size=+1>Semantic.java</font></tt>.</li>
+
+<li>
+<tt><font size=+1>Definition</font></tt> is implemented in <tt><font size=+1>Definition.java</font></tt>.</li>
+</ul>
+
+<h4>
+<a NAME="Dual Stack Architecture"></a>Dual Stack Architecture</h4>
+The FIJI virtual machine has two stacks, the object reference stack and
+the return stack.
+<h5>
+<a NAME="Object Reference Stack"></a>Object Reference Stack</h5>
+The FIJI object reference stack is a pushdown stack, a Last In, First Out
+(LIFO) queue analogous to the Forth data stack. However, any object may
+be pushed on the FIJI object reference stack, hereafter called "the stack".
+If the FIJI return stack is meant, we will say "return stack".
+<p>All function arguments are popped from the top entries of the stack.
+Function results are pushed back to the stack.
+<p>The FIJI object reference stack is implemented in the file <tt><font size=+1>engine.java</font></tt>.
+It is currently just a <tt><font size=+1>java.util.Stack</font></tt> and
+does not have a class of its own within the FIJI framework.
+<h5>
+<a NAME="Return Stack"></a>Return Stack</h5>
+The FIJI return stack is another LIFO queue. It holds only the activation
+records of nested function execution. When a function calls another function
+as part of its execution, an activation record representing the caller
+and its suspended state is pushed to the return stack.
+<p>The FIJI return stack is implemented in the file <tt><font size=+1>InnerInterpreter.java</font></tt>.
+It is currently just a <tt><font size=+1>java.util.Stack</font></tt> and
+does not have a class of its own within the FIJI framework. The activation
+record which the <tt><font size=+1>InnerInterpreter</font></tt> uses to
+represent the execution state of a FIJI word is the class <tt><font size=+1>Interpretation</font></tt>
+found in the same file.
+<h4>
+<a NAME="Words"></a>Words</h4>
+A FIJI function, or "word", to use the parlance of Forth, is one of two
+types of entities, both extenders of <tt><font size=+1>Semantic</font></tt>
+:
+<ol>
+<li>
+A <tt><font size=+1>Primitive</font></tt>, that is, a FIJI execution entity
+implemented entirely in the Java source of FIJI</li>
+
+<li>
+A <tt><font size=+1>Definition</font></tt>, that is, a FIJI execution entity
+coded in FIJI consisting, at the implementation level, of a vector of references
+to other FIJI words, be they <tt><font size=+1>Primitive</font></tt> or
+<tt><font size=+1>Definition</font></tt>.</li>
+</ol>
+There is also an extender of <tt><font size=+1>Primitive</font></tt> called
+<tt><font size=+1>ParameterizedPrimitive</font></tt>
+found in the eponymous Java file.<tt><font size=+1> ParameterizedPrimitive</font></tt>
+handles the case of a FIJI <tt><font size=+1>Primitive</font></tt> which
+has to come supplied already with an embedded object of some type in order
+to perform its work. An example of a <tt><font size=+1>ParameterizedPrimitive</font></tt>
+is a FIJI <tt><font size=+1>variable</font></tt> analogous to a Forth <tt><font size=+1>VARIABLE</font></tt>.
+The functions which handle control flow are also extenders of <tt><font size=+1>ParameterizedPrimitive</font></tt>,
+and have embedded within them a branch offset calculated at compile time.
+<br>&nbsp;
+<h4>
+<a NAME="Wordlists"></a>Wordlists</h4>
+<a href="#Words">Words</a> are grouped into wordlists, which are currently
+implemented as <tt><font size=+1>java.util.Hashtable</font></tt>s in the
+file <tt><font size=+1>Wordlist.java</font></tt>. This implementation strategy
+will change, since a wordlist should be implemented as some kind of ordered
+list. There are two reasons that this should be so, and one reason that
+it is not so.
+<p>Wordlists should be ordered because:
+<ol>
+<li>
+Practice in Forth indicates that is easier for a programmer to manage wordlists,
+adding to them and deleting from them, if they are ordered and if mass
+deletions go in order.</li>
+
+<li>
+Ordered wordlists are easier to serialize if one wishes persistent wordlists,
+that is, loadable precompiled FIJI wordlists.</li>
+</ol>
+Wordlists are not, currenly, ordered lists in FIJI because:
+<ol>
+<li>
+It's much easier to do in Java 1.2, and Linux, the author's main development
+station, is currently at Java 1.1.7a.</li>
+</ol>
+<tt><font size=+1>class Wordlist</font></tt> contains all the methods for
+acting upon wordlists, searching, adding, replacing, etc. The actions of
+other classes upon wordlists are effected by calling methods from <tt><font size=+1>class
+Wordlist</font></tt> .
+<h5>
+<a NAME="Persistence of Wordlists"></a>Persistence of Wordlists</h5>
+Wordlists persistence, the ability to save a wordlist and reload it later
+without recompiling it, will wait for the crossover to Java 1.2 for reason
+described above.
+<br>&nbsp;
+<h3>
+<a NAME="How Does FIJI Call Java"></a>How Does FIJI Call Java?</h3>
+FIJI uses Java reflection to interact with Java.
+<ul>
+<li>
+Any Java class may be instanced.</li>
+
+<li>
+Any class or instance method may be invoked.</li>
+
+<li>
+Any public data member may be accessed.</li>
+</ul>
+The syntax for dereferencing data members and the syntax for invoking constructors
+and methods are all described in the <a href="fiji.html#Calling Java">FIJI
+User's Guide</a>. Here we describe how&nbsp; these actions are accomplished.
+<h4>
+<a NAME="Methods"></a>Methods</h4>
+The relevant method in FIJI which invokes methods is <tt><font size=+1>engine.callJavaMethod(Object,
+String, JavaArgs)</font></tt> found in file <tt><font size=+1>com.SoftWoehr.desktop.shell.engine.java</font></tt>.
+The class <tt><font size=+1>JavaArgs</font></tt> is also found in engine.java.
+You should exam the cited method and private class to understand the mechanics
+of Java method invocation from within FIJI.
+<p>FIJI resolves method calls at runtime. There is not static table of
+known methods, nor is one constructed as methods are invoked. FIJI uses
+<tt><font size=+1>java.lang.Class.getMethod()</font></tt>
+to identify methods by their class, name and signature. Thus, as the user
+is entering the name of a method to be invoked, that name is merely a string
+to FIJI until the invocation word <tt><font size=+1><a href="fiji.html#)">)</a></font></tt>&nbsp;
+["closecall", a right parenthesis] is encountered in the input stream.
+Then FIJI examines the items in appropriate positions on the stack, identifies
+the object upon which the method is being invoked, determines its class,
+identifies the string representing the method name, examines the <tt><font size=+1>JavaArgs</font></tt>
+object on top of the stack and attempts to resolve the method signature.
+If resolution is successful, the method is invoked.
+<p>FIJI syntax described in the FIJI User's Guide allows the user to build
+a JavaArgs object of the arguments to be offered to a function. This <tt><font size=+1>JavaArgs</font></tt>
+object not only references the actual arguments, it also contains the classes
+which should be used to identify the method signature. If any argument
+passed does not match exactly the method signature, FIJI must be informed
+of this using FIJI sytax provided for this purpose. For example, <tt><font size=+1>java.lang.String.equals(Object)</font></tt>
+is usually passed a <tt><font size=+1>java.lang.String</font></tt> as an
+argument. The FIJI programmer uses the cast operator <tt><font size=+1><a href="fiji.html#()">()</a></font></tt>
+to identify the class name to be used for resolution of such an argument.
+<h4>
+<a NAME="Class Methods"></a>Class Methods</h4>
+Class (static) method invocation in FIJI presents one minor wrinkle because
+of an ambiguity in the syntax of FIJI. If an object is an instance object,
+FIJI assumes that the method to be invoked is an instance method and performs
+resolution based on that assumption. Well and good: if the programmer had
+intended a static (class) method to be invoked, s/he would have presented
+a class object on the stack instead of the instance; it's easy enough in
+FIJI to obtain a reference to an object's class from the object itself.
+<p>However, when an object of a class type appears upon which a method
+is to be invoked, the method may be either a method of the class itself,
+or a method of class <tt><font size=+1>java.lang.Class</font></tt> as there
+is no syntactic cue in FIJI which is intended. FIJI handles this ambiguity
+by attempting to resolve the method as a static method of the actual class
+present, and if an exception of <tt><font size=+1>java.lang.NoSuchMethodException</font></tt>
+is encountered, FIJI attempts to resolve the method as a method of <tt><font size=+1>java.lang.Class</font></tt>.
+<h4>
+<a NAME="Constructors"></a>Constructors</h4>
+FIJI treats an attempt to invoke a method called "new" as a constructor
+invocation and handles the matter appropriately in <tt><font size=+1>engine.callJavaConstructor(Object,
+JavaArgs)</font></tt>.
+<h4>
+<a NAME="Fields"></a>Fields</h4>
+Data fields are accessed via <tt><font size=+1>engine.FindField(Object,
+String)</font></tt>. FIJI syntax exposes this activity via the normal FIJI
+dereferencing operators <a href="fiji.html#@">@</a> and <tt><font size=+1><a href="fiji.html#!">!</a></font></tt>
+which are described in the User's Guide.
+<p>
+<hr WIDTH="100%">
+<br><i><a href="#Theory of com.SoftWoehr">Return to Top</a></i>
+<br><a href="http://www.well.com/~jax">Jack&nbsp; J. Woehr</a>
+<br>1999-01-17
+<br>Fairmount, Colorado
+</body>
+</html>

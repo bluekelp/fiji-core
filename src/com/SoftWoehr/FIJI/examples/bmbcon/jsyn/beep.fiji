@@ -1,0 +1,93 @@
+\ beep.fiji ... demo usage of Fiji with another Java package\
+\ Published by B M B con. See accompanying readme.1st file\
+\ Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl \
+\ Last modified: 1 Feb 2001 rt \
+
+\ Attempt to use Fiji for jSyn \
+\ This is a nearly one to one Java -> Forth translation, not nescessarely\
+\ the best way to do things in Forth, au contraire!\
+\ It's just for testing Fiji\
+\ motto "thou shall never roll ..." \
+\ This is the Tj_Beep example, without the window and button \
+\ all 'throw' codes are dropped \
+\ Original code by Phil Burk\
+\ last code modification: 7 Feb 2000 rt\
+
+: fence ;
+
+\ for our instances \
+value myBeep
+value myEnvPlayer
+value myEnv
+value myOut
+value data
+
+\ word to stamp out double arrays\
+: doubleArray	\ size - doublearray \
+	java.lang.Double class primitive array ;
+
+\ we need an array with storage for 6 doubles to be used by the envelope-player\
+6 doubleArray to data
+
+\ everything not recognized as a word or a number(long) is put on the stack as a string object\
+: >double	\ string - double \
+	java.lang.Double class new ( 3 roll , )  ;
+
+: set-data	\ double index -  \
+	java.lang.reflect.Array class
+	setDouble ( data java.lang.Object () , 3 roll Long>intparam ,  3 roll (primitive) , )
+	drop ;
+
+: get-data	\ index - double \
+	java.lang.reflect.Array class
+	getDouble ( data java.lang.Object () , 3 roll Long>intparam , ) ;
+	
+: fill-data-array
+	0.10 >double 0 set-data 1.0 >double 1 set-data
+	0.30 >double 2 set-data 0.5 >double 3 set-data
+	0.80 >double 4 set-data 0.0 >double 5 set-data ;
+
+: start-engine
+	com.softsynth.jsyn.Synth class startEngine ( 0 Long>intparam , ) drop ;
+
+\ execute this word when you're done with playing\
+: stop-engine
+	com.softsynth.jsyn.Synth class stopEngine (  ) drop ;
+
+: create-unit-generators
+	com.softsynth.jsyn.SineOscillator class new ( ) to myBeep
+	com.softsynth.jsyn.EnvelopePlayer class new ( ) to myEnvPlayer
+	com.softsynth.jsyn.SynthEnvelope class new ( data , ) to myEnv
+	com.softsynth.jsyn.LineOut class new ( ) to myOut ;
+
+: connect-units
+	output myBeep @ connect ( amplitude myEnvPlayer @ , ) drop
+	output myEnvPlayer @ connect ( input myOut @ , ) drop ;
+
+: set-amplitude	\ double - \
+	amplitude myBeep @ set ( 3 roll (primitive) , )  drop ;
+
+: set-frequency \ double - \
+	frequency myBeep @ set ( 3 roll (primitive) , )  drop ;
+ 
+: start-units
+	myEnvPlayer start ( ) drop
+	myBeep start ( ) drop
+	myOut start ( ) drop ;
+
+: trigger-sound
+	envelopePort myEnvPlayer @ clear ( ) drop
+	envelopePort myEnvPlayer @ queue ( myEnv , )  drop ;
+
+\ execute this word at the beginning of your session\
+: setup-system
+	fill-data-array
+	start-engine create-unit-generators connect-units start-units ;
+
+\ an example to make some sound\
+: beep
+	0.5 >double set-amplitude
+	440.0 >double set-frequency
+	trigger-sound ;
+
+\ *******************************eof****************************\

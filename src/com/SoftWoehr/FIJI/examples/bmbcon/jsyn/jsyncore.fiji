@@ -1,0 +1,18 @@
+\ jsyncore.fiji ... jSyn core words\
+\ Published by B M B con. See accompanying readme.1st file\
+\ Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl \
+\ Last modified: 1 Feb 2001 rt \
+
+cr " loading jsyn core..." .
+
+\ for starters\
+: start-engine
+	com.softsynth.jsyn.Synth class startEngine ( 0 Long>intparam , ) drop ;
+
+\ execute this word when you're done with playing\
+: stop-engine
+	com.softsynth.jsyn.Synth class stopEngine ( ) drop ;
+
+cr " ... jsyn core loaded" .
+
+\ ******************************eof**************************\

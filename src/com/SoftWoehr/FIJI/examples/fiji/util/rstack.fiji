@@ -1,0 +1,85 @@
+\ rstack.fiji .. create a pseudo Forth return stack   \
+\                for temporary object storage.        \
+\ Part of FIJI http://www.well.com/user/jax/SoftWoehr \
+\ GPL'ed Free Software .. NO WARRANTY .. see COPYING. \
+\ author: Jack J. Woehr jax@well.com                  \
+\ $Id: rstack.fiji,v 1.1.1.1 2001/08/21 02:41:29 jwoehr Exp $ \
+
+     \
+     Forth programmers are used to juggling
+     arguments on the stack, in part because
+     Forth offers the convenience of temporarily
+     shifting these arguments to the return stack
+     within the context of a definition.
+
+     FIJI doesn't support using the return stack
+     for this purpose because it's too easy to
+     create a java.util.Stack anytime you want
+     one, as shown in this example.
+
+     We create a pseudo return stack and define
+     the Forth words:
+
+         >r ... pop an object from the object
+                stack and push it to the rstack.
+
+         r> ... pop an object from the rstack and
+                push it to the the object stack.
+
+         r@ ... copy the top item on the rstack
+                to the object stack.
+
+   !!!   .r ... We don't define this one, because
+   !!!          there already is a .r in FIJI that
+   !!!          prints the genuine return stack.
+
+     and one FIJI sort of word,
+
+         .rc .. print out the contents of the
+                stack and the classes of same.
+     \
+
+value rstack
+java.util.Stack class new ( ) to rstack
+
+: >r      \ FIJI stack:  o --   \
+          \ rstack:        -- o \
+   rstack swap push swap ( swap java.lang.Object () , ) drop
+   \
+   We have to 'drop' at the end because Stack.push returns
+   the original object.
+   \
+   ;
+
+: r>      \ FIJI stack:   -- o  \
+          \ rstack:     o --    \
+   rstack pop ( )
+   ;
+
+: r@      \ FIJI stack:   -- o  \
+          \ rstack:     o -- o  \
+   rstack peek ( )
+   ;
+
+: .rc      \ FIJI stack:   --   \
+          \ rstack:     o -- o  \
+   rstack size ( ) longValue ( ) 0 =  \ Do we have anything on the rstack? \
+   if                                 \ No we don't, print a message.      \
+      " Empty rstack." . cr
+   else                               \ Yes we do, print all.              \
+      java.lang.Long class
+        new ( rstack size ( ) longValue ( ) (primitive) , )      \ -- depth \
+      0 do
+        rstack elementAt ( 0 index Long>intparam , )
+        dup getClass ( ) swap
+        " `" swap toString ( ) + "  /*"  +    \ -- Class String     \
+             swap toString ( ) + " */` " +    \ -- String           \
+        .                                     \ --    .. output it. \
+      loop
+   then
+   ;
+
+   " rstack has been created." . cr
+   " The words >r r> r@ .rc are now available." . cr
+
+\ End of rstack.fiji \

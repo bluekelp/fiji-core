@@ -1,0 +1,38 @@
+\ randoms.fiji ... random number generators for different types\
+\ Published by B M B con. See accompanying readme.1st file\
+\ Author: Roelf Toxopeus email: postbus@bmbcon2.demon.nl \
+\ Last modified: 1 Feb 2001 rt \
+
+cr " loading randomnumber generator for integers and doubles ..." .
+
+: newGenerator	  \ -return generator instance \
+	java.util.Random class new ( ) ;
+	
+value rng
+newGenerator to rng
+value drng
+newGenerator to drng
+
+\ to avoid conflict with Java 'random', using capital R\
+: Random \ - random#(long)\
+	rng nextLong ( ) ;
+
+: dRandom \ - random#(double)\
+	drng nextDouble ( ) ;
+
+: choose \ range(long) - 'random# in range minus 1'(long) \
+	Random abs swap mod ;
+
+: dchoose \ range(double) - 'random# in range minus 1'(double) \
+	dRandom abs swap dmod ;
+
+: alea	\ low(long) high(long) - 'random# between low high'(long)\
+	over swap - choose + ;
+
+: dalea	\ low(double) high(double) - 'random# between low high'(double)\
+	over swap d- dchoose d+ ;
+
+cr " ... generator loaded" .
+
+\ ***********************eof*****************\
+

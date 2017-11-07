@@ -1,0 +1,3279 @@
+<!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.7 [en] (X11; I; SunOS 5.8 sun4u) [Netscape]">
+   <meta name="Author" content="Jack J. Woehr">
+   <meta name="Description" content="User's guide for FIJI ForthIsh Java Interpreter">
+   <title>FIJI User's Guide</title>
+</head>
+<body>
+
+<center>
+<h1>
+<a NAME="TheTop"></a>FIJI ForthIsh Java Interpreter 1.2 User's Guide</h1></center>
+
+<center><applet 
+       code="com.SoftWoehr.FIJI.base.desktop.FijiApplet.class"
+       codebase="../../../fiji.1.2_beta.jar"
+       width="500"
+       height="250"
+       ></applet>
+<p>All <a href="http://www.softwoehr.com">SoftWoehr Free Software</a> packages
+and&nbsp; documentation pages are
+<br>Copyright &copy; 1998, 2001
+<br>by
+<br><a href="mailto:jax@softwoehr.com">Jack J. Woehr</a>
+<br>PO Box 51
+<br>Golden, Colorado 80402-0051 USA</center>
+
+<p>All <a href="http://www.softwoehr.com">SoftWoehr Free Software</a> packages
+are provided Without Warranty of Any Kind per the <a href="COPYING">Gnu
+Public License</a> and/or the <a href="COPYING.LIB">Gnu Library Public
+License</a>, whichever is appropriate. For more information on Free Software,
+please visit the
+<a href="http://www.gnu.org">Gnu Home Page</a>.
+<ul>
+<li>
+<a href="http://www.javasoft.com">Java</a> <sup>TM</sup> is a trademark
+of <a href="http://www.sun.com">Sun Microsystems</a>.</li>
+
+<li>
+<a href="http://www2.hursley.ibm.com/orexx/">ObjectRexx</a> <sup>TM</sup><a href="http://www2.hursley.ibm.com/netrexx/">NetRexx</a><sup>TM</sup>
+and <a href="http://www.vm.ibm.com">VM/ESA</a><sup>TM</sup> are trademarks
+of <a href="http://www.ibm.com">IBM</a>.</li>
+</ul>
+<u>Please start by reading the file <tt><font size=+1>README.TXT</font></tt>
+which should have come with your FIJI distribution.</u>
+<p>For the <b>latest update</b>, visit the <a href="http://www.well.com/~jax/SoftWoehr/fiji">FIJI
+Page</a>.
+<p><b>FIJI</b> is a language in progress. Any and all features may change.
+<h2>
+<a NAME="Table of Contents"></a>Table of Contents</h2>
+
+<ul>
+<li>
+<a href="#TheTop">Top of Page</a></li>
+
+<li>
+<a href="#Introduction">Introduction</a></li>
+
+<ul>
+<li>
+<a href="#Ambiguous Terminology">Ambiguous terminology</a></li>
+</ul>
+
+<li>
+<a href="#Description">Description</a></li>
+
+<li>
+<a href="fiji.html#What Use is FIJI???">What Use is FIJI?</a></li>
+
+<li>
+<a href="#Invocation">Invocation</a></li>
+
+<ul>
+<li>
+<a href="#Command-line form of the interpreter">Command-line form of the
+interpreter</a></li>
+
+<li>
+<a href="#AWT form of the interpreter">AWT form of the interpreter</a></li>
+
+<li>
+<a href="#Swing form of the interpreter">Swing form of the interpreter</a></li>
+
+<li>
+<a href="#FijiApplet">FijiApplet</a></li>
+</ul>
+
+<li>
+<a href="#Operation">Operation</a></li>
+
+<ul>
+<li>
+<a href="#Execution Model">Execution Model</a></li>
+
+<li>
+<a href="#Input Stream">Input Stream</a></li>
+
+<li>
+<a href="#Lexing">Lexing</a></li>
+
+<li>
+<a href="#Parsing">Parsing</a></li>
+
+<li>
+<a href="#Interpretation">Interpretation</a></li>
+
+<ul>
+<li>
+<a href="#Lack of Interpretive Semantics">Lack of Interpretive Semantics</a></li>
+
+<li>
+<a href="#Literals">Literals</a></li>
+
+<li>
+<a href="#Current Input Base">Current Input Base</a></li>
+</ul>
+
+<li>
+<a href="#Compilation">Compilation</a></li>
+
+<ul>
+<li>
+<a href="#Current Definition">Current Definition</a></li>
+
+<li>
+<a href="#Default Compilation Semantics">Default Compilation Semantics</a></li>
+
+<li>
+<a href="#Special Compilation Semantics">Special Compilation Semantics</a></li>
+</ul>
+
+<li>
+<a href="#Stack">Object Reference Stack ("The Stack")</a></li>
+
+<li>
+<a href="#Return Stack">Return Stack</a></li>
+
+<li>
+<a href="#Control Flow">Control Flow</a></li>
+
+<ul>
+<li>
+<a href="#Comparison Operators">Comparison Operators</a></li>
+
+<li>
+<a href="#Logical Operators">Logical Operators</a></li>
+
+<li>
+<a href="#Control Flow Stack">Control Flow Stack</a></li>
+</ul>
+
+<li>
+<a href="#Variables">Variables</a></li>
+
+<li>
+<a href="#Definitions">Definitions</a></li>
+
+<li>
+<a href="#Wordlists">Wordlists</a></li>
+
+<ul>
+<li>
+<a href="#Current Wordlist">Current Wordlist</a></li>
+
+<li>
+<a href="#Search Order">Search Order</a></li>
+
+<li>
+<a href="#Hiding Definitions">Hiding Definitions</a></li>
+
+<li>
+<a href="#Removing Definitions">Removing Definitions</a></li>
+</ul>
+
+<li>
+<a href="#Exceptions">Exceptions</a></li>
+
+<li>
+<a href="#File Loading">File Loading</a></li>
+
+<li>
+<a href="#Persistence">Persistence</a></li>
+
+<li>
+<a href="#Calling Java">Calling Java</a></li>
+
+<ul>
+<li>
+<a href="#Method Invocation">Method Invocation</a></li>
+
+<li>
+<a href="#Constructor Invocation">Constructor Invocation</a></li>
+
+<li>
+<a href="#Field Dereferencing">Field Dereferencing</a></li>
+</ul>
+
+<li>
+<a href="#Sample sessions">Sample Sessions</a></li>
+</ul>
+
+<li>
+<a href="#FIJI Wordlist">FIJI Wordlist</a></li>
+
+<ul>
+<li>
+<a href="#Stack Diagrams">Stack Diagrams</a></li>
+
+<li>
+<a href="#Class Consciousness">Class Consciousness</a></li>
+
+<li>
+<a href="#Special Compilation Semantics Annotated">Special Compilation
+Semantics Annotated</a></li>
+
+<li>
+<a href="#Interpretive Semantics Annotated">Interpretive Semantics Annotated</a></li>
+
+<li>
+<a href="#List of Words and their Operations">List of Words and their Operations</a></li>
+</ul>
+
+<li>
+<a href="#Tips & Tricks">Tips &amp; Tricks</a></li>
+
+<ul>
+<li>
+<a href="#FIJI for Forth Programmers">FIJI for Forth Programmers</a></li>
+
+<li>
+<a href="#FIJI for Java Programmers">FIJI for Java Programmers</a></li>
+</ul>
+
+<li>
+<a href="#Known Bugs">Known Bugs</a></li>
+
+<ul>
+<li>
+<a href="#Work in Progres">Work in Progress</a></li>
+
+<li>
+<a href="#Threads">Threads</a></li>
+
+<li>
+<a href="#Write Once My Foot!">Write Once My Foot!</a></li>
+
+<li>
+<a href="#Miscellaneous bugs">Miscellaneous Bugs</a></li>
+
+<li>
+<a href="#Misfeatures">Misfeatures</a></li>
+</ul>
+
+<li>
+<a href="#Revisions">Revisions</a></li>
+</ul>
+
+<h2>
+
+<hr WIDTH="100%"><a NAME="Introduction"></a>Introduction</h2>
+<a href="#Table of Contents">[Table of Contents]</a>
+<p>This is the user's guide for <b>FIJI</b>, a ForthIsh Java Interpreter.
+It is an informal specification for an informal language.
+<p><b>Installation</b> is covered in the <tt><font size=+1>README.TXT</font></tt>
+file found when the FIJI shipping archive is unpacked. Installation is
+not covered in this document.
+<p>The <b>source for FIJI</b> is bundled in the same Java runtime archive
+in which the classes reside during normal operation.
+<p>For a JDK user to build any individual FIJI directory,
+<ol>
+<li>
+Unpack the entire source tree from the archive</li>
+
+<li>
+Add the <u>parent</u> directory of the thus-unpacked <tt><font size=+1>com</font></tt>
+directory to the Java
+<tt><font size=+1>CLASSPATH</font></tt></li>
+
+<li>
+Change directory to the desired directory</li>
+
+<li>
+<tt><font size=+1>javac IdAll.java</font></tt></li>
+</ol>
+If you don't understand the above instructions, you won't need to build
+FIJI from the source. FIJI is already compiled and resides in the Java
+runtime archive you found when you unpacked the distribution archive and
+(hopefully) followed the instructions in the file <tt><font size=+1>README.TXT</font></tt>
+<p>In what follows, <tt><font size=+1>fixed width font</font></tt>&nbsp;
+is used to signify specific Java classes, methods and packages, e.g, <tt><font size=+1>com.SoftWoehr.desktop</font></tt>
+and <tt><font size=+1>java.lang.String</font></tt>. Items of discussion
+which are Classes or Objects of some sort, of what specific sort either
+to be inferred from context or not germane to discussion, are simply capitalized,
+as in String and Wordlist.
+<p>Fixed-width font is also used whenever streams of FIJI or operating
+system syntax are represented, and also throughout the <a href="#FIJI Wordlist">FIJI
+Wordlist</a>.
+<h3>
+<a NAME="Ambiguous Terminology"></a>Ambiguous Terminology</h3>
+There is some ambiguity in the terminology used in FIJI and also in the
+terminology associated with the Java source to FIJI.
+<ul>
+<li>
+<b>Primitive</b></li>
+
+<ul>
+<li>
+<i>Primitive</i> sometimes refers to Java primitive types, especially those
+represented by the <tt><font size=+1>TYPE</font></tt> fields of Java reflection.</li>
+
+<li>
+FIJI has a class <tt><font size=+1>com.SoftWoehr.desktop.shell.Primitive</font></tt>
+used to represent FIJI words defined entirely in Java, sometimes referred
+to as FIJI primitives.</li>
+</ul>
+
+<li>
+<b>Semantics</b></li>
+
+<ul>
+<li>
+<i>Semantics</i> are the runtime and compile time actions of FIJI words.</li>
+
+<li>
+<tt><font size=+1>com.SoftWoehr.desktop.shell.Semantic</font></tt> is the
+base class of from which all classes used to represent FIJI words derive.
+Thus, when speaking in a very general way about FIJI words and the properties
+which they all share, both primitive and Definition, the term <i>Semantic</i>
+may be used.</li>
+</ul>
+
+<li>
+<b>Stack</b></li>
+
+<ul>
+<li>
+There are several pushdown (LIFO) stacks in FIJI, and the user may create
+more. When used without qualification, the term <i>stack </i>generally
+means the <a href="#Stack">object reference stack</a>.</li>
+</ul>
+</ul>
+We apologize for any confusion we have thus inadvertently caused the reader.
+<br>
+<hr WIDTH="100%">
+<h2>
+<a NAME="Description"></a>Description</h2>
+<a href="#Table of Contents">[Table of Contents]</a>
+<p><b>FIJI ForthIsh Java Interpreter</b> is a user-interactive <a href="http://www.well.com/~jax/rcfb/java.html">Java</a>&nbsp;
+shell with a <a href="http://www.well.com/~jax/forth.html">Forth</a>-like
+syntax and execution model. FIJI works either as an interactive command-line
+text-mode application, or as an interactive window. FIJI is written in
+Java and the source is provided with the packages.
+<p>FIJI is
+<a href="http://www.gnu.org">Free Software</a> according to
+the <a href="COPYING">Gnu Public License</a>.
+<p>FIJI is a work in progress, and coming along very rapidly. There's not
+much there yet, but it works rather nicely for what it does. The author
+is pleased with the result. We&nbsp; hope you will enjoy FIJI when it arrives
+at 1.0 level. Watch for frequent updates at the
+<a href="http://www.well.com/~jax/SoftWoehr">SoftWoehr
+Home Page</a> until version 1.0 is released.
+<p>FIJI 1.0 comprises the full procedural language except for featuring
+persistent
+<a href="#Definitions">Definitions</a>. This last feature will
+wait until OS/2
+<br>and Linux are at JDK 1.2 level.
+<p>FIJI is part of a larger package of developer-oriented tools and subenvironments.
+This larger package doesn't have a name other than "my professional toolkit"
+but is emerging as the package <b><tt><font size=+1>com.SoftWoehr</font></tt></b>
+only part of which is contained in the FIJI distribution. If you're curious
+about some of the other stuff, look in <tt><font size=+1>com.SoftWoehr.util</font></tt>
+which contains some scraps of tools. Others tools include editors of various
+kinds and database access which I may eventually release to be used with
+FIJI.
+<p>Your <a href="mailto:jax@well.com">comments via email</a> are invited.
+<br>
+<hr WIDTH="100%">
+<h2>
+<a NAME="What Use is FIJI"></a>What Use is FIJI?</h2>
+FIJI is useful for
+<ul>
+<li>
+A command line interpreter in a Java-only environment.</li>
+
+<li>
+Testing Java-coded classes interactively (<i>this is really the most striking
+use</i>).</li>
+
+<li>
+Scripting Java objects.</li>
+
+<li>
+Learning more about Java.</li>
+</ul>
+
+<hr WIDTH="100%">
+<h2>
+<a NAME="Invocation"></a>Invocation</h2>
+<a href="#Table of Contents">[Table of Contents]</a>
+<p>There are at least four (4) ways to use FIJI:
+<ol>
+<li>
+<a href="#Command-line form of the interpreter">Command-line interpreter</a></li>
+
+<li>
+<a href="#AWT form of the interpreter">AWT window</a></li>
+
+<li>
+<a href="#Swing form of the interpreter">Swing GUI</a></li>
+
+<li>
+<a href="#FijiApplet">Applet</a></li>
+</ol>
+
+<h3>
+<a NAME="Command-line form of the interpreter"></a>Command-line form of
+the interpreter</h3>
+The following:
+<blockquote><tt><font size=+1>java com.SoftWoehr.FIJI.FIJI [-v] [-b numeric-base]
+[-c codepage] [file file ..]</font></tt></blockquote>
+will start the interpreter at the command-line when the FIJI classes archive
+<b><tt><font size=+1>fiji.jar</font></tt></b>
+(name may vary with revisions) is in the <tt><font size=+1>CLASSPATH.</font></tt>
+<p>The options may any, all or none be present, and should be presented
+in the order indicated where
+<ul>
+<li>
+-v sets verbose mode, much unintelligible debugging output to the command
+session.</li>
+
+<li>
+-b sets the interpreter's input numeric base, which may be expressed in
+decimal or in Java hex notation, e.g., 0x10 for hexidecimal base.</li>
+
+<li>
+-c codepage sets the output codepage to the proferred value. E.g., for
+IBM VM/ESA 2.2.3 on the Java 1.1.4 use <tt><font size=+1>-c Cp1407</font></tt></li>
+</ul>
+One or more <tt><font size=+1>file </font></tt>arguments may be present
+as shown. If present, they are taken to represent the relative or absolute
+path of a file containing FIJI source code to be loaded and interpreted
+prior to displaying the prompt for interactive use.
+<p>The prompt is <tt><font size=+1>oK\n</font></tt>. Enter your lines of
+input one at a time. Press Enter at the end of each line. To see the contents
+of the object reference stack, enter <tt><font size=+1>.s</font></tt> and
+press Enter. To see the same stack entries with their class names besides,
+enter <tt><font size=+1>.sc</font></tt> and press Enter.
+<p>To leave the command-line form of the interpreter, type <tt><font size=+1><a href="#bye">bye</a></font></tt>
+and press Enter. You may also use <tt><font size=+1><a href="#sysexit">sysexit</a></font></tt>.
+<h3>
+<a NAME="AWT form of the interpreter"></a>AWT form of the interpreter</h3>
+The following:
+<blockquote><tt><font size=+1>java com.SoftWoehr.desktop.ShellFrame [-v]
+[-b numeric-base] [file file ..]</font></tt></blockquote>
+will, when the SoftWoehr library swdesk.zip is in the CLASSPATH, start
+the interpreter in an AWT Frame&nbsp; with a TextArea client. To use the
+'java' command, you will need to have installed the <a href="http://www.javasoft.com">Java
+Development Kit (JDK)</a> available from Sun Microsystems.
+<p>The options may any, all or none be present, and should be presented
+in the order indicated where
+<ul>
+<li>
+-v sets verbose mode, much unintelligible debugging output to the command
+session.</li>
+
+<li>
+-b sets the interpreter's input numeric base, which may be expressed in
+decimal or in Java hex notation, e.g., 0x10 for hexidecimal base.</li>
+</ul>
+One or more <tt><font size=+1>file </font></tt>arguments may be present
+as shown. If present, they are taken to represent the relative or absolute
+path of a file containing FIJI source code to be loaded and interpreted
+prior to displaying the prompt for interactive use.
+<p>The prompt is <tt><font size=+1>oK\n</font></tt>. Enter your lines of
+input one at a time. Press Enter at the end of each line. To see the contents
+of the object reference stack, enter <tt><font size=+1>.s</font></tt> and
+press Enter. To see the same stack entries with their class names besides,
+enter <tt><font size=+1>.sc</font></tt> and press Enter.
+<p>You may also select any region of the window with the mouse and pull
+down the File-Interpret option. The selected region will be interpreted.
+<p>To leave the AWT form of the interpreter, type <tt><font size=+1><a href="#bye">bye</a></font></tt>&nbsp;
+and press Enter or pull down the File-Quit menu option. You may also use
+<tt><font size=+1><a href="#sysexit">sysexit</a></font></tt>.
+<h3>
+<a NAME="Swing form of the interpreter"></a>Swing form of the interpreter</h3>
+The following:
+<blockquote><tt><font size=+1>java com.SoftWoehr.FIJI.FIJIGui [-v] [-b
+numeric-base] [file file ..]</font></tt></blockquote>
+will, when the SoftWoehr library swdesk.zip is in the CLASSPATH, start
+the interpreter in an AWT Frame&nbsp; with a TextArea client. To use the
+'java' command, you will need to have installed the <a href="http://www.javasoft.com">Java
+Development Kit (JDK)</a> available from Sun Microsystems.
+<p>The options may any, all or none be present, and should be presented
+in the order indicated where
+<ul>
+<li>
+-v sets verbose mode, much unintelligible debugging output to the command
+session.</li>
+
+<li>
+-b sets the interpreter's input numeric base, which may be expressed in
+decimal or in Java hex notation, e.g., 0x10 for hexidecimal base.</li>
+</ul>
+One or more <tt><font size=+1>file </font></tt>arguments may be present
+as shown. If present, they are taken to represent the relative or absolute
+path of a file containing FIJI source code to be loaded and interpreted
+prior to displaying the prompt for interactive use.
+<p>The prompt is <tt><font size=+1>oK\n</font></tt>. Enter your lines of
+input one at a time. Press Enter at the end of each line. To see the contents
+of the object reference stack, enter <tt><font size=+1>.s</font></tt> and
+press Enter. To see the same stack entries with their class names besides,
+enter <tt><font size=+1>.sc</font></tt> and press Enter.
+<p>You may also select any region of the window with the mouse and pull
+down the File-Interpret option. The selected region will be interpreted.
+<p>To leave the AWT form of the interpreter, type <tt><font size=+1><a href="#bye">bye</a></font></tt>&nbsp;
+and press Enter or pull down the File-Quit menu option. You may also use
+<tt><font size=+1><a href="#sysexit">sysexit</a></font></tt>.
+<h3>
+<a NAME="FijiApplet"></a>FijiApplet</h3>
+The class <tt>com.SoftWoehr.FIJI.base.desktop.FijiApplet</tt> is an java.Applet
+form of the FIJI interpreter. It's like a terminal window.
+<p>FIJI currently offers one special attribute to the &lt;APPLET> tag,
+the
+<blockquote>loadfile="filename"</blockquote>
+attribute. Here is typical usage:
+<blockquote>&lt;applet
+<br>code="com.SoftWoehr.desktop.FijiApplet.class"
+<br>codebase="./softwoehr.jar"
+<br>width="500"
+<br>height="250"
+<br>loadfile="somefile.fiji"
+<br>>
+<br>&lt;/applet></blockquote>
+which will cause the applet to load and interpret somefile.fiji before
+giving the oK prompt.
+<p><b>Note</b> that FIJI doesn't make a very good applet because it does
+reflection, which isn't in the Java sandbox. You either have to run FijiApplet
+locally, or grant the applet special permissions in your browser or viewer.
+<p>
+<hr WIDTH="100%">
+<h2>
+<a NAME="Operation"></a>Operation</h2>
+<a href="#Table of Contents">[Table of Contents]</a>
+<p>The <a href="http://www.well.com/~jax/rcfb/forth.html">Forth programming
+model</a> is in many ways the linear antecedent of Java. Forth aims at
+increasing the range and productivity of the individual programmer. Forth's
+execution model is a virtual machine of which the Java VM is a modern variant
+and a fairly linear descendent.
+<p>The Java programming language, the language used by most coders when
+programming the Java virtual machine, is an object language using algebraic
+notation after the C/Pascal fashion. FIJI offers a Forth-like procedural
+syntax superimposed over the full Java runtime environment.
+<p>FIJI uses the Java language and class libraries to emulate a second-level
+virtual machine which is able to reference the underlying Java environment
+and to create Java objects and invoke methods on those objects.
+<p>In operating on Java classes and objects, FIJI requires that all classes&nbsp;
+be found in Java class files. FIJI provides no mechanism for defining and
+modifying classes, since Java reflection does not extend its dynamic facilities
+that far. Classes acted upon by FIJI either are in the Java runtime environment
+or are coded and compiled by the user employing, for example, <a href="http://www.javasoft.com">javac</a>
+or
+<a href="http://www2.hursley.ibm.com/NetRexx">NetRexx</a>.
+<p>One of the author's predecessors to FIJI is implemented in <a href="http://www2.hursley.ibm.com/orexx/">IBM
+ObjectRexx</a> . ObjectRexx programs can create and modify classes and
+methods at runtime, so the ObjectRexx version of this experiment is actually
+more inherently powerful. However, the advantage of being able to dip into
+Java interpretively probably means that FIJI is more generally useful at
+the present juncture.
+<h3>
+<a NAME="Execution Model"></a>Execution Model</h3>
+FIJI is a functional language which operates on a stack of references to
+Java objects. All object services come from Java. Fiji is several stacks,
+an intepreter, a compiler, an execution engine, and a default Wordlist
+coded in Java on top of the Java virtual machine and class libraries.
+<h3>
+<a NAME="Input Stream"></a>Input Stream</h3>
+FIJI itself interprets Strings. When running interactively, FIJI takes
+its input from an input stream.
+<ul>
+<li>
+When the text mode form of the interpreter is used, the input stream is
+<tt><font size=+1>System.in</font></tt>.</li>
+
+<li>
+When the the AWT form of the interpreter is used, the source of input is
+a <tt><font size=+1>com.SoftWoehr.awt.TextAreaInputStream</font></tt> feeding
+FIJI lines returned by the TextArea presented by the FIJI window.</li>
+</ul>
+
+<h3>
+<a NAME="Lexing"></a>Lexing</h3>
+Forth and FIJI both have only one lexical rule:
+<ol>
+<li>
+A lexeme is a textual entity in the input stream consisting of one or more
+non-whitespace characters followed by one whitespace character (including
+end-of-line, end-of-input and end-of -file).</li>
+</ol>
+
+<h3>
+<a NAME="Parsing"></a>Parsing</h3>
+An interpreter <tt><font size=+1>com.SoftWoehr.desktop.shell.interpreter</font></tt>
+takes Strings, parses out each lexeme and processes it. FIJI findable lexical
+entities are called <b><i>words</i></b> after the manner of Forth. Once
+the FIJI interpreter finds a word in a Wordlist FIJI does the following:
+<ul>
+<li>
+If FIJI is interpretive state the words' <a href="#Interpretive semantics">interpretive
+sematics</a> are invoked.</li>
+
+<li>
+If FIJI is in compilation state, the word's <a href="#Compilation semantics">compilation
+semantics</a> are invoked.</li>
+</ul>
+
+<h3>
+<a NAME="Semantics"></a>Semantics</h3>
+A word may have separate or identical interpretive semantics, execution
+semantics, and compilation semantics.
+<ul>
+<li>
+<a NAME="Interpretive semantics"></a><i>Interpretive semantics</i> means
+the actions of the word when encountered during interpretation of program
+text in interpretive state.</li>
+
+<ul>
+<li>
+The&nbsp;<a NAME="default interpretive semantics"></a>default interpretive
+semantics of a word are identical to the execution semantics of that word.</li>
+</ul>
+
+<li>
+<a NAME="Execution semantics"></a><i>Execution semantics</i> means the
+actions of the word when ecountered during runtime interpretation of a
+compiled definition. The execution semantics of a word are usually identical
+to the interpretive semantics.</li>
+
+<li>
+<a NAME="Compilation semantics"></a><i>Compilation semantics</i> means
+the actions of a word when encountered in compiling a definition.</li>
+
+<ul>
+<li>
+The <a href="#Default Compilation Semantics">default compilation semantics</a>
+are to append the execution semantics of the word to the <a href="#Current Definition">current
+definition</a>, but differ in the case of words meant to have special effect
+during compilation. For example, the compilation and execution semantics
+of <tt><font size=+1><a href="#dup">dup</a></font></tt> are identical.
+By contrast, the word <tt><font size=+1><a href="#doublequotes">"</a></font></tt>&nbsp;
+("doublequotes") during interpretation pushes a parsed String onto the
+<a href="#Stack">stack</a>,
+but at compile time, parses a String and compiles the String as a literal
+into the current definition.</li>
+</ul>
+</ul>
+For the majority of FIJI words and for the majority of words defined by
+the user, the interpretive and execution semantics will be identical, and
+the compilation semantics will be the <a href="#Default Compilation Semantics">default
+semantics</a> of appending the execution semantics of the word to the current
+definition.
+<h3>
+<a NAME="Interpretation"></a>Interpretation</h3>
+FIJI treats input as a stream of words whose semantics are performed upon
+encounter by the interpreter. Most tokens have dual semantics, one appropriate
+to interpretation in the present, and one appropriate to compilation into
+a <a href="#Definitions">Definition</a> for later execution. If the engine
+is in interpretive state, the interpretive semantics of the parsed and
+found word are performed. If the engine is in compilation mode, the compilation
+semantics are performed instead.
+<h4>
+<a NAME="Lack of Interpretive Semantics"></a>Lack of Interpretive Semantics</h4>
+Some words have no meaning outside the compile-time composition of a <a href="#Definitions">Definition</a>,
+e.g., <tt><font size=+1><a href="#if">if</a></font></tt> . That is, they
+lack <a href="#Interpretive semantics">interpretive semantics</a>.
+<h4>
+<a NAME="Literals"></a>Literals</h4>
+The semantics of a string or numeric literal is by default to push a <tt><font size=+1>java.lang.String</font></tt>
+or a <tt><font size=+1>java.lang.Long</font></tt> to an <a href="#Stack">object
+reference stack</a> analogous the the Forth data stack. The objects referenced
+on the FIJI stack are all Java objects, and are all accessible as such.
+Typical FIJI primitive <a href="#Definitions">Definitions</a> and user-authored
+compiled Definitions take their operands from the stack, and place their
+results on same.
+<p>As the interpreter parses each <a href="#Lexing">lexeme</a> from the
+input, the lexed string is sought as if it were a name key for a Wordlist
+by case-sensitive string match in a search order of Wordlists.
+<ul>
+<li>
+If a matching FIJI word is found</li>
+
+<ul>
+<li>
+during interpretation, FIJI performs the <a href="#Interpretive semantics">interpretive
+semantics</a> of the word immediately, frequently that of pushing an object
+reference to the <a href="#Stack">object reference stack.</a></li>
+
+<li>
+during compilation, FIJI performs the <a href="#Compilation semantics">compilation
+semantics</a> of the word, typically the <a href="#Default Compilation Semantics">default
+compilation semantics </a>of appending the <a href="#Execution semantics">execution
+semantics</a> of the word to the current Definition.</li>
+</ul>
+
+<li>
+If the lexeme cannot be matched in the wordlists currently accessed by
+the interpreter, FIJI attempts to convert the lexeme to a number in the
+<a href="#Current Input Base">current
+input base</a>. If the conversion succeeds</li>
+
+<ul>
+<li>
+during interpretation, FIJI pushes the number as a <tt><font size=+1>java.lang.Long</font></tt>
+to the reference stack.</li>
+
+<li>
+during compilation, FIJI appendeds the number to the current Definition
+as a <tt><font size=+1>java.lang.Long</font></tt>&nbsp; literal.</li>
+</ul>
+
+<li>
+If numeric conversion of the lexeme fails,</li>
+
+<ul>
+<li>
+during interpretation, FIJI pushes the lexeme onto the reference stack
+as a <tt><font size=+1>java.lang.String</font></tt>.</li>
+
+<li>
+during compilation, FIJI appends the lexeme to the current Definition as
+a literal j<tt><font size=+1>ava.lang.String</font></tt>.</li>
+</ul>
+</ul>
+Again, please <b>note</b> that, unlike the Forth language, FIJI does not
+throw an interpreter error when unidentifiable lexemes are encountered.
+FIJI merely shrugs and treats the unknown as a String, pushing or compiling
+it according to <a href="#state">state</a>.
+<p>Words are provided for both
+<ol>
+<li>
+parsing as a literal String a lexeme identical to an already defined FIJI
+word, and for</li>
+
+<li>
+parsing input containing white space as a single String.</li>
+</ol>
+
+<h4>
+<a NAME="Current Input Base"></a>Current Input Base</h4>
+Numbers parsed by the interpreter are interpreted in the current input
+base. This is set via <a href="#base">base</a> and fetched via <a href="#base?">base?</a>
+.
+<h3>
+<a NAME="Compilation"></a>Compilation</h3>
+Starting a <a href="#Definitions">Definition</a> places FIJI in compilation
+state. In compilation state, words encountered by the interpreter have
+their compilation semantics executed, rather than their interpretive semantics.
+A Definition, once completed, is added to the <a href="#Current Wordlist">current
+wordlist</a>, possibly <a href="#Hiding Definitions">hiding</a> a previous
+definition of the same name.
+<h4>
+<a NAME="Current Definition"></a>Current Definition</h4>
+A Definition is typically started by the action of&nbsp; <tt><font size=+1><a href="#:">:</a></font></tt>&nbsp;
+("colon") and completed by&nbsp;&nbsp; <a href="#;">;</a>&nbsp; ("semicolon")
+. The started Definition becomes the <i>current definition</i>.
+<p>FIJI remains in compilation state until one of three things happens:
+<ol>
+<li>
+The user explicitly changes FIJI's state to interpretive state.</li>
+
+<li>
+The (outermost of possibly nested) current definition(s) is completed in
+some fashion, typically by <tt><font size=+1><a href="#;">;</a></font></tt>
+.</li>
+
+<li>
+An exception is thrown or FIJI in some other way resets itself or is reset.</li>
+</ol>
+
+<h4>
+<a NAME="Default Compilation Semantics"></a>Default Compilation Semantics</h4>
+The default compilation behavior of a word is to append its execution semantics
+to the current definition. This applies to all words in the FIJI Wordlist
+for which no special compilation semantics are indicated, and also for
+all user <a href="#Definitions">Definitions</a> in which <a href="#immediate">immediate</a>
+is not invoked during compilation.
+<p>Invoking <a href="#immediate">immediate</a> anywhere in the body of
+a word's definition causes the word's compilation semantics to be identical
+to its execution semantics. This is the mechanism afforded the user of
+providing <a href="#Special Compilation Semantics">special compilation
+semantics</a> to a word. The word may be composed by the programmer such
+that it tests <a href="#state">state</a> and branches accordingly at runtime
+versus compile time.
+<h4>
+<a NAME="Special Compilation Semantics"></a>Special Compilation Semantics</h4>
+A word may possess special compilation semantics, that is, some behavior
+other than that of appending its execution semantics to the current definition
+when encountered by FIJI in compile state. Many FIJI words possess special
+compilation semantics, among them&nbsp; <tt><font size=+1><a href="#doublequotes">"</a><a href="#backtick">`</a></font></tt>&nbsp;
+and&nbsp; <tt><font size=+1><a href="#[">[</a></font></tt>&nbsp; .
+<p>To give a word special compilation semantics, give it alternate behavior
+depending on the value returned by <tt><font size=+1><a href="#state">state</a></font></tt>.
+If state returns <tt><font size=+1><a href="#true">true</a></font></tt>,
+FIJI is compiling. Then mark the word immediate. If state returns <tt><font size=+1><a href="#false">false</a></font></tt>,
+FIJI is interpreting. In the following example:
+<center>
+<p><tt><font size=+1>: state-smart-example state if " FIJI is compiling"
+. else " FIJI is interpreting" then immediate ;</font></tt></center>
+
+<p>when <tt><font size=+1>state-smart-example</font></tt> is encountered
+at compile time, it will print out the "compiling" message, and when encountered
+in interpretive state, will print out the "interpreting" message. <b>Please
+note</b> from the above example that FIJI <tt><font size=+1><a href="#immediate">immediate</a></font></tt>
+unlike Forth <tt><font size=+1>IMMEDIATE</font></tt> is found <u>anywhere
+inside</u> the Definition to which it applies, instead of immediately following
+the definition as in Forth.
+<h3>
+<a NAME="Stack"></a>Object Reference Stack ("The Stack")</h3>
+FIJI maintains a Last-In, First-Out (LIFO) object reference stack. All
+function operands are pulled from this reference stack, and all returns
+are pushed thither. Variable references are made by placing the <tt><font size=+1>java.lang.String</font></tt>
+name of the variable on the reference stack and dereferencing the string
+name via the FIJI words<tt><font size=+1><a href="#!">!</a> <a href="#@">@</a></font></tt>.
+Operations on Java entities are made&nbsp; in a similar fashion by string
+name references and appropriate operators.
+<p>What are being pushed to and popped from the reference stack are references
+to extant Objects. <u>To duplicate a stack item does not clone or otherwise
+duplicate the Object represented by the stack item.</u>&nbsp; Having the
+object on the stack is sufficient reference to it in the Java sense that
+the Java garbage collector considers the object accessed and thus does
+not collect it.
+<p>All FIJI words which push an object to the stack are pushing a fully-accessible
+Java object to the stack. Whether the object was placed there by a FIJI
+function or as the result of a call to Java, and whether it is a FIJI entity
+or a purely Java object, that object may have any appropriate Java method
+invoked upon it. <i>A Theory document will accompany FIJI 1.0 which will
+elucidate useful methods which may be invoked on FIJI entities themselves.</i>
+<p>Again, although we speak for convenience of pushing and popping instance
+Objects and class Objects, remember that what is really being manipulated
+is references to the Objects. The Objects themselves remain unaffected
+by their visit to the FIJI reference stack other than by the fact that
+presence on the stack prevents Objects from being garbage-collected during
+the time they are on the stack.
+<h3>
+<a NAME="Return Stack"></a>Return Stack</h3>
+FIJI possesses a return stack upon which <a href="#Definitions">Definitions</a>
+being executed nest. That is, Definitions contain other Definitions, so
+as execution semantics are nested into, a return record is pushed on the
+return stack. <u>The return stack is solely for the use of&nbsp; return
+records, and is not a temporary data storage resource as in the Forth language.</u>
+It is simple to create a temporary stack should such be needed; an example
+of same is given in the examples which accompany FIJI.
+<p>The FIJI return stack may be examined via the word <a href="#.r">.r</a>
+.
+<h3>
+<a NAME="Control Flow"></a>Control Flow</h3>
+Fiji possesses typical Forth-like control flow:
+<ul>
+<li>
+<tt><font size=+1><a href="#if">if</a> .. <a href="#else">else</a> .. <a href="#then">then</a></font></tt></li>
+
+<li>
+<tt><font size=+1><a href="#begin">begin</a> .. <a href="#again">again</a>
+.. <a href="#until">until</a> .. <a href="#while">while</a> .. <a href="#repeat">repeat</a></font></tt></li>
+
+<li>
+<tt><font size=+1><a href="#do">do</a> .. <a href="#loop">loop</a> .. <a href="#+loop">+loop</a></font></tt></li>
+</ul>
+Note that FIJI control flow words which test the stack take only one data
+type: Boolean. The FIJI words true and false push this data type to the
+stack, as do the FIJI <a href="#Comparison Operators">comparison operators</a>
+and logical operators.
+<h4>
+<a NAME="Comparison Operators"></a>Comparison Operators</h4>
+
+<blockquote>
+<li>
+<tt><font size=+1><a href="#=">=</a> "equals"</font></tt></li>
+
+<li>
+<tt><font size=+1><a href="#<>">&lt;></a> "not equals"</font></tt></li>
+
+<li>
+<tt><font size=+1><a href="#<">&lt;</a> "less than"</font></tt></li>
+
+<li>
+<tt><font size=+1><a href="#>">></a> "greater than"</font></tt></li>
+</blockquote>
+
+<h4>
+<a NAME="Logical Operators"></a>Logical Operators</h4>
+
+<ul>
+<li>
+<a href="#and">and</a></li>
+
+<li>
+<a href="#not">not</a></li>
+
+<li>
+<a href="#or">or</a></li>
+
+<li>
+<a href="#xor">xor</a></li>
+</ul>
+
+<h4>
+<a NAME="Control Flow Stack"></a>Control Flow Stack</h4>
+To compile nested control flow statements, a control flow stack is present
+and is in use only at compile time. The effect of each of the control flow
+words on the control flow stack is documented in the <a href="#FIJI Wordlist">FIJI
+Wordlist</a>. Note that control flow statements are balanced and must be
+matched by the following rules:
+<ul>
+<li>
+Each <tt><font size=+1><a href="#;">;</a></font></tt> (semicolon) must
+find on top of the control flow stack the control flow entry deposited
+there by the matching <tt><font size=+1><a href="#:">:</a></font></tt>
+(colon).</li>
+
+<li>
+Each <tt><font size=+1><a href="#then">then</a></font></tt> must find on
+top of the control flow stack the control flow entry deposited there by
+the matching <tt><font size=+1><a href="#if">if</a></font></tt> or <tt><font size=+1><a href="#else">else</a></font></tt>
+.</li>
+
+<li>
+Each <tt><font size=+1><a href="#else">else</a></font></tt> must find on
+top of the control flow stack the control flow entry deposited there by
+the matching <tt><font size=+1><a href="#if">if</a></font></tt> .</li>
+
+<li>
+Each <tt><font size=+1><a href="#again">again</a></font></tt> or until
+must find on top of the control flow stack the control flow entry deposited
+there by the matching <tt><font size=+1><a href="#begin">begin</a></font></tt>.</li>
+
+<li>
+Each <tt><font size=+1><a href="#repeat">repeat</a></font></tt> must find
+on top of the control stack the two control flow entries deposited there
+by the matching <tt><font size=+1><a href="#begin">begin</a></font></tt>
+and <tt><font size=+1><a href="#while">while</a></font></tt>.</li>
+
+<li>
+Each <tt><font size=+1><a href="#loop">loop</a></font></tt> or <tt><font size=+1><a href="#+loop">+loop</a></font></tt>
+must find on top of the control flow stack the control flow entry deposited
+there by the matching <tt><font size=+1><a href="#do">do</a></font></tt>
+or <tt><font size=+1><a href="#?do">?do</a></font></tt> .</li>
+</ul>
+
+<h3>
+<a NAME="Variables"></a>Variables</h3>
+Both types of Forth variable are supported, <tt><font size=+1><a href="#variable">variable</a></font></tt>
+and
+<tt><font size=+1><a href="#value">value</a></font></tt>.
+<ul>
+<li>
+Use <tt><font size=+1><a href="#@">@</a></font></tt> and <tt><font size=+1><a href="#!">!</a></font></tt>to
+fetch from and store to a <tt><font size=+1>variable</font></tt> respectively.</li>
+
+<li>
+Use <tt><font size=+1><a href="#to">to</a></font></tt> to store to a <tt><font size=+1>value</font></tt>.
+Simply naming the <tt><font size=+1>value</font></tt> places its contents
+on the <a href="#Stack">stack</a>.</li>
+</ul>
+
+<h3>
+<a NAME="Definitions"></a>Definitions</h3>
+New words may be defined and linked into the current Wordlist in typical
+Forth fashion using <tt><font size=+1><a href="#:">:</a></font></tt> and
+<a href="#;">;</a>
+. In FIJI, as in Forth a definition of the same name as a previous definition
+hides the previous definition, but the mechanism of the <a href="#Hiding Definitions">hiding</a>
+is somewhat different and is described below.
+<h3>
+<a NAME="Wordlists"></a>Wordlists</h3>
+FIJI Definitions are kept in Wordlists. You can create a new named Wordlist
+via
+<tt><font size=+1><a href="#wordlist">wordlist</a></font></tt>. Wordlists
+themselves are named entities and can be placed on the <a href="#Stack">object
+reference stack</a> by entering their name.
+<p>Just creating a wordlist does not guarantee that it will be searched
+by the interpreter. You must subsequently add the wordlist to the <a href="#Search Order">search
+order</a> for the words in it to be found. Also, for new words defined
+to be added to the wordlist, the wordlist must set to be the <a href="#Current Wordlist">current
+wordlist</a>.
+<h4>
+<a NAME="Current Wordlist"></a>Current Wordlist</h4>
+The wordlist to which any new word will be added is called the current
+wordlist. You can change the current wordlist via <tt><font size=+1><a href="#setcurrent">setcurrent</a></font></tt>.
+When FIJI is started, the current wordlist is the <a href="#FIJI Wordlist">FIJI
+Wordlist</a>.
+<h4>
+<a NAME="Search Order"></a>Search Order</h4>
+When FIJI interprets your input, it looks for each word in wordlists kept
+in a search order. The wordlists are searched in the order you set. You
+may add wordlists to the search order and remove them from same via
+<tt><font size=+1><a href="#getorder">getorder</a></font></tt>
+and <tt><font size=+1><a href="#setorder">setorder</a></font></tt> respectively.
+<i>The
+order in which wordlists appear in the search order determines which definition
+is found if there are two definitions possessing the same name to be found
+in two different wordlists.</i>
+<p>The first occurence of the name as FIJI goes through the search order
+is the one returned. Thus, there may be definitions of the same name in
+different wordlists. The meaning of a word which you input in such situations
+thus depends on the search order at the time of the input.
+<p>When you start FIJI, the only wordlist in the search order is the <a href="#FIJI Wordlist">FIJI
+Wordlist</a>.
+<h4>
+<a NAME="Hiding Definitions"></a>Hiding Definitions</h4>
+When a new definition <i>has the same name</i> as another pre-existing
+definition, the pre-existing definition may be explicitly or implicitly
+hidden by the new definition. This is true also in Forth, but in FIJI the
+mechanism is somewhat different.
+<ol>
+<li>
+If the new definition is in a different wordlist than the extant definition,
+the extant definition is <i>implicitly hidden</i> at such times as the
+wordlist with the new definition is ahead in the <a href="#Search Order">search
+order</a> of the wordlist with the extant definition. The extant definition
+thus hidden will again become findable should</li>
+
+<ol>
+<li>
+The search order be changed to place the wordlist containing the extant
+definition ahead of the wordlist containing the new definition;</li>
+
+<li>
+The new definition be removed from its wordlist via a final forget or via
+discard.</li>
+</ol>
+
+<li>
+If the new definition is in the same wordlist as the extant definition,
+the extant definition is <i>explictly hidden</i> by the new definition.
+However, the extant definition is not deleted; it will reappear should
+the later definition be removed via <a href="#forget">forget</a>.</li>
+</ol>
+So far, this is as in Forth. However, please note that in FIJI, a new definition
+added to Wordlist which possesses the same name as a previous definition
+pushes the previous definition to a stack associated with that name in
+that Wordlist. Therefore, it is possible to remove all definitions possessing
+a particular name at once from a wordlist, as described below.
+<h4>
+<a NAME="Removing Definitions"></a>Removing Definitions</h4>
+There are two ways to remove a definition from a wordlist.
+<ol>
+<li>
+<a href="#forget">forget</a> removes a definition, unhiding any previous
+definition of the same name occuring in the Wordlist in which it was located,
+and, effectively, unhiding any previous definition of the same name which
+is in a Wordlist appearing after the forgotten definition. forget pops
+the stack associated with a name entry in a wordlist to restore the previous
+definition of that name in that wordlist. If there is no such previous
+definition, the name is unlinked from that wordlist. <b>Note</b> that unlike
+Forth, <a href="#forget">forget</a> only removes one word at a time.</li>
+
+<li>
+<a href="#discard">discard</a> unconditionally removes a definition and
+all stacked previous definitions by that same name in that wordlist.</li>
+</ol>
+<b>Note</b> that:
+<ul>
+<li>
+A definition can only be removed if it can be found, i.e., it must be in
+a wordlist which at the time appears in the <a href="#Search Order">search
+order</a>.</li>
+
+<li>
+Only the first occurence of the particular name which is found is acted
+upon by <a href="#forget">forget</a> or <a href="#discard">discard</a>,
+i.e, that occurrence of the name which is located first by the normal FIJI
+search of the search order.</li>
+</ul>
+
+<h3>
+<a NAME="Exceptions"></a>Exceptions</h3>
+FIJI mostly catches Java exceptions, prints a stack trace, and continues
+by executing <a href="#quit">quit</a>. To clean up at any time, you may
+use any of
+<ul>
+<li>
+<a href="#quit">quit</a></li>
+
+<li>
+<a href="#warm">warm</a></li>
+
+<li>
+<a href="#cold">cold</a></li>
+</ul>
+all of which reset the interpreter with increasing degrees of completeness.
+<p>For the ultimate cleanup, exit the interpreter with bye
+<p>There is no FIJI exception regimen yet. One may be added as needed after
+other more pressing features are completed.
+<h3>
+<a NAME="File Loading"></a>File Loading</h3>
+You may load FIJI source code from a text file via <tt><font size=+1><a href="#load">load</a></font></tt>.
+<h3>
+<a NAME="Persistence"></a>Persistence</h3>
+Not yet implemented is a scheme for wordlist persistence, which will allow
+wordlists to be saved and then reloaded in their compiled form. This scheme
+will have to wait until the author switches over to JDK 1.2 which is not
+yet available on Linux.
+<h3>
+<a NAME="Calling Java"></a>Calling Java</h3>
+
+<h4>
+<a NAME="Method Invocation"></a>Method Invocation</h4>
+Java Objects and Classes are pushed to the stack and their methods invoked
+upon them. No assignment is needed to preserve the returns of constructors
+and methods: the resulting objects are pused to the reference stack. Primitive
+types are converted into object types. E.g., methods which return type
+<tt><font size=+1>int</font></tt>
+in Fiji push an object of type <tt><font size=+1>java.lang.Integer</font></tt>
+to the reference stack.
+<p>The method-calling syntax is ugly but simple. Push on the stack in this
+order (first on is deepest on stack at the time of the call):
+<ol>
+<li>
+instance object or class object</li>
+
+<li>
+method-name (String)</li>
+
+<li>
+the result of the FIJI operator "opencall" <tt><font size=+1><a href="#(">(</a></font></tt></li>
+
+<li>
+zero to n parameter objects</li>
+
+<ul>
+<li>
+each optionally followed by a String name of a class as which the parameter
+should be considered during method lookup and the "cast" operator <tt><font size=+1><a href="#()">()</a></font></tt></li>
+
+<li>
+each followed by the "comma" operator <b><tt><font size=+1>,</font></tt>
+even if it is the last parameter to the method</b>.</li>
+</ul>
+
+<li>
+the result of the FIJI operator "closecall" <tt><font size=+1><a href="#)">)</a></font></tt></li>
+</ol>
+It's "closecall" <tt><font size=+1><a href="#)">)</a></font></tt> which
+actually makes the call. The result of <tt><font size=+1><a href="#)">)</a></font></tt>
+is the result of the completed method invocation, if successful, and is
+found on the <a href="#Stack">stack</a>.
+<p>If a method invocation is unsuccessful, a Java exception will be thrown
+and caught, a stack trace printed, and the session will usually continue.
+<p>Class methods work identically to instance methods, e.g.,
+<blockquote><tt><font size=+1>java.lang.Runtime class getRuntime ( )</font></tt></blockquote>
+will return the Runtime object on the stack.
+<p>As you can see, method name resolution is dynamic at runtime. FIJI uses
+<tt><font size=+1>java.lang.Class.getDeclaredMethod(Class
+[])</font></tt>to resolve the method from the object and method name presented.
+No FIJI-internal lookup table of known Java method signatures is employed;
+the lookup is entirely via Java, and therefore requires some hints from
+the programmer when the type of an object offered as an argument to a Java
+method does not match exactly the method signature. For example, one cannot
+enter
+<blockquote><tt><font size=+1>" Argle bargle" equals ( " Argle bargle"
+, )</font></tt></blockquote>
+because the formal method signature for that Java class library method
+is actually
+<blockquote><tt><font size=+1>java.lang.String.equals(java.lang.Object)</font></tt></blockquote>
+and without a hint, FIJI will attempt to resolve a signature of
+<blockquote><tt><font size=+1>java.lang.String.equals(java.lang.String)</font></tt></blockquote>
+based on the input, a method which will not be found in the class java.lang.String.
+Instead you must code
+<blockquote><tt><font size=+1>" Argle bargle" equals ( " Argle bargle"
+java.lang.Object () , )</font></tt></blockquote>
+"casting", as it were, the method signature String to Object, by use of
+the String name of the desired class, <tt><font size=+1>java.lang.Object</font></tt>,
+and the "cast" operator <tt><font size=+1><a href="#()">()</a></font></tt>
+.
+<h4>
+<a NAME="Constructor Invocation"></a>Constructor Invocation</h4>
+FIJI pretends that Java constructor invocation is the invocation of a method
+named <tt><font size=+1>new</font></tt>. Thus, to create a new java.io.File
+you may enter:
+<blockquote><tt><font size=+1>java.io.File new ( " Myfile.txt" , )</font></tt></blockquote>
+etc., just as you would in FIJI to invoke any other object or class method.
+<h4>
+<a NAME="Field Dereferencing"></a>Field Dereferencing</h4>
+The FIJI words <tt><font size=+1><a href="#@">@</a></font></tt> and <tt><font size=+1><a href="#!">!</a></font></tt>can
+be used to dereference object and class data fields. These words, if they
+do not find a FIJI Semantic on top-of-stack, assume that the object actually
+found there has a field name under it on second-of-stack. See the documentation
+for these words for further details.
+<h3>
+<a NAME="Sample sessions"></a>Sample sessions</h3>
+These sample sessions focus mostly on the interaction of FIJI with direct
+calls to Java .
+<h4>
+<a NAME="Session One"></a>Session One</h4>
+The following example assumes there is a class file <tt><font size=+1>Hello.class</font></tt>
+in the current directory which implements <tt><font size=+1>java.lang.Runnable</font></tt>
+...
+<p><tt><font size=+1>java.lang.Thread class new ( Hello class new ( ) java.lang.Runnable
+() ,&nbsp; ) .sc</font></tt>
+<br><tt><font size=+1>&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+2&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp; 4 5&nbsp;&nbsp;&nbsp;&nbsp; 6&nbsp;&nbsp;&nbsp;&nbsp;
+7&nbsp;&nbsp; 8 9 10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+11 12 13 14</font></tt>
+<p><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1. Deposits
+the String java.lang.Thread on the reference stack.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2. Executes
+`class`, popping the String and pushing class java.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lang.Thread.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3. Pushes
+the String `new` on the reference stack.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4. `(`
+creates a parameter array, empty, for a java call.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5. Pushes
+String `Hello` on the ref stack.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 6. Pops
+"Hello: string and loads the class of that name, pushes ref.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7. Pushes
+String `new`.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8. Creates
+another param array for a java call. The stack is now</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; from bottom
+to top: Class Thread, String `new`, paramarray (empty),</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Class
+Hello, String `new`, paramarray (empty).</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9. The
+operator `)` grabs the paramarry (in this instance, empty),</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; grabs
+the `new` as method name and does getMethod()</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for the
+call for the Hello class ... so everything back to and</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; including
+the Hello class are now gone from the stack and the</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Hello
+instance is in their place, sitting on top of the empty</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; paramarray.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10. Pushes
+the String `java.lang.runnable`.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11. Grabs
+the Hello instance, turns it into a param for the param</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; array,
+cast as a Runnable.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12. The
+operator `,` grabs either a param, or some other object</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; and makes
+it a param, and then moves it into the paramarray,</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; removing
+the object from the stack. The paramarray remains.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 13. `)`
+as before completes the call to the constructor</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9. The
+operator `)` grabs the paramarry (in this instance, empty),</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; grabs
+the `new` as method name and does getMethod()</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for the
+call for the Hello class ... so everything back to and</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; including
+the Hello class are now gone from the stack and the</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Hello
+instance is in their place, sitting on top of the empty</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; paramarray.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10. Pushes
+the String `java.lang.runnable`.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11. Grabs
+the Hello instance, turns it into a param for the param</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; array,
+cast as a Runnable.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12. The
+operator `,` grabs either a param, or some other object</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; and makes
+it a param, and then moves it into the paramarray,</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; removing
+the object from the stack. The paramarray remains.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 13. `)`
+as before completes the call to the constructor</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; java.lang.Thread(Runnable)
+and removes everything left in</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; our example
+from the stack, pushing a Thread instance.</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 14. `.sc`
+prints non-destructively the contents of the stack,</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; annotating
+the printout with class information. On the IBM</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; S/390
+operating system VM/ESA running Java 1.1.4 the output</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at the
+end of the example is:</font></tt>
+<p><tt><font size=+1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; `Thread[Thread-2,5,main]
+/*class java.lang.Thread*/`</font></tt>
+<p><tt><font size=+1>&nbsp;After the example above, here's what I entered
+and what happened:</font></tt>
+<p><tt><font size=+1>&nbsp;dup start ( )</font></tt>
+<br><tt><font size=+1>&nbsp;oK</font></tt>
+<p><tt><font size=+1>&nbsp;oK Hello, VM Java!</font></tt>
+<br><tt><font size=+1>&nbsp;Hello, VM Java!</font></tt>
+<br><tt><font size=+1>&nbsp;Hello, VM Java!</font></tt>
+<p><tt><font size=+1>&nbsp;... every three seconds. etc&nbsp; ... lucky
+I `dup`'ed first so that I could</font></tt>
+<p><tt><font size=+1>&nbsp;stop ( )</font></tt>
+<p><tt><font size=+1>&nbsp;and continue my session without distraction
+of the thread running</font></tt>
+<br><tt><font size=+1>&nbsp;in the background.</font></tt>
+<h4>
+<a NAME="Session Two"></a>Session Two</h4>
+<tt><font size=+1>java.lang.Runtime class getRuntime ( ) totalMemory (
+)</font></tt>
+<p>deposits on the reference stack the total memory employed by the runtime.
+<p><tt><font size=+1>java.lang.Runtime class getRuntime ( ) totalMemory
+( ) .sc</font></tt>
+<br><tt><font size=+1>`1048568 /*class java.lang.Long*/`</font></tt>
+<br><tt><font size=+1>oK</font></tt>
+<p>
+<hr WIDTH="100%">
+<h2>
+<a NAME="FIJI Wordlist"></a>FIJI Wordlist</h2>
+<a href="#Table of Contents">[Table of Contents]</a>
+<p>This section describes the words in the default FIJI Wordlist, that
+Wordlist which is the only one accessed by the interpreter when it starts
+up.
+<p><i>All of these words are subject to change in name and specification.
+This is an experimental language!</i>
+<p>FIJI supports multiple Wordlists (<tt>com.SoftWoehr.desktop.shell.Wordlist</tt>).
+Each Wordlist is a hashtable&nbsp; of <i>words</i> in which a String name
+is used as the key. The interpreter, as part of its processing of each
+<a href="#Lexing">lexeme</a>
+of input, searches a search order of Wordlists using the lexeme as a name
+key.
+<p>The interpreter can have a multiple-Wordlist search order. New Wordlists
+can be created (<i>not yet implemented!</i>), words defined to add to the
+Wordlist, and the search order can be changed (<i>not yet implemented!</i>)
+programmatically and interactively.
+<p>The Wordlist named FIJI is the only Wordlist accessed at interpreter
+startup.
+<h3>
+<a NAME="Stack Diagrams"></a>Stack Diagrams</h3>
+In this section, each FIJI <b><i>word</i></b> in the FIJI Wordlist, is
+shown with a Forth-like stack diagram, the state of the relevant region
+of the stack prior to the word's execution&nbsp; being on the left of the
+diagram, the resultant state of the same region after the operation shown
+on the right. Stack operands are shown ascending from lower stack on the
+left to top-of-stack on the right separately in each half of the diagram.
+<p>In the stack diagrams used as an aid to understanding the effect of
+each predefined FIJI word, some abbreviations are used, including the following:
+<br>&nbsp;
+<table BORDER WIDTH="50%" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><tt><font size=+1>Abbreviation</font></tt></td>
+
+<td><tt><font size=+1>Type</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>b</font></tt></td>
+
+<td><tt><font size=+1>java.lang.Boolean</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>c</font></tt></td>
+
+<td><tt><font size=+1>java.lang.Class</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>cfe</font></tt></td>
+
+<td><tt><font size=+1>control flow entry, used for compiling</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>l</font></tt></td>
+
+<td><tt><font size=+1>java.lang.Long</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>N</font></tt></td>
+
+<td><tt><font size=+1>When postpended to an object type, he Nth occurrence
+of a series of like objects.</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>name</font></tt></td>
+
+<td><tt><font size=+1>java.lang.String for a FIJI findable name</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>s</font></tt></td>
+
+<td><tt><font size=+1>java.lang.String</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>o</font></tt></td>
+
+<td><tt><font size=+1>java.lang.Object</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>wlist</font></tt></td>
+
+<td><tt><font size=+1>com.SoftWoehr.desktop.shell.wordlist</font></tt></td>
+</tr>
+</table>
+
+<p>The "before" side of the stack diagram is on the left, and the "after"
+on the right. On either side of the " <tt><font size=+1>--</font></tt>&nbsp;
+" which separates the two sides, the item represented lowest on the stack
+is leftmost. Ellipses (<tt><font size=+1>...</font></tt>) between stack
+items mean some intervening stack itesm are not shown. Multiple occurrences
+of like objects is typically represented using N and cardinal numbers,
+e.g., <i>type</i>N ... <i>type</i>1
+<p><u>Remember that what is being pushed, popped, and copied on the stack
+are references to objects. To duplicate a stack item does not clone or
+otherwise duplicate the Object represented by the stack item.</u> This
+is the sense in which the descriptions which follow of stack activity should
+be understood.
+<h3>
+<a NAME="Control Flow Stack Effects"></a>Control Flow Stack Effects</h3>
+Additional stack diagrams of effect on the <a href="#Control Flow Stack">control
+flow stack</a> are provided where relevant. The following abbreviations
+apply:
+<br>&nbsp;
+<table BORDER WIDTH="50%" NOSAVE >
+<tr>
+<td><tt><font size=+1>ubb</font></tt></td>
+
+<td><tt><font size=+1>Unresolved backward branch.</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>ufb</font></tt></td>
+
+<td><tt><font size=+1>Unresolved forward branch.</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>cdef</font></tt></td>
+
+<td><tt><font size=+1>Current definition.</font></tt></td>
+</tr>
+</table>
+
+<br>&nbsp;
+<h3>
+<a NAME="Return Stack Effects"></a>Return Stack Effects</h3>
+Additional stack diagrams of effect on the <a href="#Return Stack">return
+stack</a> are provided where relevant. The following abbreviations apply:
+<br>&nbsp;
+<table BORDER WIDTH="50%" NOSAVE >
+<tr>
+<td><tt><font size=+1>x</font></tt></td>
+
+<td><tt><font size=+1>a return stack entry, oblique to the programmer.</font></tt></td>
+</tr>
+</table>
+
+<h3>
+<a NAME="Input Stream Effects"></a>Input Stream Effects</h3>
+Additional diagrams of effect on the <a href="#Input Stream">input stream</a>
+are provided where relevant. The following abbreviations apply:
+<br>&nbsp;
+<table BORDER WIDTH="50%" NOSAVE >
+<tr>
+<td><tt><font size=+1>name</font></tt></td>
+
+<td><tt><font size=+1>A valid FIJI name.</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>String</font></tt></td>
+
+<td><tt><font size=+1>A java.lang.String containing no white space.</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>text"</font></tt></td>
+
+<td><tt><font size=+1>Some text, possibly containing white space, delimited
+by a trailing doublequote character.</font></tt></td>
+</tr>
+
+<tr>
+<td><tt><font size=+1>text\</font></tt></td>
+
+<td><tt><font size=+1>Some text, possibly containing white space, delimited
+by a trailing backslash character.</font></tt></td>
+</tr>
+</table>
+
+<h3>
+<a NAME="Class Consciousness"></a>Class Consciousness</h3>
+Many FIJI words are class-aware and several possess different stack diagrams
+depending up what they find on top-of-stack when they are called. For example,
+<tt><font size=+1><a href="#+">+</a></font></tt>&nbsp;
+can add two Longs or two Strings.
+<p>Sometimes, passing the wrong sort of object to a FIJI function will
+result in an exception being thrown. Depending on the seriousness of the
+error, the interpreter may continue or abend. Usually it will continue,
+since there is extensive error-checking built into FIJI. The intent is
+to make a robust desktop interpreter tool. <a href="mailto:jax@well.com">Bug
+reports</a> are appreciated.
+<h3>
+<a NAME="Special Compilation Semantics Annotated"></a>Special Compilation
+Semantics Annotated</h3>
+As noted above, the <a href="#Default Compilation Semantics">default compilation
+semantics</a> of a word is to append its execution semantics to the current
+definition. Many words possess <a href="#Special Compilation Semantics">special
+compilation semantics</a>, e.g., <tt><font size=+1><a href="#doublequotes">"</a></font></tt>
+("doublequotes") which in interpretive mode pushes a string, but in compilation
+mode, compiles the string to be pushed at runtime when the definition it
+is compiled into is executed.
+<p>In all such cases, the execution semantics and compilation semantics
+are both annotated.
+<h3>
+<a NAME="Interpretive Semantics Annotated"></a>Interpretive Semantics Annotated</h3>
+Interpretive semantics by <a href="#default interpretive semantics">default</a>
+match the execution semantics. Where there is a difference, or where interpretive
+semantics are absent, this is annotated.
+<h3>
+<a NAME="List of Words and their Operations"></a>List of Words and their
+Operations</h3>
+Classes which are part of the <tt><font size=+1>com.SoftWoehr.desktop.shell</font></tt>
+package are listed without the package name prepended. Familiar Java classes
+and types such as Object and Class are sometimes mentioned without full
+qualification.
+<p>Some of the following will be unintelligible if you have not studied
+Java reflection and the relationship between Java classes and Java primitive
+types.
+<br>&nbsp;
+<table BORDER WIDTH="100%" NOSAVE >
+<tr NOSAVE>
+<td NOSAVE><a NAME="!"></a><tt><font size=+1>!</font></tt></td>
+
+<td><tt><font size=+1>o variable --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>o1 s o2 --</font></tt></td>
+
+<td><tt><font size=+1>If top-of-stack is a FIJI <a href="#variable">variable</a>,"store"
+stores object o to the variable.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>If top-of-stack is <b>not</b> a FIJI <a href="#variable">variable</a>,
+"store" assumes that <i>o2</i> is an object with a Java variable field
+whose name is represented by <i>s </i>and attempts to find such a field
+in the object and store as its contents the object on the stack <i>o1</i>.
+An exception is thrown if <i>o2</i> possesses no such field named <i>s</i>.</font></tt>
+<p><tt><font size=+1>Example:</font></tt>
+<p><tt><font size=+1>Given an already-compiled Java class findable in the
+CLASSPATH defined as follows:</font></tt>
+<blockquote><tt><font size=+1>public class foo {</font></tt>
+<p><tt><font size=+1>&nbsp; public foo() {};</font></tt>
+<br><tt><font size=+1>&nbsp; public Long bar;</font></tt>
+<p><tt><font size=+1>}</font></tt></blockquote>
+<tt><font size=+1>the following operations in FIJI:</font></tt>
+<blockquote><tt><font size=+1>99 bar foo class new ( ) !</font></tt></blockquote>
+<tt><font size=+1>will create a foo instance and store 99 to <i>foo.bar</i>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="doublequotes"></a><tt><font size=+1>"</font></tt></td>
+
+<td><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; -- s</font></tt>
+<br><tt><font size=+1>Input: text ... " --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>Input: text ... " --</font></tt></td>
+
+<td><tt><font size=+1>Execution semantics: Parses and pushes as one String
+the next text for all text up until the end of the text being interpreted
+or until the next doublequote " character encountered, whichever comes
+first. The trailing doublequote is&nbsp; discarded from the input.
+<hr WIDTH="100%">Compilation semantics: Parses as one String the next text
+for all text up until the end of the text being interpreted or until the
+next doublequote " character encountered, whichever comes first. The trailing
+doublequote is&nbsp; discarded from the input. Compiles the resultant String
+as a literal to be pushed when the Definition into which it is compiled
+is executed.</font></tt></td>
+</tr>
+
+<tr NOSAVE>
+<td NOSAVE><a NAME="'"></a><tt><font size=+1>'</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; -- s</font></tt></td>
+
+<td><tt><font size=+1>"Tick" parses next lexeme in the input and pushes
+it onto the stack. If input is empty, then "tick" returns <a href="#null">null</a>.
+Useful for pushing a String that happens to be the name of a FIJI operation
+or variable. FIJI "tick" is like LISP "tick" ... the FIJI equivalent of
+FORTH "tick" is</font></tt>
+<center>
+<p><tt><font size=+1>' <i>wordname</i> find</font></tt></center>
+
+<p><tt><font size=+1>this sort of operation being much less frequently
+necessary in FIJI than in FORTH. The FORTH word WORD has a function analogous
+to that of FIJI "tick".</font></tt>
+<p><tt><font size=+1>See also: <a href="#backtick">`</a>&nbsp; <a href="#doublequotes">"</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="("></a><tt><font size=+1>(</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; -- JavaArgs&nbsp;</font></tt></td>
+
+<td><tt><font size=+1>"Opencall" pushes an empty JavaArgs object, an accumulator
+for the objects intended to be passed to a Java method invocation. See
+the discussion of <a href="#Calling Java">calling Java</a>.</font></tt>
+<p><tt><font size=+1>See also: <a href="#)">)</a> <a href="#,">,</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="()"></a><tt><font size=+1>()</font></tt></td>
+
+<td><tt><font size=+1>o s -- JavaParam</font></tt></td>
+
+<td><tt><font size=+1>"Cast" creates a JavaParam from an Object and a String.
+The String represents the name of the class as which it is desired that
+the Object be represented when FIJI attempts to resolve a method call.
+The point is that java.lang.Class.getDeclaredMethod() does not promote
+types in resolving a method signature, so methods like java.lang.String.equals(Object)
+require some kind of explicit identification as to desired method signature
+for FIJI to resolve the call dynamically at runtime. See the discussion
+of <a href="#Calling Java">calling Java</a>.</font></tt>
+<p><tt><font size=+1>See also: <a href="#(primitive)">(primitive)</a> <a href="#>primitive">>primitive</a><a href="#primitive">primitive</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="(primitive)"></a><tt><font size=+1>(primitive)</font></tt></td>
+
+<td><tt><font size=+1>o -- JavaParam</font></tt></td>
+
+<td><tt><font size=+1>"Paren-primitive" creates a JavaParam from an Object
+"cast" as its primitive type. See the discussion of <a href="#()">()</a>.
+For instance,</font></tt>
+<blockquote><tt><font size=+1>java.lang.Long class new ( 7 (primitive)
+, )&nbsp;</font></tt></blockquote>
+<tt><font size=+1>is one way to create a new Long, aside from merely entering
+7 at the keyboard, since all numbers encountered in input are pushed to
+the reference stack as a java.lang.Long. Note that</font></tt>
+<blockquote><tt><font size=+1>java.lang.Long class new ( 7 , )</font></tt></blockquote>
+<tt><font size=+1>would not be able to resolve the method signature, since
+there is no constructor java.lang.Long(Long), only java.lang.Long(long).</font></tt>
+<p><tt><font size=+1>If, again by way of example, a call takes an int,
+as in the method java.lang.String.charAt(int), you might code</font></tt>
+<blockquote><tt><font size=+1>" Here is a long string" charAt ( 10 intValue
+( ) (primitive) , )</font></tt></blockquote>
+<tt><font size=+1>to return the character 'l' on the reference stack, but
+easier is the shortcut builtin FIJI word <a href="#Longtointparam">Long>intparam</a>.
+See the discussion of <a href="#Calling Java">calling Java</a>.</font></tt>
+<p><tt><font size=+1>See also: <a href="#()">()</a> <a href="#>primitive">>primitive</a><a href="#primitive">primitive</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=")"></a><tt><font size=+1>)</font></tt></td>
+
+<td><tt><font size=+1>c s JavaArgs -- o</font></tt></td>
+
+<td><tt><font size=+1>"Closecall" completes the assembly of Java parameters
+and makes the call to Java. The return from <i>)</i> is the return from
+the method, marshalled as an object, null in the case of void methods.
+A meaningful return may be stored in a FIJI <a href="#variable">variable</a>
+or <a href="#value">value</a>. Null returns you should <a href="#drop">drop</a>.
+See the discussion of <a href="#Calling Java">calling Java</a>.</font></tt>
+<p><tt><font size=+1>See also: <a href="#(">(</a> <a href="#,">,</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="*"></a><tt><font size=+1>*</font></tt></td>
+
+<td><tt><font size=+1>l1 l2 -- l3</font></tt></td>
+
+<td><tt><font size=+1>Multiplies two java.lang.Longs for a java.lang.Long
+product.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="+"></a><tt><font size=+1>+</font></tt></td>
+
+<td><tt><font size=+1>l1 l2 -- l3</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>s1 s2 -- s3</font></tt></td>
+
+<td><tt><font size=+1>Adds two java.lang.Longs for a java.lang.Long sum.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Adds two java.lang.Strings appending <i>s2</i> to
+<i>s1</i>
+for a java.lang.String result <i>s3</i>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=","></a><tt><font size=+1>,</font></tt></td>
+
+<td><tt><font size=+1>JavaArgs o -- JavaArgs</font></tt></td>
+
+<td><tt><font size=+1>Adds the object o on top-of-stack to the Javaparam
+underneath it. See the discussion of <a href="#Calling Java">calling Java</a>.</font></tt>
+<p><tt><font size=+1>See also: <a href="#(">(</a> <a href="#)">)</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="+loop"></a><tt><font size=+1>+loop</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>l --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control: ubb --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>Marks the end of an iterative body commenced by the
+corresponding <a href="#do">do</a>. loop increments the iterative index
+by the value of <i>l</i> and returns control backwards to the corresponding
+<a href="#do">do</a>
+until the <a href="#index">index</a> transitions the border between the
+limit established at the corresponding <a href="#do">do</a> and that limit
+minus one (1), at which time execution continues past the loop. The increment
+may be positive or negative. If negative, the limit passed to the corresponding
+<a href="#do">do</a>
+should be less than the index passed to the same do, or the iteration will
+be quite long, considering the 32-bit precision of the iterative index.</font></tt>
+<p><tt><font size=+1>Example:</font></tt>
+<blockquote><tt><font size=+1>:test 0 10 do 0 index -3 +loop ;</font></tt></blockquote>
+<tt><font size=+1>will output, when test is executed:</font></tt>
+<blockquote><tt><font size=+1>10 7 4 1</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>Pops and resolves the unresolved backwards branch
+left on the control flow stack by the corresponding <a href="#do">do</a>.
+The <a href="#Control Flow Stack">control flow stack</a> must be in balance
+when loop is encountered during compiliation.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="-"></a><tt><font size=+1>-</font></tt></td>
+
+<td><tt><font size=+1>l1 l2 -- l3</font></tt></td>
+
+<td><tt><font size=+1>Subtracts a java.lang.Long l2 from l1 for a java.lang.Long
+difference l3.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="."></a><tt><font size=+1>.</font></tt></td>
+
+<td><tt><font size=+1>o --</font></tt></td>
+
+<td><tt><font size=+1>Pops an object from the reference stack, invokes
+toString() on it and displays the resulting string.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=".."></a><tt><font size=+1>..</font></tt></td>
+
+<td><tt><font size=+1>o1 .. oN --</font></tt></td>
+
+<td><tt><font size=+1>Pops every stack item from the reference stack, outputing
+the toString() value of each, in order from deepest to top-of-stack. The
+stack is empty afterwards.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=".c"></a><tt><font size=+1>.c</font></tt></td>
+
+<td><tt><font size=+1>o1 ... oN -- o1 ... oN</font></tt></td>
+
+<td><tt><font size=+1>Without popping any value, displays the toString()
+value of the class of each item on the reference stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=".r"></a><tt><font size=+1>.r</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>return stack:&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Outputs a view of the <a href="#Return Stack">return
+stack</a>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=".s"></a><tt><font size=+1>.s</font></tt></td>
+
+<td><tt><font size=+1>o1 ... oN -- o1 ... oN</font></tt></td>
+
+<td><tt><font size=+1>Without popping any value, displays the toString()
+value of each item on the reference stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=".sc"></a><tt><font size=+1>.sc</font></tt></td>
+
+<td><tt><font size=+1>o1 ... oN -- o1 ... oN</font></tt></td>
+
+<td><tt><font size=+1>Without popping any value, displays the toString()
+value of each item on the reference stack alongside the toString() value
+of its class.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="/"></a><tt><font size=+1>/</font></tt></td>
+
+<td><tt><font size=+1>l1 l2 -- l3</font></tt></td>
+
+<td><tt><font size=+1>Divides a java.lang.Long l1 by l2 for java.lang.Long
+quotient l3</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=":"></a><tt><font size=+1>:</font></tt></td>
+
+<td><tt><font size=+1>&nbsp;--&nbsp;</font></tt>
+<br><tt><font size=+1>input: name --&nbsp;</font></tt>
+<br><tt><font size=+1>control: -- cdef</font></tt></td>
+
+<td><tt><font size=+1>"Colon" creates an commences composition of a new
+Definition. Consumes a name from the input and makes it the name of the
+new Definition. Pushes a control flow element on the control stack which
+must be found on top at the execution of&nbsp;&nbsp; ;&nbsp; .&nbsp; <a href="#Definitions">Definitions</a>
+may nest through the use of <a href="#[">[</a> and <a href="#]">]</a> for
+example</font></tt>
+<blockquote><tt><font size=+1>: test ` test 0 ` . [ : test1 ` test 1 `
+. ; ] ; ok</font></tt>
+<br><tt><font size=+1>test test 0 ok</font></tt>
+<br><tt><font size=+1>test1 test 1 ok</font></tt></blockquote>
+<tt><font size=+1>See also: <a href="#leftcurly">{</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=";"></a><tt><font size=+1>;</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>return: x --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control:&nbsp; cdef --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics: Effects an unnest (a return)
+to the calling definition, or to the text interpreter.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics: "Semicolon" completes composition
+of a new Definition and links it into the current Wordlist. The control
+stack must be in balance at the time this word is encountered in compilation.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="<"></a><tt><font size=+1>&lt;</font></tt></td>
+
+<td><tt><font size=+1>l1 l2 -- b</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>s1 s2 -- b</font></tt></td>
+
+<td><tt><font size=+1>Returns true if l1 &lt; l2, false otherwise.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Returns true if s1 is lexicographically less than
+s2, false otherwise.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="="></a><tt><font size=+1>=</font></tt></td>
+
+<td><tt><font size=+1>o1 o2 -- b</font></tt></td>
+
+<td><tt><font size=+1>Returns true if the two objects are equal, effectively
+java.lang.Object.equals(), false otherwise.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="<>"></a><tt><font size=+1>&lt;></font></tt></td>
+
+<td><tt><font size=+1>o1 o2 -- b</font></tt></td>
+
+<td><tt><font size=+1>Returns true if the two objects are not equal, the
+inverse of <a href="#=">=</a>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=">"></a><tt><font size=+1>></font></tt></td>
+
+<td><tt><font size=+1>l1 l2 -- b</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>s1 s2 -- b</font></tt></td>
+
+<td><tt><font size=+1>Returns true if l1 > l2, false otherwise.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Returns true if s1 is lexicographically greater than
+s2, false otherwise.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=">class"></a><tt><font size=+1>>class</font></tt></td>
+
+<td><tt><font size=+1>o -- c</font></tt></td>
+
+<td><tt><font size=+1>Pops the Object on top of the stack and pushes its
+class object.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=">primitive"></a><tt><font size=+1>>primitive</font></tt></td>
+
+<td><tt><font size=+1>o -- c</font></tt></td>
+
+<td><tt><font size=+1>Pops an Object and pushes the class object of its
+primitive type.&nbsp;</font></tt>
+<p><tt><font size=+1>Example:</font></tt>
+<blockquote><tt><font size=+1>1 >primitive</font></tt></blockquote>
+<tt><font size=+1>pops the java.lang.Long 1 and pushes back the class object
+'long'. See the discussion of <a href="#Calling Java">calling Java</a>.</font></tt>
+<p><tt><font size=+1>See also: <a href="#()">()</a> <a href="#(primitive)">(primitive)</a><a href="#primitive">primitive</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME=">string"></a><tt><font size=+1>>string</font></tt></td>
+
+<td><tt><font size=+1>o -- s</font></tt></td>
+
+<td><tt><font size=+1>Pops the Object on top of the stack and pushes its
+toString() value.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="@"></a><tt><font size=+1>@</font></tt></td>
+
+<td><tt><font size=+1>variable -- o</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>s o1 -- o2</font></tt></td>
+
+<td><tt><font size=+1>If top-of-stack is a FIJI <a href="#variable">variable</a>,"fetch"
+fetches to the object stack the contents of the variable.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>If top-of-stack is <b>not</b> a FIJI <a href="#variable">variable</a>,
+"fetch" assumes that <i>o1</i> is an object with a Java variable field
+whose name is represented by <i>s </i>and attempts to find such a field
+in the object and return its contents on the stack as <i>o2</i>. An exception
+is thrown if <i>o1</i> possesses no such field named <i>s</i>.</font></tt>
+<p><tt><font size=+1>Example:</font></tt>
+<p><tt><font size=+1>Given an already-compiled Java class findable in the
+CLASSPATH defined as follows:</font></tt>
+<blockquote><tt><font size=+1>public class foo {</font></tt>
+<p><tt><font size=+1>&nbsp; public foo() {};</font></tt>
+<br><tt><font size=+1>&nbsp; public Long bar = 1776;</font></tt>
+<p><tt><font size=+1>}</font></tt></blockquote>
+<tt><font size=+1>the following operations in FIJI:</font></tt>
+<blockquote><tt><font size=+1>bar foo class new ( ) @</font></tt></blockquote>
+<tt><font size=+1>will create a foo instance and fetch the year of American
+independence from <i>foo.bar</i>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="Longtointparam"></a><tt><font size=+1>Long>intparam</font></tt></td>
+
+<td><tt><font size=+1>l -- JavaParam</font></tt></td>
+
+<td><tt><font size=+1>Pops the java.lang.Long from top of stack and pushes
+back a JavaParam object with the Long's intValue() result "cast" as an
+int. See <a href="#()">()</a> and <a href="#(primitive)">(primitive)</a>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="backtick"></a><tt><font size=+1>`</font></tt></td>
+
+<td><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; -- s</font></tt>
+<br><tt><font size=+1>Input: text ... " --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>Input: text ... " --</font></tt></td>
+
+<td><tt><font size=+1>Execution semantics: "Backtick" parses the input
+up to end of input or a matching trailing delimiter backtick (removing
+the trailing delimiter from the input) and returns a java.lang.String of
+that input, which may contain whitespace. "Backtick" is identical in function
+to <a href="#doublequotes">"</a> doublequotes and is provided to ease entry
+of doublequote-containing text.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics: Parses as one String the next
+text for all text up until the end of the text being interpreted or until
+the next backtick ` character encountered, whichever comes first. The trailing
+backtick is discarded from the input. Compiles the resultant String as
+a literal to be pushed when the Definition into which it is compiled is
+executed.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="again"></a><tt><font size=+1>again</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br>&nbsp;
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control: ubb --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>At runtime, branch backwards to the code following
+the corresponding <a href="#begin">begin</a>.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>At compile time, <i>again</i> pops an unresolved
+backwards branch from the <a href="#Control Flow Stack">control flow stack</a>.
+The control stack must be in balance, that is, the top entry must have
+been deposited by the corresponding <a href="#begin">begin</a>. The branch
+is resolved and compiled by <i>again</i>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="and"></a><tt><font size=+1>and</font></tt></td>
+
+<td><tt><font size=+1>b1 b2 -- b3</font></tt></td>
+
+<td><tt><font size=+1>Performs logical AND on b1 and b2 resulting in b3.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="array"></a><tt><font size=+1>array</font></tt></td>
+
+<td><tt><font size=+1>l s -- Array</font></tt></td>
+
+<td><tt><font size=+1>Pushes a new java.lang.reflect.Array of length <i>l</i>
+and type represented by the string name of class <i>s</i>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="begin"></a><tt><font size=+1>begin</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control:&nbsp; -- ubb</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>This word has no effect at runtime.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>At compile time, <i>begin</i> deposits an unresolved
+backwards branch on the <a href="#Control Flow Stack">control flow stack</a>.
+The branch will be resolved by a subsequent <a href="#again">again</a>
+by an <a href="#until">until</a>, or by a <a href="#while">while</a> ..
+<a href="#repeat">repeat</a>
+pair.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="bye"></a><tt><font size=+1>bye</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Exits FIJI. In the command-line form of the interpreter,
+if you have performed any threading operations or AWT operations, FIJI
+may not exit cleanly after <i>bye</i>. In such cases, press your break
+key, e.g, for a PC, typically ^C. Alternatively, you may use <a href="#sysexit">sysexit</a>
+which will not only close FIJI, but also any other Java application which
+launched FIJI.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="cr"></a><tt><font size=+1>cr</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Output a newline.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="class"></a><tt><font size=+1>class</font></tt></td>
+
+<td><tt><font size=+1>s -- c</font></tt></td>
+
+<td><tt><font size=+1>Returns the class object named by a java.lang.String.
+The class name must be fully qualified, since FIJI has no notion of imports.
+For example,</font></tt>
+<blockquote><tt><font size=+1>java.lang.String class</font></tt></blockquote>
+<tt><font size=+1>removes the String "java.lang.String" from the reference
+stack and pushes back the String class object.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="cold"></a><tt><font size=+1>cold</font></tt></td>
+
+<td><tt><font size=+1>o1 on --</font></tt></td>
+
+<td><tt><font size=+1>Resets FIJI, resets search order to default and rebuilds
+default FIJI Wordlist.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="compile"></a><tt><font size=+1>compile</font></tt></td>
+
+<td><tt><font size=+1>Semantic --</font></tt></td>
+
+<td><tt><font size=+1>Appends the Semantics object found on top-of-stack
+to the current definition.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="decompile"></a><tt><font size=+1>decompile</font></tt></td>
+
+<td><tt><font size=+1>Semantic --</font></tt></td>
+
+<td><tt><font size=+1>Outputs the definition of Semantic.</font></tt>
+<p><tt><font size=+1>Example:</font></tt>
+<blockquote><tt><font size=+1>: test 0 10 do 0 index . -3 +loop ;</font></tt></blockquote>
+<tt><font size=+1>can be decompiled for the programmer's edification by</font></tt>
+<blockquote><tt><font size=+1>' test find decompile</font></tt></blockquote>
+<tt><font size=+1>which results in the output:</font></tt>
+<blockquote><tt><font size=+1>: test (literal) 0 (literal) 10 (do) (literal)
+0 index . (literal) -3 (+loop) ;</font></tt></blockquote>
+<tt><font size=+1>For those semantics which are FIJI primitives, that is,
+FIJI words coded entirely in Java in the source to FIJI, rather than defined
+by the user at runtime, decompile will simply output the name of the word
+itself in the body of the definition, e.g.</font></tt>
+<blockquote><tt><font size=+1>' decompile find decompile</font></tt></blockquote>
+<tt><font size=+1>will output:</font></tt>
+<blockquote><tt><font size=+1>: decompile decompile ;</font></tt></blockquote>
+</td>
+</tr>
+
+<tr>
+<td><a NAME="depth"></a><tt><font size=+1>depth</font></tt></td>
+
+<td WIDTH="90%"><tt><font size=+1>oN .. o1 -- oN .. o1 N</font></tt></td>
+
+<td><tt><font size=+1>Pushes the number representing the depth of the stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="dimarray"></a><tt><font size=+1>dimarray</font></tt></td>
+
+<td><tt><font size=+1>l1 ... lN N s -- Array</font></tt></td>
+
+<td><tt><font size=+1>Pops a String representing a full-qualified class
+name, a number of dimensions, and a length for each of these dimensions,
+returning a multi-dimensional array for objects of the specified class.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="discard"></a><tt><font size=+1>discard</font></tt></td>
+
+<td><tt><font size=+1>s&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Take <i>s</i> as the name of a word and remove unconditionally
+from the first wordlist in which it is encountered the wordlist entry of
+that name. See the discussion of <a href="#Removing Definitions">removing
+definitions</a>.</font></tt>
+<p><tt><font size=+1>See also: <a href="#forget">forget</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="do"></a><tt><font size=+1>do</font></tt></td>
+
+<td><tt><font size=+1>Intepretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>l1 l2 --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control: ubb --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Commence an iteration with an initial index of <i>l2</i>
+and a limit of <i>l1</i>. When the corresponding <a href="#loop">loop</a>
+is reached, the index is incremented. When the index becomes equal to the
+limit, the iteration is exited and control continues past the corresponding
+<a href="#loop">loop</a>.</font></tt>
+<p><tt><font size=+1>If the initial index and the limit are identical,
+the iteration is passed over and execution continues past the <a href="#loop">loop</a>.</font></tt>
+<p><tt><font size=+1>Example:</font></tt>
+<blockquote><tt><font size=+1>: test 10 0 do 0 index . loop ;</font></tt></blockquote>
+<tt><font size=+1>will produce, when <i>test</i> is executed, the output:</font></tt>
+<blockquote><tt><font size=+1>0 1 2 3 4 5 6 7 8 9</font></tt></blockquote>
+<tt><font size=+1>whereas</font></tt>
+<blockquote><tt><font size=+1>: test 0 0 do 0 index . loop ;</font></tt></blockquote>
+<tt><font size=+1>when <i>test</i> is executed produces no output.</font></tt>
+<p><tt><font size=+1>The precisions of the index and limit are 32-bits,
+signed.</font></tt>
+<p><tt><font size=+1>See also: <a href="#index">index</a> <a href="#+loop">+loop</a></font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>Lays down the runtime for do and pushes the unresovled
+backwards branch onto the control stack for resolution by the corresponding
+<a href="#loop">loop</a>.</font></tt>
+<p><tt><font size=+1>Iterative loops may nest, but the control flow stack
+must remain in balance.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="drop"></a><tt><font size=+1>drop</font></tt></td>
+
+<td><tt><font size=+1>o --</font></tt></td>
+
+<td><tt><font size=+1>Pops the stack and discards.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="dup"></a><tt><font size=+1>dup</font></tt></td>
+
+<td><tt><font size=+1>o1 -- o1 o1</font></tt></td>
+
+<td><tt><font size=+1>Duplicates the top reference on the reference stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="else"></a><tt><font size=+1>else</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control: ufb1 -- ufb2</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>At runtime, <i>else</i> is the target of a branch
+from an <a href="#if">if</a> that tested and found top-of-stack false.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>At compile time, <i>else</i> resolves a prior unresolved
+conditional branch laid down by <a href="#if">if</a> and lays down an unresolved
+branch past the <i>else</i> to be resolved by <a href="#then">then</a>.
+The <a href="#Control Flow Stack">control flow stack</a> must be in balance
+when else is encountered during compilation.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="execute"></a><tt><font size=+1>execute</font></tt></td>
+
+<td><tt><font size=+1>Semantic --</font></tt></td>
+
+<td><tt><font size=+1>Pops the Semantic from top-of-stack at executes it.
+In other words, the phrase:</font></tt>
+<blockquote><tt><font size=+1>' dup find execute</font></tt></blockquote>
+<tt><font size=+1>is equivalent to:</font></tt>
+<blockquote><tt><font size=+1>dup</font></tt></blockquote>
+<tt><font size=+1>by itself. To use such a construct in compilation, the
+following is an example:</font></tt>
+<blockquote><tt><font size=+1>: my-dup [ ' dup find compile ] ;</font></tt></blockquote>
+</td>
+</tr>
+
+<tr>
+<td><a NAME="exit"></a><tt><font size=+1>exit</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Exit the Definition currently being executed. This
+should not be invoked within an iteration commenced by <a href="#do">do</a>.
+Instead, <a href="#leave">leave</a> the iteration first and then invoke
+<i>exit</i>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="false"></a><tt><font size=+1>false</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; -- false</font></tt></td>
+
+<td><tt><font size=+1>Pushes Java false on the reference stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="find"></a><tt><font size=+1>find</font></tt></td>
+
+<td><tt><font size=+1>s -- Semantic | null</font></tt></td>
+
+<td><tt><font size=+1>Pops the String on top-of-stack and uses it as a
+name key to search the Wordlists in the search order. Finding the FIJI
+word, it pushes the word to the stack, or failing to find it, pushes null.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="forget"></a><tt><font size=+1>forget</font></tt></td>
+
+<td><tt><font size=+1>s --</font></tt></td>
+
+<td><tt><font size=+1>Take <i>s</i> as the name of a word and searches
+for it in the search order. If the name is found, pop back any previous
+definition of that word which is stacked in the same wordlist entry represented
+by <i>s</i>. If there is no previous definition of the word represented
+by <i>s</i>, remove that entry from the wordlit in which it was found.
+See discussion of <a href="#Hiding Definitions">hiding definitions</a>.</font></tt>
+<p><tt><font size=+1>See also: <a href="#discard">discard</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="getcurrent"></a><tt><font size=+1>getcurrent</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; -- wlist</font></tt></td>
+
+<td><tt><font size=+1>Returns the <a href="#Current Wordlist">current wordlist</a>,
+the one to which all new <a href="#Definitions">Definitions</a> are being
+added.</font></tt>
+<p><tt><font size=+1>See also: <a href="#getorder">getorder</a> <a href="#setcurrent">setcurrent</a><a href="#setorder">setorder</a><a href="#wordlist">wordlist</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="getorder"></a><tt><font size=+1>getorder</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --&nbsp; wlistN .. wlist1 N</font></tt></td>
+
+<td><tt><font size=+1>Returns on the stack the wordlists in the search
+order topped by the number of wordlists returned.</font></tt>
+<p><tt><font size=+1>See also: <a href="#getcurrent">getcurrent</a> <a href="#setcurrent">setcurrent</a><a href="#setorder">setorder</a><a href="#wordlist">wordlist</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="if"></a><tt><font size=+1>if</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp;b --&nbsp;</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>control: -- ufb</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>Tests at runtime the top of stack and if it's a Boolean,
+branches on false to a corresponding <a href="#else">else</a>, if any,
+otherwise to the matching <a href="#then">then</a>. If top-of-stack is
+not a Boolean, <i>if</i> throws an exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>At compile time, <i>if</i> lays down an unresolved
+forward branch to be resolved by <a href="#else">else</a> or <a href="#then">then</a>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="immediate"></a><tt><font size=+1>immediate</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:&nbsp;</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics: This word has no valid interpretive
+semantics other than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid execution semantics.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics: This word sets the current
+definition immediate, that is, the semantics of the definition will be
+executed alike at compile time as at execution time, rather than the word
+possessing the default FIJI compilation semantics. By testing <a href="#state">state</a>
+a word can exhibit different behavior at runtime and compile time. NOTE
+that FIJI <b>immediate</b> unlike FORTH <b>IMMEDIATE</b> is used <u>inside</u>
+the definition body, and not after the semi-colon which terminates the
+definition's composition.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="immediate?"></a><tt><font size=+1>immediate?</font></tt></td>
+
+<td><tt><font size=+1>Definition -- b</font></tt></td>
+
+<td><tt><font size=+1>Returns true if the Definition on top-of-stack is
+immediate, false if not.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="index"></a><tt><font size=+1>index</font></tt></td>
+
+<td><tt><font size=+1>l1 -- l2</font></tt></td>
+
+<td><tt><font size=+1>When executed within an iteration between <a href="#do">do</a>
+and <a href="#loop">loop</a>, pushes the <i>l1</i>'th innermost iteration
+index to the object stack as <i>l2</i>.</font></tt>
+<p><tt><font size=+1>Example:</font></tt>
+<blockquote><tt><font size=+1>: test 2 0 do 2 0 do 0 index . 1 index .
+loop loop;</font></tt></blockquote>
+<tt><font size=+1>will output, when <i>test</i> is executed:</font></tt>
+<blockquote><tt><font size=+1>0 0 1 0 0 1 1 1</font></tt></blockquote>
+<tt><font size=+1>An exception will result if <i>index</i> is executed
+outside an iteration, or if the index requested does not exist (not nested
+that deeply in nested iterations).</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="interpret"></a><tt><font size=+1>interpret</font></tt></td>
+
+<td><tt><font size=+1>s --</font></tt></td>
+
+<td><tt><font size=+1>Interpret the string on top-of-stack as FIJI input.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="leave"></a><tt><font size=+1>leave</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Leave the current iteration, continuing execution
+after the <a href="#loop">loop</a> or <a href="#+loop">+loop</a>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="load"></a><tt><font size=+1>load</font></tt></td>
+
+<td><tt><font size=+1>s --</font></tt></td>
+
+<td><tt><font size=+1>The String on top-of-stack is taken as the name of
+a file to interpret as if it had been input from the keyboard.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="loop"></a><tt><font size=+1>loop</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control: ubb --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>Marks the end of an iterative body commenced by the
+corresponding <a href="#do">do</a>. loop increments the iterative index
+by one (1) and returns control backwards to the corresponding <a href="#do">do</a>
+until the <a href="#index">index</a> equals the limit established at the
+corresponding <a href="#do">do</a>, at which time execution continues past
+the loop.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>Pops and resolves the unresolved backwards branch
+left on the control flow stack by the corresponding <a href="#do">do</a>.
+The <a href="#Control Flow Stack">control flow stack</a> must be in balance
+when loop is encountered during compilation.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="mod"></a><tt><font size=+1>mod</font></tt></td>
+
+<td><tt><font size=+1>l1 l2 -- l3</font></tt></td>
+
+<td><tt><font size=+1>Divides a java.lang.Long l1 by l2 pushing the java.lang.Long
+modular division result.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="noop"></a><tt><font size=+1>noop</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Does, predictably enough, nothing.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="not"></a><tt><font size=+1>not</font></tt></td>
+
+<td><tt><font size=+1>b -- !b</font></tt></td>
+
+<td><tt><font size=+1>Returns the logical NOT of the Boolean on top-of-stack,
+e.g.,</font></tt>
+<blockquote><tt><font size=+1>true not</font></tt></blockquote>
+<tt><font size=+1>returns</font></tt>
+<blockquote><tt><font size=+1>false</font></tt></blockquote>
+</td>
+</tr>
+
+<tr>
+<td><a NAME="null"></a><tt><font size=+1>null</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; -- null</font></tt></td>
+
+<td><tt><font size=+1>Pushes Java null to the stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="or"></a><tt><font size=+1>or</font></tt></td>
+
+<td><tt><font size=+1>b1 b2 -- b3</font></tt></td>
+
+<td><tt><font size=+1>Performs logical OR on b1 and b2 resulting in b3.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="over"></a><tt><font size=+1>over</font></tt></td>
+
+<td><tt><font size=+1>o1 o2 -- o1 o2 o1</font></tt></td>
+
+<td><tt><font size=+1>Copies second-on-stack over top-of-stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="pick"></a><tt><font size=+1>pick</font></tt></td>
+
+<td><tt><font size=+1>oN oN-1 ... o0 N -- oN oN-1 ... o0 oN</font></tt></td>
+
+<td><tt><font size=+1>Pushes a copy of the Nth stack item to top-of-stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="primitive"></a><tt><font size=+1>primitive</font></tt></td>
+
+<td><tt><font size=+1>c1 -- c2</font></tt></td>
+
+<td><tt><font size=+1>Pops a class object and pushes back the class object
+of the original class's primitive type. See the discussion of <a href="#Calling Java">calling
+Java</a>.</font></tt>
+<p><tt><font size=+1>See also: <a href="#()">()</a> <a href="#(primitive)">(primitive)</a><a href="#>primitive">>primitive</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="quit"></a><tt><font size=+1>quit</font></tt></td>
+
+<td><tt><font size=+1>oN ... o0 -- oN ... o0</font></tt></td>
+
+<td><tt><font size=+1>Abandon the current input without any other effect.
+This word is very poorly specified at the moment and will change.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="repeat"></a><tt><font size=+1>repeat</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control: ubb ufb --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>At runtime, branch backwards to the code following
+the corresponding <a href="#begin">begin</a>.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>At compile time, <i>repeat</i> pops both an unresolved
+forward branch and an unresolved backwards branch from the <a href="#Control Flow Stack">control
+flow stack</a>. The control stack must be in balance, that is, the top
+entry must have been deposited by the corresponding <a href="#while">while</a>
+and second-on-control-stack must have been deposited by the corresponding
+<a href="#begin">begin</a>.
+The branches are resolved and compiled by <i>repeat</i>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="roll"></a><tt><font size=+1>roll</font></tt></td>
+
+<td><tt><font size=+1>oN ... o0 N -- oN-1 ... o0 oN</font></tt></td>
+
+<td><tt><font size=+1>Rolls the Nth stack entry to top-of-stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="rot"></a><tt><font size=+1>rot</font></tt></td>
+
+<td><tt><font size=+1>o1 o2 o3 -- o2 o3 o1</font></tt></td>
+
+<td><tt><font size=+1>Rotates the third stack entry to top-of-stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="setcurrent"></a><tt><font size=+1>setcurrent</font></tt></td>
+
+<td><tt><font size=+1>wlist --</font></tt></td>
+
+<td><tt><font size=+1>Set the wordlist found on top-of-stack to be the
+<a href="#Current Wordlist">current
+wordlist</a> to which all new <a href="#Definitions">Definitions</a> are
+added.</font></tt>
+<p><tt><font size=+1>See also: <a href="#getcurrent">getcurrent</a> <a href="#getorder">getorder</a><a href="#setorder">setorder</a><a href="#wordlist">wordlist</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="setorder"></a><tt><font size=+1>setorder</font></tt></td>
+
+<td><tt><font size=+1>wlistN .. wlist1 N --</font></tt></td>
+
+<td><tt><font size=+1>Empties the <a href="#Search Order">search order</a>,
+then sets the search order to N <a href="#Wordlists">wordlists</a> found
+on the stack.</font></tt>
+<p><tt><font size=+1>See also: <a href="#getcurrent">getcurrent</a> <a href="#getorder">getorder</a><a href="#setcurrent">setcurrent</a><a href="#wordlist">wordlist</a></font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="state"></a><tt><font size=+1>state</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; -- b</font></tt></td>
+
+<td><tt><font size=+1>Returns true if FIJI is in compilation state, false
+if FIJI is in interpretive state.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="swap"></a><tt><font size=+1>swap</font></tt></td>
+
+<td><tt><font size=+1>o1 o2 -- o2 o1</font></tt></td>
+
+<td><tt><font size=+1>Swaps the top two stack entries.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="sysexit"></a><tt><font size=+1>sysexit</font></tt></td>
+
+<td><tt><font size=+1>l --</font></tt></td>
+
+<td><tt><font size=+1>Does a java.lang.System.exit() with an exit code
+of <i>l</i>. This will not only close FIJI but also any Java application
+which launched FIJI. Alternatively, use the milder <a href="#bye">bye</a>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="system"></a><tt><font size=+1>system</font></tt></td>
+
+<td><tt><font size=+1>s --</font></tt></td>
+
+<td><tt><font size=+1>Exec the String on top-of-stack as a system command.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="then"></a><tt><font size=+1>then</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>control: ufb --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics: This word has no valid interpretive
+semantics other than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>Serves as the marker past which control is transferred
+after <a href="#if">if</a> branches over an <a href="#else">else</a>.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:&nbsp;</font></tt>
+<br><tt><font size=+1>At compile time, <i>then</i> pops a control flow
+entry from the control stack representing an unresolved branch laid down
+by <a href="#if">if</a> or <a href="#else">else</a> and resolves the branch.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="to"></a><tt><font size=+1>to</font></tt></td>
+
+<td><tt><font size=+1>o --</font></tt>
+<br><tt><font size=+1>input: name --</font></tt></td>
+
+<td><tt><font size=+1>At runtime, consumes the next lexeme as a name and
+uses it as the name of a <a href="#value">value</a> into which the top-of-stack
+object is then popped. If the name is not found, or is not a value, an
+exception results.&nbsp;</font></tt>
+<br><tt><font size=+1>At compile time, parsees the input in a similar fashion
+and compiles the pop-and-storage operation to be effected at runtime as
+described above.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="true"></a><tt><font size=+1>true</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; -- true</font></tt></td>
+
+<td><tt><font size=+1>Pushes Java true to the stack.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="until"></a><tt><font size=+1>until</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>b --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control: ubb --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>At runtime, if the Boolean on top of the <a href="#Stack">object
+reference stack</a> is false, branch backwards to the code following the
+corresponding <a href="#begin">begin</a>. Otherwise, continue execution
+past the <i>until</i>.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>At compile time, <i>until</i> pops an unresolved
+backwards branch from the <a href="#Control Flow Stack">control flow stack</a>.
+The control stack must be in balance, that is, the top entry must have
+been deposited by the corresponding <a href="#begin">begin</a>. The branch
+is resolved and compiled by <i>until</i>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="value"></a><tt><font size=+1>value</font></tt></td>
+
+<td><tt><font size=+1>&nbsp;--</font></tt>
+<br><tt><font size=+1>input: name --</font></tt></td>
+
+<td><tt><font size=+1>Parses input for a valid name and creates a new value,
+a self-fetching variable as it were. If a valid name is not found, an exception
+results. The initial value of the value is null.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="variable"></a><tt><font size=+1>variable</font></tt></td>
+
+<td><tt><font size=+1>--</font></tt>
+<br><tt><font size=+1>input: name --</font></tt></td>
+
+<td><tt><font size=+1>Parses input for a valid name and creates a new variable.
+If a valid name is not found, an exception results. The initial value of
+the variable is null.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="version"></a><tt><font size=+1>version</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; -- s</font></tt></td>
+
+<td><tt><font size=+1>Returns a string representing the current version
+of FIJI.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="warm"></a><tt><font size=+1>warm</font></tt></td>
+
+<td><tt><font size=+1>&nbsp;oN ... o0 --</font></tt></td>
+
+<td><tt><font size=+1>Resets FIJI but does not alter search order nor rebuild
+the default FIJI Wordlist.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="while"></a><tt><font size=+1>while</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>b --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>control: ubb -- ubb ufb</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>At runtime, if the Boolean on top of the <a href="#Stack">object
+reference stack</a> is false, branch forwards to the code following the
+corresponding <a href="#repeat">repeat</a>.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>At compile time, <i>while</i> compiles and pushes
+an unresolved forewards branch to the <a href="#Control Flow Stack">control
+flow stack</a>. This branch is subsequently resolved and compiled by the
+corresponding <a href="#repeat">repeat</a>, along with the underlying unresolved
+backwards branch which had been pushed by the corresponding <a href="#begin">begin</a>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="wordlist"></a><tt><font size=+1>wordlist</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>input: name --</font></tt></td>
+
+<td><tt><font size=+1>Creates a new named empty wordlist. You may subsequently
+add the wordlist to the <a href="#Search Order">search order</a> via <a href="#setorder">setorder</a>
+and/or make it the <a href="#Current Wordlist">current wordlist</a> to
+which all new <a href="#Definitions">Definitions</a> are added via <a href="#setcurrent">setcurrent</a>.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="words"></a><tt><font size=+1>words</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Output all words in all Wordlists in the search order.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="xor"></a><tt><font size=+1>xor</font></tt></td>
+
+<td><tt><font size=+1>b1 b2 -- b3</font></tt></td>
+
+<td><tt><font size=+1>Performs logical CORon b1 and b2 resulting in b3.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="["></a><tt><font size=+1>[</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics: This word has no valid interpretive
+semantics other than to throw a "compile-only" exception.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid execution semantics.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics: "Left bracket" switches FIJI
+from compilation state to interpretive state. This is useful while compiling
+a definition when one wishes to calculate some intermediate result and
+then compile it, or to compile a word which possesses <a href="#Special Compilation Semantics">special
+compilation semantics</a> and would otherwise not compile itself when encountered
+in compilation state, as in the example:</font></tt>
+<blockquote><tt><font size=+1>: say" [ ' " find compile ] . ;</font></tt></blockquote>
+<tt><font size=+1>which, when executed, will parse a doublequotes-terminated
+string and immediately print it out.</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="\"></a><tt><font size=+1>\</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>Input: text\ --</font></tt></td>
+
+<td><tt><font size=+1>"Backslash" is the FIJI comment character.</font></tt>
+<ul>
+<li>
+<tt><font size=+1>During interactive interpretation or compilation, the
+comment extends from the operation of the initial backslash until the next
+backslash is encountered, or until end-of-line is encountered, whichever
+comes first.</font></tt></li>
+
+<li>
+<tt><font size=+1>During loading of FIJI source code from a file, the comment
+extends from the operation of the initial backslash until the next backslash
+is encountered, or until end-of file, whichever comes first.</font></tt></li>
+</ul>
+<tt><font size=+1>Remember that the initial backslash is a FIJI word, thus,
+to be recognized it must be followed by at least one whitespace character.
+Contrarily, the trailing comment-delimiting backslash character is not
+a FIJI word, it's just a character that's being sought in the input stream,
+and thus needs no whitespace after it. However, it's good style to leave
+space after the comment-closing backslash.</font></tt>
+<p><tt><font size=+1>Examples:</font></tt>
+<blockquote><tt><font size=+1>\ Here's a definition entered at the keybaord.
+\</font></tt>
+<br><tt><font size=+1>: test 10 0 do \ here's a comment entered at the
+keyboard</font></tt>
+<br><tt><font size=+1>0 index . loop ;</font></tt></blockquote>
+
+<blockquote><tt><font size=+1>\ Here's a definition from a source file.
+\</font></tt>
+<br><tt><font size=+1>: test 10 0 do</font></tt>
+<br><tt><font size=+1>\&nbsp; Here's a comment in a source file</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp; to be loaded by FIJI. It spans several</font></tt>
+<br><tt><font size=+1>&nbsp;&nbsp; lines up until the trailing backslash.</font></tt>
+<br><tt><font size=+1>\</font></tt>
+<br><tt><font size=+1>0 index . loop;</font></tt></blockquote>
+</td>
+</tr>
+
+<tr>
+<td><a NAME="]"></a><tt><font size=+1>]</font></tt></td>
+
+<td><tt><font size=+1>&nbsp; --</font></tt></td>
+
+<td><tt><font size=+1>"Right bracket" sets FIJI compilation state. This
+runtime action is only valid when there is currently a definition under
+composition!</font></tt></td>
+</tr>
+
+<tr>
+<td><a NAME="leftcurly"></a><tt>{</tt></td>
+
+<td><tt>--</tt>
+<br><tt>Control: -- cdef</tt></td>
+
+<td><tt><font size=+1>"Left curly" creates an commences composition of
+a new anonymous Definition. Pushes a control flow element on the control
+stack which must be found on top at the execution of <a href="#rightcurly">}</a>&nbsp;
+. <a href="#Definitions">Definitions</a> may nest through the use of <a href="#[">[</a>
+and <a href="#]">]</a> for example</font></tt>
+<blockquote><tt><font size=+1>{ ` test 0 ` . [ { test1 ` test 1 ` . } ]
+} ok</font></tt>
+<br><tt><font size=+1>execute test 0 ok</font></tt>
+<br><tt><font size=+1>execute test 1 ok</font></tt></blockquote>
+</td>
+</tr>
+
+<tr>
+<td><a NAME="rightcurly"></a><tt>}</tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<blockquote><tt><font size=+1>none</font></tt></blockquote>
+
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; --</font></tt>
+<br><tt><font size=+1>return: x --</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics:</font></tt>
+<br><tt><font size=+1>&nbsp; -- x</font></tt>
+<br><tt><font size=+1>control:&nbsp; cdef --</font></tt></td>
+
+<td><tt><font size=+1>Interpretive semantics:</font></tt>
+<br><tt><font size=+1>This word has no valid interpretive semantics other
+than to throw a "compile-only" exception.</font></tt>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Execution semantics: Effects an unnest (a return)
+to the calling definition, or to the text interpreter.</font></tt>
+<br>
+<hr WIDTH="100%">
+<br><tt><font size=+1>Compilation semantics: "Right curly" completes composition
+of an anonymous Definition previously commenced via <a href="#leftcurly">{</a>
+"left curly". and deposits its token on the object reference stack where
+it can be stored for later user with, for instance, <a href="#execute">execute</a>.
+The control stack must be in balance at the time this word is encountered
+in compilation.</font></tt></td>
+</tr>
+</table>
+
+<p>
+<hr WIDTH="100%">
+<h2>
+<a NAME="Tips & Tricks"></a>Tips &amp; Tricks</h2>
+<a href="#Table of Contents">[Table of Contents]</a>
+<h3>
+<a NAME="FIJI for Forth Programmers"></a>FIJI for Forth Programmers</h3>
+FIJI is a Forthlike procedural wrapper for Java. If there is a Forthlike
+facility missing from FIJI that is necessary for your work, please <a href="mailto:jax@well.com">write
+to me</a> about it. If it's truly important, I'll be glad to add it to
+the language. However, the intent is mostly to do complex work in Java.
+For example, there is not a full file handling wordset in FIJI. That's
+because you can do things like the following:
+<blockquote><tt><font size=+1>java.io.FileInputStream class new ( java.io.File
+class new ( " myfile" , ) , )</font></tt></blockquote>
+to place a reference to a <tt><font size=+1>java.io.FileInputStream</font></tt>
+for an extant file called "myfile" on the stack. And, of course, this sort
+of thing works within <a href="#Compilation">Definitions</a>. So the important
+thing for a Forth programer to remember learning FIJI is to concentrate
+on learning how to do things in the fractured Java syntax FIJI offers.
+The Forthish part of FIJI is simplicity itself.
+<p>Some words a Forth programmer might at first glance think are necessary
+are missing in FIJI. There is no need for Forth<tt><font size=+1>TYPE</font></tt>
+since FIJI <tt><font size=+1><a href="#.">.</a></font></tt> ("dot") outputs
+the String value of the top-of-stack for any kind of object. The Standard
+Forth word <tt><font size=+1>WORD</font></tt> is missing because FIJI <tt><font size=+1><a href="#'">'</a></font></tt>
+("tick") occupies that conceptual space in FIJI.
+<p>Several FIJI words have meanings dissimilar to the identical Forth words.
+Important examples are <tt><font size=+1><a href="#'">'</a></font></tt>
+("tick") <tt><font size=+1><a href="#,">,</a></font></tt>&nbsp; ("comma")
+and <tt><font size=+1><a href="#(">(</a></font></tt>&nbsp; ("opencall").
+The author can only plead that FIJI is not Forth, and the meanings assumed
+in FIJI by these words makes perfect sense in FIJI.
+<p>Some Forth Standard words have been simplified in naming, e.g., FIJI
+uses <tt><font size=+1><a href="#setorder">setorder</a></font></tt>&nbsp;
+without the hyphen. <i>De gustibus non disputandum est</i>.
+<h3>
+<a NAME="FIJI for Java Programmers"></a>FIJI for Java Programmers</h3>
+FIJI shares with Forth the simplicity of a unidirectional parser. This
+has several advantages, among them being:
+<ul>
+<li>
+The syntactic rules are simple.</li>
+
+<li>
+Meticulous code factoring is enforced by the necessity of the programmer
+being able to visualize stack effect.</li>
+</ul>
+However, unidirectional parsing does make Java invocation look very odd.
+If you just keep in mind that every single lexical element (lexeme) in
+your source text is having its effect as soon as it is encountered, you
+will find FIJI easy to understand.
+<p>The lack of assignment at method invocation may also seem odd to the
+Java programmer. Two points to remember are that
+<ol>
+<li>
+Everything in FIJI comes from the <a href="#Stack">stack</a> and goes to
+the stack.</li>
+
+<li>
+<a href="#Variables">Variables</a> are untyped, so any object can be scooped
+up from the stack and stored to any <tt><font size=+1><a href="#variable">variable</a></font></tt>or
+<tt><font size=+1><a href="#value">value</a></font></tt>.</li>
+</ol>
+You may wish to explore genuine Forth systems to get a feel for Forth itself.
+You may start browsing the Web for free Forth resources at the author's
+<a href="http://www.well.com/user/jax/rcfb/forth.html">JaxRCFB
+Forth Page</a>. Also, if you have Linux, you may well have gforth installed
+already, a fine Standard Forth implementation.
+<br>
+<hr WIDTH="100%">
+<h2>
+<a NAME="Known Bugs"></a>Known Bugs</h2>
+<a href="#Table of Contents">[Table of Contents]</a>
+<h3>
+<a NAME="Work in Progres"></a>Work in Progress</h3>
+<b>FIJI</b> is very much a work in progress. FIJI currently lacks the following
+planned feature:
+<ul>
+<li>
+Dictionary persistence.</li>
+</ul>
+among other features.
+<h3>
+<a NAME="Threads"></a>Threads</h3>
+
+<ul>
+<li>
+On the Blackdown Linux JVM 1.1.7a, only one FIJI instance can run launched
+from the yet-barely-documented <a href="../packages.html">com.SoftWoehr.desktop.Desktop</a>.</li>
+
+<li>
+I haven't really worked very deeply at getting FIJI to run in multiple
+threads nicely, anyway.</li>
+</ul>
+
+<h3>
+<a NAME="Write Once My Foot!"></a>Write Once My Foot!</h3>
+There are definitely differences from platform to platform and from applet
+environment to applet environment. I haven't yet taken time to figure these
+all out. You may experience variations in behavior, especially in the AWT
+form of the interpreter. However, even the command line form of the interpreter
+experiences oddities, e.g., on VM/ESA, the oK prompt comes out ahead of
+any output resulting from the previous input!? You and I will have some
+fun debugging together, it's easy to see!
+<h3>
+<a NAME="Miscellaneous bugs"></a>Miscellaneous bugs</h3>
+
+<ul>
+<li>
+-b numeric-base switch doesn't set output numeric base.</li>
+
+<li>
+In the <a href="#AWT form of the interpreter">AWT form of the interpreter</a>,
+if the first element of a line of input is <tt><font size=+1>oK</font></tt>
+that input is not recognized. To get around this, enter the lexeme as <tt><font size=+1>'
+oK</font></tt> instead. This should not be a problem in new FijiGUI.</li>
+</ul>
+
+<h3>
+<a NAME="Misfeatures"></a>Misfeatures</h3>
+
+<ul>
+<li>
+I would have skipped the complex exception regimen I coded had I realized
+how difficult it is to get inside Java system exceptions and peel them
+and see what spawned them. I may remove or reform all that code at a future
+date.</li>
+
+<li>
+The way <a href="#dimarray">dimarray</a> is coded works just fine, but
+is really startlingly difficult to utilize. I will have to recode and make
+it smarter so that one can use it without understanding the entire <tt><font size=+1>java.lang.reflection.Array</font></tt>
+class.</li>
+
+<li>
+There is no easy way currently for an application to do the equivalent
+of Forth <tt><font size=+1>key</font></tt> or <tt><font size=+1>key?</font></tt>
+especially under the GUI version of the interpreter. I'm looking at this.</li>
+</ul>
+
+<hr WIDTH="100%">
+<h2>
+<a NAME="Revisions"></a>Revisions</h2>
+<a href="#Table of Contents">[Table of Contents]</a>
+<p>1.2 2001.07.15
+<ul>
+<li>
+Fixed bugs</li>
+
+<li>
+Improved comments</li>
+
+<li>
+Reorganized project</li>
+
+<li>
+New GUI</li>
+</ul>
+1.1 1999-02-04
+<ul>
+<li>
+Added to language</li>
+
+<ul>
+<li>
+<tt><font size=+1><a href="#and">and</a></font></tt></li>
+
+<li>
+<tt><font size=+1><a href="#or">or</a></font></tt></li>
+
+<li>
+<tt><font size=+1><a href="#xor">xor</a></font></tt></li>
+
+<li>
+<tt><font size=+1><a href="#null">null</a></font></tt></li>
+</ul>
+
+<li>
+Fixed <tt><font size=+1><a href="#=">=</a></font></tt>&nbsp; and <a href="#<>">&lt;></a>
+so they would compare to null.</li>
+
+<li>
+"Tick" <a href="#'">'</a> now returns null if input is empty.</li>
+</ul>
+1.0 1999-01-31
+<ul>
+<li>
+Bug fixes, e.g., <tt><font size=+1><a href="#dimarray">dimarray</a></font></tt>.</li>
+
+<li>
+More documentation.</li>
+</ul>
+0.9 1999-01-04
+<ul>
+<li>
+Wordlists now push redefined Definitions.</li>
+
+<li>
+Can now load source code from the command line.</li>
+
+<li>
+Bug fixes: Class fields and methods couldn't be resolved in 0.8</li>
+</ul>
+0.8 1998-12-30 .. File loading, interpreter nesting, example files.
+<br>0.7 1998-12-27 .. More control flow, various utilities.
+<br>0.6 1998-12-24 .. Iteration, decompilation, displaying wordlists.
+<br>0.5 1998-12-21 .. Compiled literals, looping, bug fixes.
+<br>0.4 1998-12-18 .. Definitions, control flow, variables, values, bug
+fixes.
+<br>0.3 1998-12-14 .. First public release.
+<br>
+<hr WIDTH="100%">
+<br><a href="#Table of Contents">[Table of Contents]</a>
+<br><a href="http://www.softwoehr.com">SoftWoehr Home Page</a>
+<br><a href="http://www.well.com/~jax/rcfb/">Jax RCFB Programmer's Page</a>
+<br><a href="mailto:jax@softwoehr.com">Jack J. Woehr</a>
+<p>Last Modified 2001-05-27
+</body>
+</html>
