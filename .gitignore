@@ -1,0 +1,9 @@
+# IntelliJ stuff
+.idea/
+*.iml
+
+# maven stuff
+target/
+
+# vim stuff
+.*.sw?
