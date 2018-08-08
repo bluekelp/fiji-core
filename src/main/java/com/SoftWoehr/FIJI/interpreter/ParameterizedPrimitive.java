@@ -26,7 +26,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package com.SoftWoehr.FIJI.base.desktop.shell;
+package com.SoftWoehr.FIJI.interpreter;
 
 import  com.SoftWoehr.SoftWoehr;
 import  com.SoftWoehr.util.*;
@@ -233,7 +233,7 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
         setName(name);
         Class signature[] = new Class[1];
         signature[0] = this.getClass();
-        Class c = Class.forName("com.SoftWoehr.FIJI.base.desktop.shell.engine");
+        Class c = Class.forName("com.SoftWoehr.FIJI.interpreter.engine");
         method = c.getMethod(methodName, signature);     /* All Arity/0*/
     }
     

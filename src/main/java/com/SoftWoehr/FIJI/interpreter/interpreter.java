@@ -26,7 +26,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package com.SoftWoehr.FIJI.base.desktop.shell;
+package com.SoftWoehr.FIJI.interpreter;
 
 import java.io.*;
 import java.util.*;
@@ -473,7 +473,7 @@ public class interpreter implements SoftWoehr, verbose {
     /** Display main() command line usage. */
     public static void usage() {
         System.err.println("Usage:");
-        System.err.println(" java com.SoftWoehr.FIJI.base.desktop.shell.interpreter [-b base] [-o output_codepage] [-v] [file file ...]");
+        System.err.println(" java com.SoftWoehr.FIJI.interpreter.interpreter [-b base] [-o output_codepage] [-v] [file file ...]");
         System.err.println(" -v                 .. enables verbose mode, weird, unintelligible debug msgs.");
         System.err.println(" -o output_codepage .. for VM/ESA with Java 1.1.4 use Cp1407.");
         System.err.println(" -b base            .. where base is numeric input base, e.g. 8 16 0x10 etc.");

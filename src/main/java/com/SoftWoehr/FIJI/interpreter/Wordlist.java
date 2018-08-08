@@ -26,10 +26,9 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package com.SoftWoehr.FIJI.base.desktop.shell;
+package com.SoftWoehr.FIJI.interpreter;
 
 import  java.util.*;
-import  java.lang.reflect.*;
 
 import  com.SoftWoehr.*;
 import  com.SoftWoehr.util.*;

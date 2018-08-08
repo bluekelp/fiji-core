@@ -26,7 +26,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package com.SoftWoehr.FIJI.base.desktop.shell;
+package com.SoftWoehr.FIJI.interpreter;
 
 import java.util.*;
 import  com.SoftWoehr.SoftWoehr;
@@ -248,7 +248,7 @@ public class SearchOrder implements SoftWoehr, verbose {
         // -------------------
         SearchOrder searchOrder = new SearchOrder();
         searchOrder.nthElement(0);
-        searchOrder.add(new com.SoftWoehr.FIJI.base.desktop.shell.Wordlist());
+        searchOrder.add(new Wordlist());
         // -------------------
         
         return;

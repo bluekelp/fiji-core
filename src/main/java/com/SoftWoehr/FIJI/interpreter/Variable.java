@@ -1,4 +1,4 @@
-/* Value.java ...  */
+/* Variable.java ...  */
 /*********************************************/
 /* Copyright *C* 1999, All Rights Reserved.  */
 /* Jack J. Woehr jax@well.com jwoehr@ibm.net */
@@ -26,24 +26,24 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package com.SoftWoehr.FIJI.base.desktop.shell;
+package com.SoftWoehr.FIJI.interpreter;
 
-import  com.SoftWoehr.SoftWoehr;
+import  com.SoftWoehr.*;
 import  com.SoftWoehr.util.*;
 
- /** Value is a self-fetching Variable.
+ /**
    *
    * @author $Author: jwoehr $
    * @version $Revision: 1.1.1.1 $
    */
-public class Value extends Semantic implements SoftWoehr, verbose
+public class Variable extends Semantic implements SoftWoehr, verbose
 {
   /*****************************************/
   /*% SoftWoehr default variables section. */
   /*****************************************/
 
   /** Revision level */
-  private static final String rcsid = "$Id: Value.java,v 1.1.1.1 2001/08/21 02:39:25 jwoehr Exp $";
+  private static final String rcsid = "$Id: Variable.java,v 1.1.1.1 2001/08/21 02:39:28 jwoehr Exp $";
   /** Implements com.SoftWoehr.SoftWoehr */
   public String rcsId() {return rcsid;}
 
@@ -73,18 +73,17 @@ public class Value extends Semantic implements SoftWoehr, verbose
   /*********************************/
 
   /** Arity/0 ctor, anonymous */
-  public Value () {
-    super("Anonymous Value");
+  public Variable () {
+    super("Anonymous Variable");
     }
 
   /** Arity/1 ctor, the most useful one. */
-  public Value (String name) {
+  public Variable (String name) {
     super(name);
   }
 
-  /** Return a String representation of the object. */
   public String toString () {
-    return "A Value named " + getName() + " whose value is " + datum;
+    return "A Variable named " + getName() + " whose value is " + datum ;
     }
 
   protected void finalize () throws Throwable
@@ -92,7 +91,7 @@ public class Value extends Semantic implements SoftWoehr, verbose
       super.finalize();
     }
 
-  /** The Value notifies subcomponents of shutdown then shuts itself down.
+  /** The Variable notifies subcomponents of shutdown then shuts itself down.
     * @see com.SoftWoehr.SoftWoehr
     */
   public int shutdown() {
@@ -105,23 +104,14 @@ public class Value extends Semantic implements SoftWoehr, verbose
     return 0;
     }
 
-  /** Reinitialize the Value, discarding previous state. */
-  //public void reinit() {
-  //  }
-
-  /** Execution semantics are to push own datum. */
-  public void execute (engine e) {
+  /* A method for the FIJI operator '@' to use. */
+  public void fetch (engine e) {
     e.push(datum);
     }
 
-  /** Get the datum. */
-  public Object getDatum() {
-    return datum;
-    }
-
-  /** Set the datum. */
-  public void setDatum(Object o) {
-    datum = o;
+  /* A method for the FIJI operator '!' to use. */
+  public void store (engine e) {
+    datum = e.pop();
     }
 
   /*******************************/
@@ -158,15 +148,15 @@ public class Value extends Semantic implements SoftWoehr, verbose
   /*% Main */
   /*********/
 
-  /** Demonstrate <code>Value</code>. */
+  /** Demonstrate <code>Variable</code>. */
   public static void main (String argv[]) {
 
     GetArgs myArgs = new GetArgs(argv);/* Assimilate the command line.     */
-    Value theValue = new Value();      /* Instance of Value we're demoing. */
+    Variable theVariable = new Variable();         /* Instance of Variable we're demoing.  */
 
     /* GPL'ed SoftWoehr announces itself. */
-    System.out.println("Value, Copyright (C) 1999 Jack J. Woehr.");
-    System.out.println("Value comes with ABSOLUTELY NO WARRANTY;");
+    System.out.println("Variable, Copyright (C) 1999, 2000 by Jack J. Woehr.");
+    System.out.println("Variable comes with ABSOLUTELY NO WARRANTY;");
     System.out.println("Please see the file COPYING and/or COPYING.LIB");
     System.out.println("which you should have received with this software.");
     System.out.println("This is free software, and you are welcome to redistribute it");
@@ -177,7 +167,7 @@ public class Value extends Semantic implements SoftWoehr, verbose
       {
       if (myArgs.nthOption(i).getOption().substring(1,2).equals("v"))
         {
-        theValue.setVerbose(true);
+        theVariable.setVerbose(true);
         }                                                         /* End if*/
       }
 
@@ -188,6 +178,6 @@ public class Value extends Semantic implements SoftWoehr, verbose
 
     return;
     }
-}                                                      /* End of Value class*/
+}                                                      /* End of Variable class*/
 
-/*  End of Value.java */
+/*  End of Variable.java */

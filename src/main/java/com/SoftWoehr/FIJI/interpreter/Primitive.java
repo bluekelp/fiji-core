@@ -26,7 +26,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package com.SoftWoehr.FIJI.base.desktop.shell;
+package com.SoftWoehr.FIJI.interpreter;
 
 import  java.lang.reflect.*;
 
@@ -77,7 +77,7 @@ class Primitive extends Semantic implements SoftWoehr, verbose {
     throws java.lang.ClassNotFoundException
     , java.lang.NoSuchMethodException {
         this.setName(name);
-        Class c = Class.forName("com.SoftWoehr.FIJI.base.desktop.shell.engine");
+        Class c = Class.forName("com.SoftWoehr.FIJI.interpreter.engine");
         method = c.getMethod(methodName, new Class[0]);          /* All Arity/0*/
     }
     
@@ -93,7 +93,7 @@ class Primitive extends Semantic implements SoftWoehr, verbose {
     throws java.lang.ClassNotFoundException
     , java.lang.NoSuchMethodException {
         this.setName(name);
-        Class c = Class.forName("com.SoftWoehr.FIJI.base.desktop.shell.engine");
+        Class c = Class.forName("com.SoftWoehr.FIJI.interpreter.engine");
         method = c.getMethod(methodName, new Class[0]);          /* All Arity/0*/
         compilationMethod = c.getMethod(compilationMethodName
         , new Class[0]);  /* All Arity/0*/

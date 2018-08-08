@@ -13,6 +13,8 @@
 
 package com.SoftWoehr.FIJI;
 
+import com.SoftWoehr.FIJI.interpreter.interpreter;
+
 /** This class merely serves as a launcher for the FIJI
  * interpreter running at the command line.
  * @author  jax
@@ -27,7 +29,7 @@ public class FIJI {
    * @param args the command line arguments
    */
     public static void main (String args[]) {
-        com.SoftWoehr.FIJI.base.desktop.shell.interpreter.main(args);
+        interpreter.main(args);
     }
     
 }

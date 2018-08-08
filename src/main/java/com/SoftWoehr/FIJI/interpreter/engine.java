@@ -27,7 +27,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package com.SoftWoehr.FIJI.base.desktop.shell;
+package com.SoftWoehr.FIJI.interpreter;
 
 import java.io.*;
 import java.util.*;
@@ -144,12 +144,12 @@ public class engine implements SoftWoehr, verbose {
             cClass     = Class.forName("java.lang.Class");
             cBoolean   = Class.forName("java.lang.Boolean");
             cObject    = Class.forName("java.lang.Object");
-            cJavaParam = Class.forName("com.SoftWoehr.FIJI.base.desktop.shell.JavaParam");
-            cVariable  = Class.forName("com.SoftWoehr.FIJI.base.desktop.shell.Variable");
-            cValue     = Class.forName("com.SoftWoehr.FIJI.base.desktop.shell.Value");
-            cDefinition= Class.forName("com.SoftWoehr.FIJI.base.desktop.shell.Definition");
+            cJavaParam = Class.forName("com.SoftWoehr.FIJI.interpreter.JavaParam");
+            cVariable  = Class.forName("com.SoftWoehr.FIJI.interpreter.Variable");
+            cValue     = Class.forName("com.SoftWoehr.FIJI.interpreter.Value");
+            cDefinition= Class.forName("com.SoftWoehr.FIJI.interpreter.Definition");
             cParameterizedPrimitive =
-            Class.forName("com.SoftWoehr.FIJI.base.desktop.shell.ParameterizedPrimitive");
+            Class.forName("com.SoftWoehr.FIJI.interpreter.ParameterizedPrimitive");
             cLiteral =   /* Since name resolution by forName() won't work this one.*/
             new ParameterizedPrimitive.Literal("").getClass();
         }                                                            /* End try*/
@@ -183,7 +183,7 @@ public class engine implements SoftWoehr, verbose {
     public boolean state;
     
     /** The search order */
-    public com.SoftWoehr.FIJI.base.desktop.shell.SearchOrder searchOrder;
+    public SearchOrder searchOrder;
     
     /** The current wordlist to which new defs are added. */
     public Wordlist currentWordlist;
@@ -2383,7 +2383,7 @@ class JavaArgs extends Vector {
      * All the objects in the JavaArgs vector are stored in JavaParam's,
      * along with their nominal class for the purpose of method signature
      * resolution.
-     * @see com.SoftWoehr.FIJI.base.desktop.shell.JavaParam#
+     * @see JavaParam#
      * @return An array of objects representing the arguments stored
      * in a JavaArgs
      */
