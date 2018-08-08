@@ -19,6 +19,7 @@ import com.SoftWoehr.util.Argument;
 import com.SoftWoehr.util.GetArgs;
 
 import java.io.*;
+import java.util.function.Consumer;
 
 /** This class merely serves as a launcher for the FIJI
  * interpreter running at the command line.
@@ -40,7 +41,8 @@ public class FIJI {
 
       /* Create the interpreter instance. */
       try {
-        i = new interpreter();
+        Consumer<String> outputter = this::output;
+        i = new interpreter(outputter);
       }                                                          /* End try*/
 
       catch (Exception e) {

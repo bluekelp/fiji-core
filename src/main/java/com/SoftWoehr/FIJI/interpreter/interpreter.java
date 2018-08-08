@@ -30,6 +30,7 @@ package com.SoftWoehr.FIJI.interpreter;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 import  com.SoftWoehr.SoftWoehr;
 import  com.SoftWoehr.util.*;
@@ -41,6 +42,8 @@ import  com.SoftWoehr.util.*;
  */
 
 public class interpreter implements verbose {
+
+    private Consumer<String> outputter;
     
     /**  Flags whether we are in verbose mode. */
     private boolean isverbose = false;
@@ -70,7 +73,8 @@ public class interpreter implements verbose {
     private String defaultDelimiters = " \t\n\r";
     
     /** Arity/0 ctor. */
-    public interpreter() {
+    public interpreter(Consumer<String> outputter) {
+        this.outputter = outputter;
         reinit();
     }
     
@@ -203,7 +207,7 @@ public class interpreter implements verbose {
     }
 
     public void output(String s) {
-
+        outputter.accept(s);
     }
     
     /** Issue the prompt as appropriate */
