@@ -352,8 +352,9 @@ public class interpreter implements SoftWoehr, verbose {
     }
     
     /** Interpret one String.
+     * returns true if we should stop
      * @param s  */
-    public void interpret(String s) {
+    public boolean interpret(String s) {
         announce("String to interpret is: " + s);
         String aLexeme;                   /* Holds a lexeme as we examine it. */
         Semantic semantic;/* Holds a semantic as we decide what to do with it.*/
@@ -457,6 +458,7 @@ public class interpreter implements SoftWoehr, verbose {
                 myEngine.warm();
             }                                                     /* End catch*/
         }                         /* End if (interpretation string non-null)*/
+        return killFlag;
     }                                      /* End of interpreter.interpret*/
     
     
@@ -618,14 +620,13 @@ public class interpreter implements SoftWoehr, verbose {
         
     /* Begin to parse interactive input. */
         i.prompt();
-        while (!i.killFlag) {
+        while (true) {
             try {
                 String tib = br.readLine();
 
-                i.interpret(tib);
-                if (!i.killFlag) {
-                    i.prompt();
-                }                                                       /* End if*/
+                boolean stop = i.interpret(tib);
+                if (stop) break;
+                else i.prompt();
             }                                                      /* End try*/
             catch (EOFException e) {                          /* No more input.*/
                 i.setKillFlag(true);
