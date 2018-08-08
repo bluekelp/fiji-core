@@ -30,9 +30,7 @@ package com.SoftWoehr.FIJI.interpreter;
 
 import java.io.*;
 import java.util.*;
-import java.util.function.Consumer;
 
-import  com.SoftWoehr.SoftWoehr;
 import  com.SoftWoehr.util.*;
 
 /** A class to interpret input of a stream of FIJI commands.
@@ -43,7 +41,8 @@ import  com.SoftWoehr.util.*;
 
 public class interpreter implements verbose {
 
-    private Consumer<String> outputter;
+    private PrintStream err;
+    private PrintStream out;
     
     /**  Flags whether we are in verbose mode. */
     private boolean isverbose = false;
@@ -72,9 +71,9 @@ public class interpreter implements verbose {
     
     private String defaultDelimiters = " \t\n\r";
     
-    /** Arity/0 ctor. */
-    public interpreter(Consumer<String> outputter) {
-        this.outputter = outputter;
+    public interpreter(PrintStream err, PrintStream out) {
+        this.err = err;
+        this.out = out;
         reinit();
     }
     
@@ -207,7 +206,11 @@ public class interpreter implements verbose {
     }
 
     public void output(String s) {
-        outputter.accept(s);
+        out.print(s);
+    }
+
+    public void outputError(Exception e) {
+        e.printStackTrace(err);
     }
     
     /** Issue the prompt as appropriate */
@@ -265,7 +268,7 @@ public class interpreter implements verbose {
                             semantic.execute(myEngine);                     /* So do it.*/
                         }                                                 /* End try*/
                         catch (Exception e) {
-                            e.printStackTrace(System.err);
+                            e.printStackTrace(err);
                             output(e.getMessage());
                             myEngine.warm();
                         }                                               /* End catch*/
@@ -279,7 +282,7 @@ public class interpreter implements verbose {
                             semantic.compile(myEngine);                /* So compile it.*/
                         }                                                 /* End try*/
                         catch (Exception e) {
-                            e.printStackTrace(System.err);
+                            e.printStackTrace(err);
                             output(e.getMessage());
                             myEngine.warm();
                         }                                               /* End catch*/
@@ -308,7 +311,7 @@ public class interpreter implements verbose {
                             catch (Exception x) {
                                 announce("interpreter had problem compiling literal Long.");
                                 announce("Lexeme was: " + aLexeme);
-                                x.printStackTrace(System.err);
+                                x.printStackTrace(err);
                                 myEngine.warm();
                             }                                             /* End catch*/
                         }                                                 /* End try*/
@@ -319,7 +322,7 @@ public class interpreter implements verbose {
                             catch (Exception x) {
                                 announce("interpreter had problem compiling literal String.");
                                 announce("Lexeme was: " + aLexeme);
-                                x.printStackTrace(System.err);
+                                x.printStackTrace(err);
                                 myEngine.warm();
                             }                                             /* End catch*/
                         }                                               /* End catch*/
@@ -332,7 +335,7 @@ public class interpreter implements verbose {
                 }
             }                                                       /* End try*/
             catch (Exception e) {
-                e.printStackTrace(System.err);
+                e.printStackTrace(err);
                 myEngine.warm();
             }                                                     /* End catch*/
         }                         /* End if (interpretation string non-null)*/

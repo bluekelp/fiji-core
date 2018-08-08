@@ -41,8 +41,7 @@ public class FIJI {
 
       /* Create the interpreter instance. */
       try {
-        Consumer<String> outputter = this::output;
-        i = new interpreter(outputter);
+        i = new interpreter(System.err, System.out);
       }                                                          /* End try*/
 
       catch (Exception e) {
