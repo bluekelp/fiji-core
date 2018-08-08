@@ -617,32 +617,27 @@ public class interpreter implements SoftWoehr, verbose {
         }                               /* Done loading any source arguments.*/
         
     /* Begin to parse interactive input. */
-        String tib = "";
-        
         i.prompt();
         while (!i.killFlag) {
             try {
-                tib = br.readLine();
+                String tib = br.readLine();
+
+                i.interpret(tib);
+                if (!i.killFlag) {
+                    i.prompt();
+                }                                                       /* End if*/
             }                                                      /* End try*/
-            
             catch (EOFException e) {                          /* No more input.*/
                 i.setKillFlag(true);
                 break;
             }
-            
             catch (IOException e) {
                 e.printStackTrace(System.err);
                 break;
             }
-            
             catch (Exception e) {
                 e.printStackTrace(System.err);
             }                                                    /* End catch*/
-            
-            i.interpret(tib);
-            if (!i.killFlag) {
-                i.prompt();
-            }                                                       /* End if*/
         }                                                        /* End while*/
         try {
             br.close();
@@ -650,7 +645,6 @@ public class interpreter implements SoftWoehr, verbose {
         catch (Exception e) {
             e.printStackTrace(System.err);
         }                                                       /* End catch*/
-        
     }
 }                                               /* End of interpreter class*/
 
