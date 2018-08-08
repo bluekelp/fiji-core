@@ -78,65 +78,65 @@ public class engine implements SoftWoehr, verbose {
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cObject    ;
+    public Class cObject    ;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cBoolean   ;
+    public Class cBoolean   ;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cString    ;
+    public Class cString    ;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cLong      ;
+    public Class cLong      ;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cInteger   ;
+    public Class cInteger   ;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cClass     ;
+    public Class cClass     ;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cJavaParam ;
+    public Class cJavaParam ;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cVariable  ;
+    public Class cVariable  ;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cValue     ;
+    public Class cValue     ;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cDefinition;
+    public Class cDefinition;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cParameterizedPrimitive;
+    public Class cParameterizedPrimitive;
     
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
-    public static Class cLiteral;
+    public Class cLiteral;
     
     /** Init the static class references. */
-    static {
+    private void loadClasses() {
         try {
             cString    = Class.forName("java.lang.String");
             cLong      = Class.forName("java.lang.Long");
@@ -152,12 +152,11 @@ public class engine implements SoftWoehr, verbose {
             Class.forName("com.SoftWoehr.FIJI.interpreter.ParameterizedPrimitive");
             cLiteral =   /* Since name resolution by forName() won't work this one.*/
             new ParameterizedPrimitive.Literal("").getClass();
-        }                                                            /* End try*/
-        catch (Exception e) {
-            e.printStackTrace(System.err);
-        }                                                          /* End catch*/
+        } catch (Exception e) {
+            myInterpreter.outputError(e);
+        }
     }
-    
+
     /** Object stack. */
     public Stack<Object> stack;
     
@@ -187,20 +186,14 @@ public class engine implements SoftWoehr, verbose {
     
     /** The current wordlist to which new defs are added. */
     public Wordlist currentWordlist;
-    
-    /** Arity/0 ctor. Initializes the engine cold. Does not
-     * associate the engine with an input interpreter.
-     */
-    private engine() {
-        cold();
-    }
-    
+
     /** Open engine on an input interpreter and initialize cold.
      * @param i the associated input interpreter
      */
     public engine(interpreter i) {
-        this();
+        cold();
         myInterpreter = i;
+        loadClasses();
     }
     
     /** shutdown() here does nothing.

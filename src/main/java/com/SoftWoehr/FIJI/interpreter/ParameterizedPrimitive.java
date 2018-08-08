@@ -58,7 +58,23 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
     /** The object that this prim implicitly operates upon. */
     private Object myObject;
     private Class  myObjectClass;
-    
+
+    private static Class intClassInstance;
+    private static Class intClass() throws ClassNotFoundException {
+        if (intClassInstance == null)
+            intClassInstance = Class.forName("java.lang.Integer");
+
+        return intClassInstance;
+    }
+
+    private static Class objClassInstance;
+    private static Class objClass() throws ClassNotFoundException {
+        if (objClassInstance == null)
+            objClassInstance = Class.forName("java.lang.Object");
+
+        return objClassInstance;
+    }
+
     /** The primitive for a branch. */
     public static class Branch extends ParameterizedPrimitive {
         /**
@@ -73,7 +89,7 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
         )
         throws java.lang.ClassNotFoundException
         , java.lang.NoSuchMethodException {
-            super(name, methodName, new Integer(delta), engine.cInteger);
+            super(name, methodName, new Integer(delta), intClass());
         }
     }                                                  /* End of Branch class*/
     
@@ -139,7 +155,7 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
             super ( "(literal)"
             , "doLiteral"
             , o
-            , engine.cObject
+            , objClass()
             );
         }
         
@@ -163,7 +179,7 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
         public Do   (int offset)   /* Offset in definition at which 'do' occurs*/
         throws java.lang.ClassNotFoundException
         , java.lang.NoSuchMethodException {
-            super("(do)", "doDo", new Integer(offset), engine.cInteger);
+            super("(do)", "doDo", new Integer(offset), intClass());
         }
     }                                                      /* End of Do class*/
     
@@ -176,7 +192,7 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
         public Loop   (int delta)
         throws java.lang.ClassNotFoundException
         , java.lang.NoSuchMethodException {
-            super("(loop)", "loop", new Integer(delta), engine.cInteger);
+            super("(loop)", "loop", new Integer(delta), intClass());
         }
     }                                                    /* End of Loop class*/
     
@@ -189,7 +205,7 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
         public PlusLoop   (int delta)
         throws java.lang.ClassNotFoundException
         , java.lang.NoSuchMethodException {
-            super("(+loop)", "plusLoop", new Integer(delta), engine.cInteger);
+            super("(+loop)", "plusLoop", new Integer(delta), intClass());
         }
     }                                                    /* End of Loop class*/
     
