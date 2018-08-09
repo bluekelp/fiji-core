@@ -65,7 +65,7 @@ public class Engine {
         if (e != null) {
             interpreter.outputError(e);
         }
-        if (s == null && e != null) {
+        if (s == null && e != null && e.getMessage() != null) {
             s = e.getMessage();
         }
         else if (s == null) {
@@ -238,7 +238,7 @@ public class Engine {
 
     // Outputs to verbose stream if verbose.
     void announce(String s) {
-        if (isverbose) output(s);
+        if (isverbose && s != null) output(s);
     }
 
     /**
