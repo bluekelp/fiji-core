@@ -34,8 +34,6 @@ package com.softwoehr.fiji.base;
  * @version $Revision: 1.1.1.1 $
  */
 public class Exceptions extends java.lang.Exception {
-    private Throwable t;
-
     /** Exceptions pertaining to com.SoftWoehr.desktop. */
     public static class desktop {
         /** Exceptions pertaining to com.SoftWoehr.desktop.shell. */
@@ -337,66 +335,19 @@ public class Exceptions extends java.lang.Exception {
         }                                                              /* shell*/
     }                                                              /* desktop*/
 
-    /** A buncha Exceptions types. */
-    public static class BackToMain extends com.softwoehr.fiji.base.Exceptions {
-
-        /** Arity/1 Throwable constructor. */
-        public BackToMain(Throwable t) {
-            super(t);
-        }
-
-        /** Arity/2 Throwable constructor. */
-        public BackToMain(String s, java.lang.Throwable t) {
-            super(s,t);
-        }
-
-    }
-
-    /** A buncha Exceptions types. */
-    public static class BadArgToMain extends com.softwoehr.fiji.base.Exceptions {
-
-        /** Arity/1 Throwable constructor. */
-        public BadArgToMain(Throwable t) {
-            super(t);
-        }
-
-        /** Arity/2 Throwable constructor. */
-        public BadArgToMain(String s, java.lang.Throwable t) {
-            super(s,t);
-        }
-    }
-
     /** Arity/0 ctor. */
-    public Exceptions() {
-    }
+    private Exceptions() {}
 
     /** Arity/1 Throwable constructor. */
     public Exceptions(Throwable t) {
-        this.t = t;
+        super(t);
     }
 
     /** Arity/2 Throwable constructor. */
     public Exceptions(String s, java.lang.Throwable t) {
-        super(s);
-        this.t = t;
+        super(s, t);
     }
 
-    public String toString() {
-        String result = super.toString();
-        if (null != t) {
-            result += "Embedded exception: " + t.toString();
-        }                                                           /* End if*/
-        return result;
-    }
-
-    protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
-        super.finalize();
-    }
-
-    /** Return the Throwable, if any, which occasioned this Exceptions. */
-    public Throwable getThrowable() {
-        return t;
-    }
 }                                                     /* End of Exceptions class*/
 
 /*  End of Exceptions.java */

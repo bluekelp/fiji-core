@@ -34,8 +34,6 @@ package com.softwoehr.fiji.base;
  * @version $Revision: 1.1.1.1 $
  */
 public class Error extends java.lang.Error {
-    private Throwable t;
-
     /** Errors pertaining to com.SoftWoehr.desktop. */
     public static class desktop {
         /** Errors pertaining to com.SoftWoehr.desktop.shell. */
@@ -249,38 +247,19 @@ public class Error extends java.lang.Error {
     }
 
     /** Arity/0 ctor. */
-    public Error() {
-    }
+    private Error() {}
 
     /** Arity/1 Throwable constructor.
      * @param t  */
     public Error(Throwable t) {
-        this.t = t;
+        super(t);
     }
 
     /** Arity/2 Throwable constructor.
      * @param s
      * @param t  */
     public Error(String s, java.lang.Throwable t) {
-        super(s);
-        this.t = t;
-    }
-
-    /**
-     * @return  */
-    public String toString()
-    {return super.toString();}
-
-    /**
-     * @throws Throwable  */
-    protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
-        super.finalize();
-    }
-
-    /** Return the Throwable, if any, which occasioned this error.
-     * @return  */
-    public Throwable getThrowable() {
-        return t;
+        super(s, t);
     }
 }                                                     /* End of Error class*/
 
