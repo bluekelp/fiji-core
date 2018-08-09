@@ -71,13 +71,13 @@ public class Engine {
     private boolean isverbose = false;
 
     // References to a Class object for comparisons to avoid frequent calls to Class.forName()
-    private Class cBoolean   ;
-    private Class cString    ;
-    private Class cLong      ;
-    private Class cClass     ;
-    private Class cJavaParam ;
-    private Class cVariable  ;
-    private Class cValue     ;
+    private Class cBoolean;
+    private Class cString;
+    private Class cLong;
+    private Class cClass;
+    private Class cJavaParam;
+    private Class cVariable;
+    private Class cValue;
     private Class cDefinition;
     private Class cParameterizedPrimitive;
     private Class cLiteral;
@@ -85,12 +85,12 @@ public class Engine {
     /** Init the static class references. */
     private void loadClasses() {
         try {
+            //cInteger   = Class.forName("java.lang.Integer");
+            //cObject    = Class.forName("java.lang.Object");
             cString    = Class.forName("java.lang.String");
             cLong      = Class.forName("java.lang.Long");
-//            cInteger   = Class.forName("java.lang.Integer");
             cClass     = Class.forName("java.lang.Class");
             cBoolean   = Class.forName("java.lang.Boolean");
-//            cObject    = Class.forName("java.lang.Object");
             cJavaParam = Class.forName("com.softwoehr.fiji.interpreter.JavaParam");
             cVariable  = Class.forName("com.softwoehr.fiji.interpreter.Variable");
             cValue     = Class.forName("com.softwoehr.fiji.interpreter.Value");
@@ -98,13 +98,13 @@ public class Engine {
             cParameterizedPrimitive =
             Class.forName("com.softwoehr.fiji.interpreter.ParameterizedPrimitive");
             cLiteral =   /* Since name resolution by forName() won't work this one.*/
-            new ParameterizedPrimitive.Literal("").getClass();
+                new ParameterizedPrimitive.Literal("").getClass();
         } catch (Exception e) {
             outputError(e);
         }
     }
 
-    /** Object stack. */
+    // "the stack" the main object/data stack used in our "forth"
     public Stack<Object> stack;
 
     /** Inner Interpreter is the Definition Interpreter.
@@ -133,25 +133,22 @@ public class Engine {
         myInterpreter.outputError(e);
     }
 
-    /** Compilation state */
+    // Compilation state - interpreting or compiling
     boolean state;
 
-    /** The search order */
     private SearchOrder searchOrder;
 
-    /** The current wordlist to which new defs are added. */
+    // where new defs are added
     private Wordlist currentWordlist;
 
-    /** Open Engine on an input Interpreter and initialize cold.
-     * @param i the associated input Interpreter
-     */
+    // Open Engine on an input Interpreter and initialize cold.
     public Engine(Interpreter i) {
         cold();
         myInterpreter = i;
         loadClasses();
     }
 
-    /** Reinit Engine like just came up. */
+    // Reinit Engine like just came up.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void cold() {
         warm();
@@ -161,7 +158,7 @@ public class Engine {
         currentWordlist = searchOrder.nthElement(0);                    /* == w*/
     }
 
-    /** Reinit Engine but preserve some state. */
+    // Reinit Engine but preserve some state.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void warm() {
         stack = new Stack<>();
@@ -170,7 +167,7 @@ public class Engine {
         state = INTERPRETING;
         if (null != myInterpreter) {     /* Interpreter calls Engine.warm() when it wants to reset self.*/
             myInterpreter.warmReset();
-        }                                                           /* End if*/
+        }
     }
 
     /** Set state INTERPRETING/COMPILING.
@@ -189,16 +186,11 @@ public class Engine {
         return state;
     }
 
-    /** Sets verbosity of the debugging output.
-     * @param tf <CODE>true</CODE> iff verbose.
-     */
     private void    setVerbose  (boolean tf) {
         isverbose = tf;
     }
 
-    /** Outputs to verbose stream if verbose.
-     * @param s Message to announce
-     */
+    // Outputs to verbose stream if verbose.
     void    announce    (String s)   { if (isverbose) output(s);}
 
     /** Find a semantic by name in one of the wordlists
@@ -264,7 +256,7 @@ public class Engine {
             String s = "Stack under.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-        }                                                           /* End if*/
+        }
     }
 
     /** drop          o --
@@ -280,7 +272,7 @@ public class Engine {
             String s = "Stack under.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-        }                                                           /* End if*/
+        }
     }
 
     /** swap      o1 o2 -- o2 o1
@@ -297,7 +289,7 @@ public class Engine {
             String s = "Stack under.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-        }                                                           /* End if*/
+        }
     }
 
     /** over        o1 o2 -- o1 o2 o1
@@ -314,7 +306,7 @@ public class Engine {
             String s = "Stack under.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-        }                                                           /* End if*/
+        }
     }
 
     /** rot        o1 o2 o3 -- o2 o3 o1
@@ -333,7 +325,7 @@ public class Engine {
             String s = "Stack under.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-        }                                                           /* End if*/
+        }
     }
 
     /** roll        om .. o((m-n)+1) om-n  m -- .. o((m-n)+1) om
@@ -355,14 +347,14 @@ public class Engine {
                 String s = "Stack under.";
                 announce(s);
                 throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-            }                                                         /* End if*/
+            }
         }
         else {
             String s = "Stack under.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-        }                                                           /* End if*/
-    }                                                /* public void roll ()*/
+        }
+    }
 
     /** pick      om .. om-n m -- om .. om-n om
      * throws StackUnderflow If stack is too shallow for operation.
@@ -382,13 +374,13 @@ public class Engine {
                 String s = "Stack under.";
                 announce(s);
                 throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-            }                                                         /* End if*/
+            }
         }
         else {
             String s = "Stack under.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-        }                                                           /* End if*/
+        }
     }
 
     /** .s        o1 .. oN -- o1 .. oN */
@@ -402,7 +394,7 @@ public class Engine {
                 }
                 else {
                     output("`null` ");
-                }                                                       /* End if*/
+                }
 
             }
         }
@@ -422,7 +414,7 @@ public class Engine {
                 }
                 else {
                     output("`null` ");
-                }                                                       /* End if*/
+                }
             }
         }
         else {
@@ -443,7 +435,7 @@ public class Engine {
                 }
                 else {
                     output("`null` ");
-                }                                                       /* End if*/
+                }
             }
         }
         else {
@@ -461,11 +453,11 @@ public class Engine {
             }
             else {
                 output("`null` ");
-            }                                                         /* End if*/
+            }
         }
         else {
             output("Empty stack. ");
-        }                                                           /* End if*/
+        }
     }
 
     /** Display destructively all stack entries.
@@ -483,14 +475,14 @@ public class Engine {
                 }
                 else {
                     s = "`null`";
-                }                                                       /* End if*/
+                }
                 output(s + " ");
-            }                                                      /* End while*/
-        }                                                           /* End if*/
+            }
+        }
         else {
             output("Empty stack. ");
-        }                                                           /* End if*/
-    }                                                           /* dotdot()*/
+        }
+    }
 
     /** Print out the inner Interpreter state.
      * .r --        R: --
@@ -524,31 +516,31 @@ public class Engine {
                     String name = (String) pop();
                     try {
                         push(Class.forName(name));
-                    }                                                    /* End try*/
+                    }
                     catch (Exception e) {
                         String s = name + " is not a class name.";
                         announce(s);
                         outputError(e);
                         throw new Exceptions.desktop.shell.NotClassName(s, e);
-                    }                                                  /* End catch*/
+                    }
                 }
                 else {
                     pop();
                     push(null);
-                }                                                       /* End if*/
-            }                                                        /* End try*/
+                }
+            }
             catch (Exception e) {
                 String s = "classForName() couldn't getClass() on top-of-stack item.";
                 outputError(e);
                 throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassInstance(s, e);
-            }                                                      /* End catch*/
-        }                                                           /* End if*/
+            }
+        }
         else {
             String s = "Stack under.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-        }                                                           /* End if*/
-    }                                              /* End of classForName()*/
+        }
+    }
 
     /** Convert an arg to a JavaParam with the class signature set.
      * ()        o stringClassName|Class -- javaParam
@@ -566,16 +558,16 @@ public class Engine {
             else                       /* TOS is presumed a string naming a class*/ {
                 classForName();         /* TOS presumed to be string name of class.*/
                 c = (Class) pop();                         /* Grab resultant class.*/
-            }                                                         /* End if*/
-        }                                                          /* End try*/
+            }
+        }
         catch (Exception e) {
       /* The only thing likely to throw above is classForName() */
             String s = "castParam() couldn't classForName() on top-of-stack item.";
             outputError(e);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassName(s, e);
-        }                                                        /* End catch*/
-        push(new JavaParam(pop(), c));                   /* Create a JavaParam.*/
-    }                                                 /* End of castParam()*/
+        }
+        push(new JavaParam(pop(), c));
+    }
 
     /** Convert a reflection type to its primitive type.
      * This is necessary for methods type as 'int', etc.
@@ -592,19 +584,19 @@ public class Engine {
             try {
                 Field f = c.getField("TYPE");
                 push(f.get(c));
-            }                                                        /* End try*/
+            }
             catch (Exception e) {
                 String s = "classToPrimitiveType() found a  non-reflected type.";
                 announce(s);
                 outputError(e);
                 throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.NonReflectedType(s, e);
-            }                                                      /* End catch*/
+            }
         }
         else {
             String s = "Stack under.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
-        }                                                           /* End if*/
+        }
     }
 
     /** Convert a stack entry to the class object of its primitive type.
@@ -788,7 +780,7 @@ public class Engine {
         }
         else                 /* It's not yet a JavaParam, accumulate it as one.*/ {
             ((JavaArgs) peek()).addElement(new JavaParam(o));
-        }                                                           /* End if*/
+        }
     }
 
     /** Resove and make the call.
@@ -804,8 +796,8 @@ public class Engine {
         }
         else {
             callJavaMethod(o, methodName, javaArgs);
-        }                                                           /* End if*/
-    }                                                     /* End callJava()*/
+        }
+    }
 
     /** Resolve and call a method, not a constructor.
      * @param o The object on which to call the (static or instance) method.
@@ -817,29 +809,29 @@ public class Engine {
             , String methodName
             , JavaArgs javaArgs
     ) {
-        Method method     = null;          /* The method we'll invoke.         */
+        Method method;                     /* The method we'll invoke.         */
         try {                              /* Resolve the method.*/
             if (cClass == o.getClass()) {  /* It's a class object, not an instance object.*/
                 try {                       /* Try to resolve it as an object method.*/
                     method     =
                     o.getClass().getMethod(methodName, javaArgs.toClassArray());
-                }                                                      /* End try*/
+                }
                 catch (java.lang.NoSuchMethodException e) {     /* Oops, wasn't an object method. Try it as a class method.*/
                     method     =                              /* Try a static method.*/
                     ((Class)o).getMethod(methodName, javaArgs.toClassArray());
-                }                                                    /* End catch*/
+                }
             }
             else                  /* It's an instance object, not a class object.*/ {
                 method     =
                 o.getClass().getMethod(methodName, javaArgs.toClassArray());
-            }                                                         /* End if*/
+            }
             Object oo = method.invoke(o, javaArgs.toObjectArray());  /* invoke   */
             push(oo);
-        }                                                          /* End try*/
+        }
         catch (Exception e) {
             outputError(e);
-        }                                                        /* End catch*/
-    }                                                 /* End callJavaMethod*/
+        }
+    }
 
     /** Resolve and call a constructor, not a method.
      * @param o The object on which to call the constructor.
@@ -854,18 +846,17 @@ public class Engine {
         try                                          /* Resolve the constructor*/ {
             constructor  =
             ((Class) o).getConstructor(javaArgs.toClassArray());
-        }                                                          /* End try*/
+        }
         catch (Exception e) {
             outputError(e);
-        }                                                        /* End catch*/
+        }
         try {                                               /* Execute the call*/
             push(constructor.newInstance(javaArgs.toObjectArray()));
         }
-
         catch (Exception e) {
             outputError(e);
-        }                                                        /* End catch*/
-    }                                                 /* End callJavaMethod*/
+        }
+    }
 
     /** Return a java.lang.Field for an object instance.
      * @param o  The object whose field to find.
@@ -883,7 +874,7 @@ public class Engine {
         }
         else {
             c = x;                     /* It's an instance, use the gotten class.*/
-        }                                                           /* End if*/
+        }
         Field f = c.getField(fieldName);   /* Find the field name.             */
         return f;
     }                 /* public Field findField(Object o, String fieldName)*/
@@ -977,7 +968,7 @@ public class Engine {
     public void not() {
         push((Boolean) pop() == false
         );
-    }                                                 /* public void not ()*/
+    }
 
     /** AND two booleans on top of stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -985,7 +976,7 @@ public class Engine {
         boolean lhs = (Boolean) pop();
         boolean rhs = (Boolean) pop();
         push(lhs && rhs);
-    }                                                 /* public void and ()*/
+    }
 
     /** OR two booleans on top of stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -993,7 +984,7 @@ public class Engine {
         boolean lhs = (Boolean) pop();
         boolean rhs = (Boolean) pop();
         push(lhs || rhs);
-    }                                                  /* public void or ()*/
+    }
 
     /** XOR two booleans on top of stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -1001,7 +992,7 @@ public class Engine {
         boolean lhs = (Boolean) pop();
         boolean rhs = (Boolean) pop();
         push(lhs ^ rhs);
-    }                                                 /* public void xor ()*/
+    }
 
     /** Compare two objects for equality. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -1011,15 +1002,13 @@ public class Engine {
         if (a == null || b == null) {
             if (a == null && b == null) {
                 push(Boolean.TRUE);
-            }
-            else {
+            } else {
                 push(Boolean.FALSE);
-            }                                                         /* End if*/
-        }
-        else {
+            }
+        } else {
             push(a.equals(b));
-        }                                                           /* End if*/
-    }                                             /* public void isEqual ()*/
+        }
+    }
 
     /** Compare two objects for inequality. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -1029,15 +1018,13 @@ public class Engine {
         if (a == null || b == null) {
             if (a == null && b == null) {
                 push(Boolean.FALSE);
-            }
-            else {
+            } else {
                 push(Boolean.TRUE);
-            }                                                         /* End if*/
-        }
-        else {
+            }
+        } else {
             push(!a.equals(b));
-        }                                                           /* End if*/
-    }                                           /* public void isUnequal ()*/
+        }
+    }
 
     /** Compare two numbers (i.e., java.lang.Long's) or
      * two strings for greater-than.
@@ -1193,12 +1180,12 @@ public class Engine {
         }
         else {
             aClass = (Class) o;    /* It's the class object for the type desired.*/
-        }                                                           /* End if*/
+        }
         int nDims = ((Long)pop()).intValue(); /* Convert Long to int: num dims.*/
         int dimArray [] = new int [nDims];
         for (int i = 0; i < nDims; ++i) {
             dimArray[i] = ((Long)pop()).intValue();
-        }                                                          /* End for*/
+        }
         push(Array.newInstance(aClass, dimArray));
     }
 
@@ -1218,13 +1205,13 @@ public class Engine {
                 String t = "Invalid null name offered.";
                 announce(t);
                 throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.BadName(t, null);
-            }                                                         /* End if*/
+            }
         }
         else {
             String t = "Invalid empty String name offered.";
             announce(t);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.BadName(t, null);
-        }                                                           /* End if*/
+        }
         return s;
     }                                                   /* parseValidName()*/
 
@@ -1253,14 +1240,14 @@ public class Engine {
             try {
                 Field f = findField(o, s);
                 f.set(o, pop());                              /* set field contents*/
-            }                                                        /* End try*/
+            }
             catch (Exception e) {
                 String err = "Trouble setting field " + s + " of object " + o;
                 announce(err);
                 outputError(e);
                 throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.NonVariable(s, null);
-            }                                                      /* End catch*/
-        }                                                           /* End if*/
+            }
+        }
     }
 
     /** Fetch an object from its storage in a variable.
@@ -1278,14 +1265,14 @@ public class Engine {
             try {
                 Field f = findField(o, s);
                 push(f.get(o));
-            }                                                        /* End try*/
+            }
             catch (Exception e) {
                 String err = "Trouble getting field " + s + " of object " + o;
                 announce(err);
                 outputError(e);
                 throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.NonVariable(s, null);
-            }                                                      /* End catch*/
-        }                                                           /* End if*/
+            }
+        }
     }
 
     // Fetch a wordlist from the search order, converting it to a value.
@@ -1343,13 +1330,13 @@ public class Engine {
             ,v
             ,cValue
             ).compile(this);
-        }                                                          /* End try*/
+        }
         catch (Exception e) {
             String s = "Problem with compileToValue()";
             announce(s);
             outputError(e);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.CompileToValue(s, e);
-        }                                                        /* End catch*/
+        }
     }
 
     /** Grab the next lexeme, find it in the search order and determine
@@ -1369,13 +1356,13 @@ public class Engine {
             String s = "Name " + aName + " not found.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.NameNotFound(s, null);
-        }                                                           /* End if*/
+        }
 
         if (aSemantic.getClass() != cValue) {
             String s = aName + " is not a Value.";
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.NonValue(s, null);
-        }                                                           /* End if*/
+        }
         return (Value) aSemantic;
     }
 
@@ -1436,7 +1423,7 @@ public class Engine {
                 announce(s);
                 throw new
                 com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance(s, null);
-            }                                                         /* End if*/
+            }
             currentWordlist.put(getCurrentDefinition());   /* Link into wordlist.*/
             currentDefinition/* This is really mooted by innerInterpreter.getCurrentDefinition()*/
             = (Definition) c.element;/* Pop back next outer definition, maybe null.*/
@@ -1447,7 +1434,7 @@ public class Engine {
             announce(s);
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance(s, null);
-        }                                                           /* End if*/
+        }
     }
 
     /** Finish compilation and leave token on the stack. Don't link
@@ -1464,7 +1451,7 @@ public class Engine {
                 announce(s);
                 throw new
                 com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance(s, null);
-            }                                                         /* End if*/
+            }
             push(getCurrentDefinition());   /* Leave token on reference stack.*/
             currentDefinition = (Definition) c.element;/* Pop back next outer definition, maybe null.*/
             state = c.state;                          /* Pop back previous state.*/
@@ -1474,7 +1461,7 @@ public class Engine {
             announce(s);
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance(s, null);
-        }                                                           /* End if*/
+        }
     }
 
     /** Create a new Definition in the current wordlist.
@@ -1630,8 +1617,8 @@ public class Engine {
                 announce(s);
                 throw new
                 com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance(s, null);
-            }                                                         /* End if*/
-        }                                                           /* End if*/
+            }
+        }
         return c;
     }                     /* public ControlFlowElement popParamPrimControl()*/
 
@@ -1647,12 +1634,12 @@ public class Engine {
             String s = "A branch had a non-Integer value.";
             announce(s);
             throw
-            new com.softwoehr.fiji.base.Exceptions.desktop.shell.InvalidParameterObject
-            (s, null);
-        }                                                           /* End if*/
+                    new com.softwoehr.fiji.base.Exceptions.desktop.shell.InvalidParameterObject
+                            (s, null);
+        }
         Integer i = (Integer) p.getObject();
         bump(i);
-    }                     /* public void doBranch(ParameterizedPrimitive p)*/
+    }
 
     /** This method is here just as an alias so that strict resolution can occur
      * from within the ctor for ParameterizedPrimitive.UnconditionalBranch p).
@@ -1685,12 +1672,12 @@ public class Engine {
             s += "\n" + innerInterpreter.toString();/* Throw something, it's not a boolean.*/
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.ConditionalNonBoolean(s, null);
-        }                                                           /* End if*/
+        }
 
         if (!(Boolean) o) {           /* If true, don't branch.*/
             doUnconditionalBranch(p);
-        }                                                           /* End if*/
-    }                   /* public void doIfBranch(ParameterizedPrimitive p)*/
+        }
+    }
 
     /** Compile an unresolved conditional branch.
      * throws NoSuchMethodException self-explanatory
@@ -1718,14 +1705,14 @@ public class Engine {
             .ConditionalBranch(getCurrentDefinition()
             .compositionLength()
             );
-        }                                                          /* End try*/
+        }
         catch (Exception e) {
             String s = "Problem opening a conditional branch in current definition."
             + getCurrentDefinition();
             announce(s);
             outputError(e);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
-        }                                                        /* End catch*/
+        }
         p.compile(this);
         pushControl(new ControlFlowElement(p, this, cParameterizedPrimitive));
         // relocList.ifBranches.markReloc(p);
@@ -1756,18 +1743,18 @@ public class Engine {
             .UnconditionalBranch(getCurrentDefinition()
             .compositionLength()
             );
-        }                                                          /* End try*/
+        }
         catch (Exception e) {
             String s = "Problem opening an unconditional branch in current definition."
             + getCurrentDefinition();
             announce(s);
             outputError(e);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
-        }                                                        /* End catch*/
+        }
         p.compile(this);
         pushControl(new ControlFlowElement(p, this, cParameterizedPrimitive));
         // relocList.ifBranches.markReloc(p);
-    }                                       /* public void compileBranch ()*/
+    }
 
     /** Resolve a conditional or unconditional branch by popping control stack,
      * evaluating the integer offset at which the Parameterized
@@ -1789,30 +1776,28 @@ public class Engine {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
-            com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
+                    com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
+        }
 
         ParameterizedPrimitive p =  /* Manipulate branch in definition via ref.*/
-        (ParameterizedPrimitive) c.getElement();
+                (ParameterizedPrimitive) c.getElement();
 
         if (p.validate()) {/* Now resolve the branch via the ref from the stack.*/
             int origin = (Integer) p.getObject();
             int destination =   /* Okay - inner Interpreter while loop tests .LT.*/
-            getCurrentDefinition().compositionLength();
+                    getCurrentDefinition().compositionLength();
             p.setObject((destination - origin) - 1);  /* Resolution.*/
-      /* "Minus one" because this is the bump delta to the instruction
-       * pointer, which latter has already been post-incremented in the
-       * inner Interpreter loop.
-       */
-        }
-
-        else                                                      /* Not valid.*/ {
+            /* "Minus one" because this is the bump delta to the instruction
+             * pointer, which latter has already been post-incremented in the
+             * inner Interpreter loop.
+             */
+        } else                                                      /* Not valid.*/ {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
-            com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
-    }                                        /* public void resolveBranch()*/
+                    com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
+        }
+    }
 
     /** Make an 'else' by laying down an unconditional branch out
      * of the true-clause of the 'if' and then resolving the 'if'
@@ -1838,20 +1823,20 @@ public class Engine {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
-    /* Retrieve the previously laid down unresolved branch. */
+        /* Retrieve the previously laid down unresolved branch. */
         ControlFlowElement c = popParamPrimControl();/* Throws if non a ParamPrim.*/
         if (null == c)                                  /* Did we get anything?*/ {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
-            com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
+                    com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
+        }
 
-    /* Keep unresolved in hand while laying down a new unresolved unconditional. */
+        /* Keep unresolved in hand while laying down a new unresolved unconditional. */
         compileBranch();   /* Now quick like a bunny lay down a new unresolved.*/
         pushControl(c);/* Sneakily push back the previously retrieved unresolved.*/
         resolveBranch();/* Resolve the previously unresolved, leaving new unres.*/
-    }                              /* public void compileAndResolveBranch()*/
+    }
 
     /** Push an unresolved unconditional branch. I.e., this is 'begin'.
      * The unconditional branch can be discarded for a conditional branch
@@ -1873,16 +1858,16 @@ public class Engine {
             .UnconditionalBranch(getCurrentDefinition()
             .compositionLength()
             );
-        }                                                          /* End try*/
+        }
         catch (Exception e) {
             String s = "Problem opening an unconditional branch in current definition."
             + getCurrentDefinition();
             announce(s);
             outputError(e);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
-        }                                                        /* End catch*/
+        }
         pushControl(new ControlFlowElement(p, this, cParameterizedPrimitive));
-    }                             /* public void pushUnconditionalBranch ()*/
+    }
 
     /** Compile an 'again', that is, resolve and compile
      * the unconditional branch pushed to the control
@@ -1908,30 +1893,29 @@ public class Engine {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
-    /* Retrieve the previously pushed unresolved branch. */
+        /* Retrieve the previously pushed unresolved branch. */
         ControlFlowElement c = popParamPrimControl();/* Throws if non a ParamPrim.*/
         if (null == c)                                  /* Did we get anything?*/ {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
-            com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
+                    com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
+        }
         ParameterizedPrimitive p =         /* Grab branch to be resolved.      */
-        (ParameterizedPrimitive) c.getElement();
+                (ParameterizedPrimitive) c.getElement();
         if (p.validate()) {/* Now resolve the branch via the ref from the stack.*/
             int destination = (Integer) p.getObject();
             int origin =
-            getCurrentDefinition().compositionLength();
+                    getCurrentDefinition().compositionLength();
             p.setObject((destination - origin) - 1);/* Resolution backwards.*/
             p.compile(this);                                      /* Lay it down.*/
-        }
-        else                                                      /* Not valid.*/ {
+        } else                                                      /* Not valid.*/ {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
-            com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
-    }                  /* public void compileUnconditionalBackwardsBranch()*/
+                    com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
+        }
+    }
 
     /** Compile an 'until', that is, calc the delta from the unconditional
      * backwards branch pushed to the control flow stack by 'begin' and
@@ -1964,7 +1948,7 @@ public class Engine {
             announce(s);
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
+        }
         ParameterizedPrimitive p =         /* Grab branch to be resolved.      */
         (ParameterizedPrimitive) c.getElement();
         if (p.validate()) {/* Now resolve the branch via the ref from the stack.*/
@@ -1975,14 +1959,14 @@ public class Engine {
                 p =/* Discard the unconditional pushed by 'begin', create new branch.*/
                 new ParameterizedPrimitive   /* Resolution backwards.            */
                 .ConditionalBranch((destination-origin) - 1);
-            }                                                        /* End try*/
+            }
             catch (Exception e) {
                 String s = "Problem creating a conditional branch in current definition."
                 + getCurrentDefinition();
                 announce(s);
                 outputError(e);
                 throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
-            }                                                      /* End catch*/
+            }
             p.compile(this);                                      /* Lay it down.*/
         }
         else                                                      /* Not valid.*/ {
@@ -1990,8 +1974,8 @@ public class Engine {
             announce(s);
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
-    }                    /* public void compileConditionalBackwardsBranch()*/
+        }
+    }
 
     /** Compile an 'repeat', that is, resove the unconditional
      * backwards branch pushed to the control flow stack by 'begin' and
@@ -2024,7 +2008,7 @@ public class Engine {
         pushControl(ubb);                                  /* ... the 'repeat'.*/
         compileUnconditionalBackwardsBranch();/* Resolve the 'repeat' to 'begin'.*/
         resolveBranch();            /* Resolve the 'while' to past the 'begin'.*/
-    }                                   /* public void resolveTwoBranches()*/
+    }
 
     /** The runtime for 'do', i.e., push the indices to control stack.
      * @param p The <CODE>Do</CODE> Semantic we are going to run.
@@ -2068,14 +2052,14 @@ public class Engine {
             .Do(getCurrentDefinition()
             .compositionLength() + 1/* To right after the 'do' runtime.*/
             );
-        }                                                          /* End try*/
+        }
         catch (Exception e) {
             String s = "Problem opening an unconditional branch in current definition."
             + getCurrentDefinition();
             announce(s);
             outputError(e);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
-        }                                                        /* End catch*/
+        }
         pushControl(new ControlFlowElement(p, this, cParameterizedPrimitive));
         p.compile(this);
         // relocList.ifBranches.markReloc(p);
@@ -2091,8 +2075,8 @@ public class Engine {
         if (!done) {
             Integer i = (Integer) p.getObject();
             bump(i);
-        }                                                           /* End if*/
-    }                   /* public void loop (ParameterizedPrimitive.Loop p)*/
+        }
+    }
 
     /** Runtime for '+loop'. Called from a ParameterizedPrimitive having
      * embedded object, the Integer stored indicating the bump value.
@@ -2104,8 +2088,8 @@ public class Engine {
         if (!done) {
             Integer i = (Integer) p.getObject();
             bump(i);
-        }                                                           /* End if*/
-    }                   /* public void loop (ParameterizedPrimitive.Loop p)*/
+        }
+    }
 
     /** Compile a 'loop' resolved to where the 'do' was encountered by
      * popping control stack,  evaluating the integer offset at
@@ -2137,30 +2121,28 @@ public class Engine {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
-            com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
+                    com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
+        }
 
         ParameterizedPrimitive p =  /* Manipulate branch in definition via ref.*/
-        (ParameterizedPrimitive) c.getElement();
+                (ParameterizedPrimitive) c.getElement();
 
         if (p.validate()) {/* Now resolve the back branch via the ref from stack.*/
             int destination = (Integer) p.getObject();
             int origin =                /* Add one because inner interp will have*/
-      /*  postincremented  past this compilation. */
-            getCurrentDefinition().compositionLength() + 1;
+                    /*  postincremented  past this compilation. */
+                    getCurrentDefinition().compositionLength() + 1;
             int delta = destination - origin;/* Backwards value.                 */
             p.setObject(origin); /* 'leave' Resolution for the 'do'.*/
             p = new ParameterizedPrimitive.Loop(delta);/* Create the resolved Loop.*/
             p.compile(this);                        /* Compile the resolved loop.*/
-        }
-
-        else                                                      /* Not valid.*/ {
+        } else                                                      /* Not valid.*/ {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
-            com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
-    }                                          /* public void compileLoop()*/
+                    com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
+        }
+    }
 
     /** Compile a '+loop' resolved to where the 'loop' was encountered by
      * popping control stack,  evaluating the integer offset at
@@ -2193,7 +2175,7 @@ public class Engine {
             announce(s);
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
+        }
 
         ParameterizedPrimitive p =  /* Manipulate branch in definition via ref.*/
         (ParameterizedPrimitive) c.getElement();
@@ -2217,14 +2199,14 @@ public class Engine {
             announce(s);
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
-        }                                                           /* End if*/
-    }                                      /* public void compilePlusLoop()*/
+        }
+    }
 
     /** Return a loop index. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void index() {
         push((long) innerInterpreter.ithIndex(((Long) pop()).intValue()));
-    }                                               /* public void index ()*/
+    }
 
     /** Perform a leave at runtime */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -2260,16 +2242,16 @@ public class Engine {
             if (x.getClass() == cLiteral) {
                 myInterpreter
                 .output(((ParameterizedPrimitive.Literal)x).getObject() + " ");
-            }                                                         /* End if*/
-        }                                                          /* End for*/
+            }
+        }
         output(";\n");
-    }                                           /* public void decompile ()*/
+    }
 
     /** Interpret a string as fiji input. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void interpret() {
         myInterpreter.interpret((String)pop());
-    }                                           /* public void interpret ()*/
+    }
 
     /** Load FIJI source from a file. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -2285,19 +2267,19 @@ public class Engine {
                 inputStreamReader.read(input, 0, (int)length);
                 String sourceCode = new String(input);
                 myInterpreter.interpret(sourceCode);
-            }                                                        /* End try*/
+            }
             catch (Exception e) {
                 outputError(e);
-            }                                                      /* End catch*/
+            }
             finally {
                 fileInputStream  .close();
                 inputStreamReader.close();
-            }                                                    /* End finally*/
-        }                                                          /* End try*/
+            }
+        }
         catch (Exception e) {
             outputError(e);
-        }                                                        /* End catch*/
-    }                                                 /* public void load()*/
+        }
+    }
 
     public static String fijiVersion() {
         return  "1.2";
@@ -2326,13 +2308,13 @@ public class Engine {
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void getOrder() {
         searchOrder.getOrder(this);
-    }                                             /* public void getOrder()*/
+    }
 
     /** Set search order from stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void setOrder() {
         searchOrder.setOrder(this);
-    }                                             /* public void setOrder()*/
+    }
 
     /** Set current Wordlist to the Wordlist on the top of the stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -2365,8 +2347,8 @@ public class Engine {
         result = searchOrder.forget(name);
         if (false == result) {
             output(name + " not found.\n");
-        }                                                           /* End if*/
-    }                                              /* public void forget ()*/
+        }
+    }
 
     /** Discard a wordlist entry in first
      * place found in the search order.
@@ -2376,13 +2358,11 @@ public class Engine {
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void discard() {
         boolean result;
-        String name = (String)pop();
+        String name = (String) pop();
         result = searchOrder.discard(name);
         if (false == result) {
             output(name + " not found.\n");
-        }                                                           /* End if*/
-    }                                              /* public void discard()*/
+        }
+    }
 
-}                                                    /* End of Engine class*/
-
-/*  End of Engine.java */
+}
