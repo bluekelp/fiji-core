@@ -28,6 +28,7 @@
 
 package com.softwoehr.fiji.interpreter;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /** A Primitive is a Semantic coded all in Java.
@@ -40,12 +41,12 @@ class Primitive extends Semantic {
     public Method method;
 
     /** Resolved method that represents compilation semantics. */
-    public Method compilationMethod;
+    private Method compilationMethod;
 
     /** Arity/0 ctor.
      * throws ClassNotFoundException
      * throws NoSuchMethodException  */
-    public Primitive()
+    Primitive()
     throws java.lang.ClassNotFoundException
     , java.lang.NoSuchMethodException {
         this("noop", "noop");
@@ -58,7 +59,7 @@ class Primitive extends Semantic {
      * @param methodName
      * throws ClassNotFoundException
      * throws NoSuchMethodException  */
-    public Primitive(String name, String methodName)
+    Primitive(String name, String methodName)
     throws java.lang.ClassNotFoundException
     , java.lang.NoSuchMethodException {
         this.setName(name);
@@ -74,7 +75,7 @@ class Primitive extends Semantic {
      * @param compilationMethodName
      * throws ClassNotFoundException
      * throws NoSuchMethodException  */
-    public Primitive(String name, String methodName, String compilationMethodName)
+    Primitive(String name, String methodName, String compilationMethodName)
     throws java.lang.ClassNotFoundException
     , java.lang.NoSuchMethodException {
         this.setName(name);
@@ -86,17 +87,8 @@ class Primitive extends Semantic {
     /** Execution semantics
      * @param anEngine
      * throws BadPrimitiveExecute  */
-    public void execute(Engine anEngine)
-    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute {
-        try {
-            method.invoke(anEngine);
-        }
-        catch (Exception e) {
-            String s = "Problem executing method from FIJI primitive " + getName();
-            System.out.println(s);
-            e.printStackTrace(System.err);
-            throw new com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute(s, e);
-        }
+    public void execute(Engine anEngine) throws InvocationTargetException, IllegalAccessException {
+        method.invoke(anEngine);
     }
 
     /** Compilation semantics, the default behavior
@@ -109,24 +101,12 @@ class Primitive extends Semantic {
      * throws BadPrimitiveExecute
      * throws BadDefinitionExecute  */
 
-    public void compile(Engine e)
-    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveCompile
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute {
+    public void compile(Engine e) throws InvocationTargetException, IllegalAccessException {
         if (null == compilationMethod) {
             super.compile(e);
         }
         else {
-            try {
-                compilationMethod.invoke(e);
-            }
-            catch (Exception ex) {
-                String s = "Problem executing compilation method from FIJI primitive " + getName();
-                System.out.println(s);
-                ex.printStackTrace(System.err);
-                throw new com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveCompile(s, ex);
-            }
+            compilationMethod.invoke(e);
         }
     }
 

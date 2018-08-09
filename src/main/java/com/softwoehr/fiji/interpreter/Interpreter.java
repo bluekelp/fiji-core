@@ -28,6 +28,7 @@
 
 package com.softwoehr.fiji.interpreter;
 
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.NoSuchElementException;
 import java.util.Stack;
@@ -67,14 +68,14 @@ public class Interpreter {
 
     private String defaultDelimiters = " \t\n\r";
 
-    public Interpreter(PrintStream err, PrintStream out) {
+    public Interpreter(PrintStream err, PrintStream out) throws NoSuchMethodException, ClassNotFoundException {
         this.err = err;
         this.out = out;
         reinit();
     }
 
     // Reset the Interpreter, losing all previous state.
-    private void reinit() {
+    private void reinit() throws NoSuchMethodException, ClassNotFoundException {
         engine = new Engine(this);
         warmReset();
     }
@@ -271,7 +272,7 @@ public class Interpreter {
 
 
     /* Load a file as FIJI source. */
-    public void load(String filename) {
+    public void load(String filename) throws IOException {
         engine.push(filename);
         engine.load();
     }

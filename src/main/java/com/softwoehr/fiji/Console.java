@@ -13,7 +13,6 @@
 
 package com.softwoehr.fiji;
 
-import com.softwoehr.fiji.errors.Error;
 import com.softwoehr.fiji.interpreter.Engine;
 import com.softwoehr.fiji.interpreter.Interpreter;
 import com.softwoehr.util.Argument;
@@ -31,7 +30,25 @@ public class Console {
       f.runner(argv);
     }
 
-    private void runner(String argv[])
+  private RuntimeException error(String s) {
+    return error(s, null);
+  }
+
+  private RuntimeException error(Exception e) {
+    return error(null, e);
+  }
+
+  private RuntimeException error(String s, Exception e) {
+      if (s != null) {
+        System.err.println(s);
+      }
+      if (e != null) {
+        e.printStackTrace(System.err);
+      }
+      return new RuntimeException(s, e);
+  }
+
+  private void runner(String argv[])
     {
       Interpreter i;
       InputStreamReader isr;
@@ -50,7 +67,7 @@ public class Console {
          *  exhaustively enumerating candidate classes and testing them?
          *  The stack trace.
          */
-        throw new Error.BackToMain(e);
+        throw error(e);
       }
 
       for (Argument a : args.options) {
@@ -61,14 +78,12 @@ public class Console {
               i.setBase(Integer.decode(a.argument));
             }
             catch (Exception e) {
-              e.printStackTrace(System.err);
-              throw new com.softwoehr.fiji.errors.Error.desktop.shell.BadBase(e);
+              throw error("bad base", e);
             }
           }
           else {
             String s = "(null) presented for Interpreter numeric base.";
-            System.out.println(s);
-            throw new com.softwoehr.fiji.errors.Error.desktop.shell.BadBase(s, null);
+            throw error(s, null);
           }
         }
         else if (a.option.equals("-o")) {
@@ -77,8 +92,7 @@ public class Console {
           }
           else {
             String s = "Bad output stream encoding proposed: " + a.option;
-            System.out.println(s);
-            throw new com.softwoehr.fiji.errors.Error.desktop.shell.BadEncoding(s, null);
+            throw error(s, null);
           }
         }
         else if (a.option.equals("-h") || a.option.equals("--")) {
@@ -87,9 +101,8 @@ public class Console {
         }
         else {
           String s = "Bad option " + a.option + " " + a.argument;
-          System.err.println(s);
           usage();
-          throw new Error.BadArgToMain(s, null);
+          throw error(s);
         }
       }
 
@@ -109,8 +122,7 @@ public class Console {
         br = new BufferedReader(isr);
       }
       catch (Exception e) {
-        e.printStackTrace(System.err);
-        throw new Error.BackToMain(e);
+        throw error(e);
       }
 
       for (Argument a : args.arguments) {

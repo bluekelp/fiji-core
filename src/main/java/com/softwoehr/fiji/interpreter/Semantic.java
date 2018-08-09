@@ -28,6 +28,8 @@
 
 package com.softwoehr.fiji.interpreter;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  *
  * @author $Author: jwoehr $
@@ -69,9 +71,7 @@ public class Semantic {
      * @param e
      * throws BadPrimitiveExecute
      * throws BadDefinitionExecute  */
-    public void execute(Engine e)
-    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute {
+    public void execute(Engine e) throws InvocationTargetException, IllegalAccessException {
         e.push(this);
     }
 
@@ -83,11 +83,7 @@ public class Semantic {
      * throws BadPrimitiveExecute
      * throws BadDefinitionExecute  */
 
-    public void compile(Engine e)
-    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveCompile
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute {
+    public void compile(Engine e) throws InvocationTargetException, IllegalAccessException {
         e.getCurrentDefinition().append(this);
     }
 

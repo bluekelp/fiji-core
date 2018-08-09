@@ -29,6 +29,7 @@
 
 package com.softwoehr.fiji.interpreter;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.Stack;
 
@@ -162,9 +163,7 @@ public class InnerInterpreter {
      * throws BadPrimitiveExecute If a prim blows up.
      * throws BadDefinitionExecute If a def blows up.
      */
-    public void interpret(Definition d)
-    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute {
+    public void interpret(Definition d) throws InvocationTargetException, IllegalAccessException {
         nest(d);
         while (interpretation.index <= interpretation.definition.lastIndex()) {
             Semantic s =     /* Here's where the instruction pointer gets bumped.*/

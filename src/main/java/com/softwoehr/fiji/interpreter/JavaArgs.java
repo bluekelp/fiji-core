@@ -1,7 +1,5 @@
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.fiji.interpreter.JavaParam;
-
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -11,10 +9,10 @@ import java.util.Vector;
  * e.g., java.lang.String.equals(java.lang.Object o) but the Object
  * is a String.
  */
-public class JavaArgs extends Vector {
+class JavaArgs extends Vector {
     /** Create a JavaArgs object to pass args to java method invocation.
      */
-    public JavaArgs() {}                     /* Needs an arity/1 on Object[]*/
+    JavaArgs() {}
 
     /** Return an object array of the elements of the vector.
      * All the objects in the JavaArgs vector are stored in JavaParam's,
@@ -24,13 +22,13 @@ public class JavaArgs extends Vector {
      * @return An array of objects representing the arguments stored
      * in a JavaArgs
      */
-    public synchronized Object[] toObjectArray() {
+    synchronized Object[] toObjectArray() {
         int sz = size();
         Object result[] = new Object[sz];
         Enumeration e = elements();
         for (int i = 0; i < sz ; ++i) {
             result[i] = ((JavaParam) (e.nextElement())).getRealObject();
-        }                                                          /* End for*/
+        }
         return result;
     }
 
@@ -40,13 +38,13 @@ public class JavaArgs extends Vector {
      * see com.SoftWoehr.desktop.shell.JavaParam#
      * @return The array of classes from the vector.
      */
-    public synchronized Class[] toClassArray() {
+    synchronized Class[] toClassArray() {
         int sz = size();
         Class result[] = new Class[sz];
         Enumeration e = elements();
         for (int i = 0; i < sz ; ++i) {
             result[i] = ((JavaParam) (e.nextElement())).getSignatureClass();
-        }                                                          /* End for*/
+        }
         return result;
     }
-}                                                /* End of JavaArgs class*/
+}

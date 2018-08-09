@@ -28,6 +28,7 @@
 
 package com.softwoehr.fiji.interpreter;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -107,20 +108,8 @@ public class Definition extends Semantic {
      * @param e
      * throws BadDefinitionExecute
      * throws BadPrimitiveExecute  */
-    public void execute(Engine e)
-    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute {
-        try {
-            e.innerInterpreter.interpret(this);
-        }                                                          /* End try*/
-        catch (com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute  ex) {
-            String s = "Problem in Definition.execute() for " + getName();
-            com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute x =
-            new com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute
-            (s, ex);
-            ex.printStackTrace(System.err);
-            throw x;
-        }                                                        /* End catch*/
+    public void execute(Engine e) throws InvocationTargetException, IllegalAccessException {
+        e.innerInterpreter.interpret(this);
     }
 
     /** Compilation semantics.
@@ -128,25 +117,12 @@ public class Definition extends Semantic {
      * throws BadDefinitionCompile
      * throws BadDefinitionExecute
      * throws BadPrimitiveExecute  */
-    public void compile(Engine e)
-    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute
-    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute {
+    public void compile(Engine e) throws InvocationTargetException, IllegalAccessException {
         if (immediate) {
             execute(e);
         }
         else {
-            try {
-                super.compile(e);
-            }                                                        /* End try*/
-            catch (com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveCompile ex) {
-                String s = "Problem in Definition.compile() for " + getName();
-                com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile x =
-                new com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile
-                (s, ex);
-                ex.printStackTrace(System.err);
-                throw x;
-            }                                                      /* End catch*/
+            super.compile(e);
         }                                                           /* End if*/
     }
 
