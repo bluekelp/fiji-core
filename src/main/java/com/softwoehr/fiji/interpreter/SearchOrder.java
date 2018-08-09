@@ -28,8 +28,6 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.SoftWoehr;
-import com.softwoehr.util.GetArgs;
 import com.softwoehr.util.verbose;
 import com.softwoehr.util.verbosity;
 
@@ -41,13 +39,7 @@ import java.util.Vector;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class SearchOrder implements SoftWoehr, verbose {
-    
-    /** Revision level */
-    private static final String rcsid = "$Id: SearchOrder.java,v 1.1.1.1 2001/08/21 02:39:23 jwoehr Exp $";
-    /** Implements com.SoftWoehr.SoftWoehr
-     * @return  */
-    public String rcsId() {return rcsid;}
+public class SearchOrder implements verbose {
     
     /**  Flags whether we are in verbose mode. */
     private boolean isverbose = true;
@@ -195,39 +187,6 @@ public class SearchOrder implements SoftWoehr, verbose {
      * @see com.softwoehr.util.verbosity#
      * @param s  */
     public void    announce    (String s)   {v.announce(s);   }
-    
-    
-    /** Demonstrate <code>SearchOrder</code>.
-     * @param argv  */
-    public static void main(String argv[]) {
-        
-        GetArgs myArgs = new GetArgs(argv);/* Assimilate the command line.     */
-        // SearchOrder theSearchOrder = new SearchOrder();         /* Instance of SearchOrder we're demoing.  */
-        
-        /* GPL'ed SoftWoehr announces itself. */
-        System.out.println("SearchOrder, Copyright (C) 1999 Jack J. Woehr.");
-        System.out.println("SearchOrder comes with ABSOLUTELY NO WARRANTY;");
-        System.out.println("Please see the file COPYING and/or COPYING.LIB");
-        System.out.println("which you should have received with this software.");
-        System.out.println("This is free software, and you are welcome to redistribute it");
-        System.out.println("under certain conditions enumerated in COPYING and/or COPYING.LIB.");
-        
-        /* See if user passed in the -v flag to request verbosity. */
-        for (int i = 0; i < myArgs.optionCount() ; i++) {
-            if (myArgs.nthOption(i).getOption().substring(1,2).equals("v")) {
-                // theSearchOrder.setVerbose(true);
-            }                                                         /* End if*/
-        }
-        
-        // Your code goes here.
-        // -------------------
-        SearchOrder searchOrder = new SearchOrder();
-        searchOrder.nthElement(0);
-        searchOrder.add(new Wordlist());
-        // -------------------
-        
-        return;
-    }
 }                                                      /* End of SearchOrder class*/
 
 /*  End of SearchOrder.java */

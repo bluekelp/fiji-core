@@ -38,13 +38,7 @@ import  com.softwoehr.util.*;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class Definition extends Semantic implements SoftWoehr, verbose {
-    /** Revision level */
-    private static final String rcsid = "$Id: Definition.java,v 1.1.1.1 2001/08/21 02:39:06 jwoehr Exp $";
-    /** Implements com.SoftWoehr.SoftWoehr
-     * @return  */
-    public String rcsId() {return rcsid;}
-    
+public class Definition extends Semantic implements verbose {
     /**  Flags whether we are in verbose mode. */
     public boolean isverbose = false;
     /**  Helper for verbose mode. */
@@ -80,11 +74,6 @@ public class Definition extends Semantic implements SoftWoehr, verbose {
         String result = "A Definition named " + getName();
         return result;
     }
-    
-    /** shutdown() here does nothing.
-     * @see com.softwoehr.SoftWoehr
-     */
-    public int shutdown() { return 0; }
     
     /**
      * @see com.softwoehr.util.verbose#
@@ -223,11 +212,6 @@ public class Definition extends Semantic implements SoftWoehr, verbose {
         return composition.size();
     }
     
-    /** Demonstrate <code>Definition<code>.
-     * Currently, does nothing.
-     * @param argv  */
-    public static void main(String argv[]) {
-    }
 }                                                /* End of Definition class*/
 
 /*  End of Definition.java */

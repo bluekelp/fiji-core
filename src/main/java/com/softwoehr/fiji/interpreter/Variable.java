@@ -28,25 +28,17 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import  com.softwoehr.*;
-import  com.softwoehr.util.*;
+import com.softwoehr.util.GetArgs;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
 
  /**
    *
    * @author $Author: jwoehr $
    * @version $Revision: 1.1.1.1 $
    */
-public class Variable extends Semantic implements SoftWoehr, verbose
+public class Variable extends Semantic implements verbose
 {
-  /*****************************************/
-  /*% SoftWoehr default variables section. */
-  /*****************************************/
-
-  /** Revision level */
-  private static final String rcsid = "$Id: Variable.java,v 1.1.1.1 2001/08/21 02:39:28 jwoehr Exp $";
-  /** Implements com.SoftWoehr.SoftWoehr */
-  public String rcsId() {return rcsid;}
-
   /**  Flags whether we are in verbose mode. */
   private boolean isverbose = true;
   /**  Helper for verbose mode. */
@@ -118,45 +110,6 @@ public class Variable extends Semantic implements SoftWoehr, verbose
     * @see com.softwoehr.util.verbosity
     */
    public void    announce    (String s)   {v.announce(s);   }
-
-  /********************************************/
-  /*% SoftWoehr default methods section ends. */
-  /********************************************/
-
-  /*********/
-  /*% Main */
-  /*********/
-
-  /** Demonstrate <code>Variable</code>. */
-  public static void main (String argv[]) {
-
-    GetArgs myArgs = new GetArgs(argv);/* Assimilate the command line.     */
-    Variable theVariable = new Variable();         /* Instance of Variable we're demoing.  */
-
-    /* GPL'ed SoftWoehr announces itself. */
-    System.out.println("Variable, Copyright (C) 1999, 2000 by Jack J. Woehr.");
-    System.out.println("Variable comes with ABSOLUTELY NO WARRANTY;");
-    System.out.println("Please see the file COPYING and/or COPYING.LIB");
-    System.out.println("which you should have received with this software.");
-    System.out.println("This is free software, and you are welcome to redistribute it");
-    System.out.println("under certain conditions enumerated in COPYING and/or COPYING.LIB.");
-
-    /* See if user passed in the -v flag to request verbosity. */
-    for (int i = 0; i < myArgs.optionCount() ; i++)
-      {
-      if (myArgs.nthOption(i).getOption().substring(1,2).equals("v"))
-        {
-        theVariable.setVerbose(true);
-        }                                                         /* End if*/
-      }
-
-    // Your code goes here.
-    // -------------------
-
-    // -------------------
-
-    return;
-    }
 }                                                      /* End of Variable class*/
 
 /*  End of Variable.java */

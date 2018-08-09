@@ -39,13 +39,7 @@ import  com.softwoehr.util.*;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class Wordlist extends Semantic implements SoftWoehr, verbose {
-    /** Revision level */
-    private static final String rcsid = "$Id: Wordlist.java,v 1.1.1.1 2001/08/21 02:39:34 jwoehr Exp $";
-    /** Implements com.SoftWoehr.SoftWoehr
-     * @return  */
-    public String rcsId() {return rcsid;}
-    
+public class Wordlist extends Semantic implements verbose {
     /**  Flags whether we are in verbose mode. */
     public boolean isverbose = false;
     /**  Helper for verbose mode. */
@@ -357,11 +351,6 @@ public class Wordlist extends Semantic implements SoftWoehr, verbose {
             e.printStackTrace(System.err);
         }                                                        /* End catch*/
         return defaultList;
-    }
-    
-    /** Demonstrate <code>Wordlist<code>.
-     * @param argv  */
-    public static void main(String argv[]) {
     }
 }                                                  /* End of Wordlist class*/
 

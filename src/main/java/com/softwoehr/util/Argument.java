@@ -26,8 +26,6 @@
 
 package com.softwoehr.util;
 
-import  com.softwoehr.*;
-
 /** Holds an argument parsed from a command line.
   * If it's a plain argument, records the argument
   * string and position. If it is a dash-option,
@@ -39,20 +37,8 @@ import  com.softwoehr.*;
   * @version $Revision: 1.1.1.1 $
   * @see com.softwoehr.GetArgs
   */
-public class Argument implements SoftWoehr
+public class Argument
 {
-  public static final String rcsid = "$Id: Argument.java,v 1.1.1.1 2001/08/21 02:43:40 jwoehr Exp $";
-
-  /** Implement com.SoftWoehr.SoftWoehr ...
-    * return the RCS id for the class.
-    */
-  public String rcsId() { return rcsid; }
-
-  /** shutdown() here does nothing.
-    * @see com.softwoehr.SoftWoehr
-  */
-  public int shutdown () { return 0; }
-
   /** The "option", that is, dash-letter, e.g., -a -b etc. */
   public String option;
 
@@ -76,11 +62,6 @@ public class Argument implements SoftWoehr
   /** Return the option and argument as a String. */
   public String toString ()
     {return option + " " + argument;}
-
-  protected void finalize () throws Throwable
-    {           /* Called by garbage collector in case no longer referenced*/
-      super.finalize();
-    }
 
   /** Return the option portion (if any) of the Argument. */
   public String getOption() {return option;}

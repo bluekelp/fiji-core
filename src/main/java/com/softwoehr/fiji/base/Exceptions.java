@@ -28,7 +28,6 @@
 
 package com.softwoehr.fiji.base;
 
-import com.softwoehr.SoftWoehr;
 import com.softwoehr.util.verbose;
 import com.softwoehr.util.verbosity;
 
@@ -37,12 +36,7 @@ import com.softwoehr.util.verbosity;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class Exceptions extends java.lang.Exception implements SoftWoehr, verbose {
-    
-    /** Revision level */
-    private static final String rcsid = "$Id: Exceptions.java,v 1.1.1.1 2001/08/21 02:38:39 jwoehr Exp $";
-    /** Implements com.SoftWoehr.SoftWoehr */
-    public String rcsId() {return rcsid;}
+public class Exceptions extends java.lang.Exception implements verbose {
     
     /**  Flags whether we are in verbose mode. */
     private boolean isverbose = true;

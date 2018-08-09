@@ -34,7 +34,6 @@ import java.util.*;
 import java.lang.reflect.*;
 
 import com.softwoehr.fiji.JavaArgs;
-import com.softwoehr.SoftWoehr;
 import com.softwoehr.util.*;
 
 /** The execution Engine for our interaction.

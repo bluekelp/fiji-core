@@ -28,7 +28,6 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.SoftWoehr;
 import com.softwoehr.util.GetArgs;
 import com.softwoehr.util.verbose;
 import com.softwoehr.util.verbosity;
@@ -41,13 +40,7 @@ import com.softwoehr.util.verbosity;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verbose {
-    
-    /** Revision level */
-    private static final String rcsid = "$Id: ParameterizedPrimitive.java,v 1.1.1.1 2001/08/21 02:38:59 jwoehr Exp $";
-    /** Implements com.SoftWoehr.SoftWoehr
-     * @return  */
-    public String rcsId() {return rcsid;}
+public class ParameterizedPrimitive extends Primitive implements verbose {
     
     /**  Flags whether we are in verbose mode. */
     private boolean isverbose = true;
@@ -339,36 +332,6 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
      * @see com.softwoehr.util.verbosity#
      * @param s  */
     public void    announce    (String s)   {v.announce(s);   }
-    
-    /** Demonstrate <code>ParameterizedPrimitive</code>.
-     * @param argv  */
-    public static void main(String argv[]) {
-        
-        GetArgs myArgs = new GetArgs(argv);/* Assimilate the command line.     */
-        //    ParameterizedPrimitive theParameterizedPrimitive = new ParameterizedPrimitive();         /* Instance of ParameterizedPrimitive we're demoing.  */
-        
-    /* GPL'ed SoftWoehr announces itself. */
-        System.out.println("ParameterizedPrimitive, Copyright (C) 1999, 2000 by Jack J. Woehr.");
-        System.out.println("ParameterizedPrimitive comes with ABSOLUTELY NO WARRANTY;");
-        System.out.println("Please see the file COPYING and/or COPYING.LIB");
-        System.out.println("which you should have received with this software.");
-        System.out.println("This is free software, and you are welcome to redistribute it");
-        System.out.println("under certain conditions enumerated in COPYING and/or COPYING.LIB.");
-        
-    /* See if user passed in the -v flag to request verbosity. */
-        for (int i = 0; i < myArgs.optionCount() ; i++) {
-            if (myArgs.nthOption(i).getOption().substring(1,2).equals("v")) {
-                //      theParameterizedPrimitive.setVerbose(true);
-            }                                                         /* End if*/
-        }
-        
-        // Your code goes here.
-        // -------------------
-        
-        // -------------------
-        
-        return;
-    }
 }                                                      /* End of ParameterizedPrimitive class*/
 
 /*  End of ParameterizedPrimitive.java */

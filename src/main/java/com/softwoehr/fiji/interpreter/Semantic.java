@@ -28,21 +28,15 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import  com.softwoehr.*;
-import  com.softwoehr.util.*;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
 
 /**
  *
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class Semantic implements SoftWoehr, verbose {
-    /** Revision level */
-    private static final String rcsid = "$Id: Semantic.java,v 1.1.1.1 2001/08/21 02:39:25 jwoehr Exp $";
-    /** Implements com.SoftWoehr.SoftWoehr
-     * @return  */
-    public String rcsId() {return rcsid;}
-    
+public class Semantic implements verbose {
     /**  Flags whether we are in verbose mode. */
     public boolean isverbose = false;
     /**  Helper for verbose mode. */
@@ -65,11 +59,6 @@ public class Semantic implements SoftWoehr, verbose {
      * @return  */
     public String toString()
     {return "A Semantic named " + getName();}
-    
-    /** shutdown() here does nothing.
-     * @see com.softwoehr.SoftWoehr#
-     * @return  */
-    public int shutdown() { return 0; }
     
     /**
      * @see com.softwoehr.util.verbose#

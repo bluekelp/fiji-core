@@ -28,23 +28,17 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import  java.lang.reflect.*;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
 
-import  com.softwoehr.SoftWoehr;
-import  com.softwoehr.util.*;
+import java.lang.reflect.Method;
 
 /** A Primitive is a Semantic coded all in Java.
  *
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-class Primitive extends Semantic implements SoftWoehr, verbose {
-    /** Revision level */
-    private static final String rcsid = "$Id: Primitive.java,v 1.1.1.1 2001/08/21 02:39:21 jwoehr Exp $";
-    /** Implements com.SoftWoehr.SoftWoehr
-     * @return  */
-    public String rcsId() {return rcsid;}
-    
+class Primitive extends Semantic implements verbose {
     /**  Flags whether we are in verbose mode. */
     public boolean isverbose = false;
     
