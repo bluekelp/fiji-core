@@ -210,7 +210,7 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
     }                                                    /* End of Loop class*/
     
     /** Arity/4 ctor, passing in a name for the primitive,
-     * a method name to resolve for class engine, an Object
+     * a method name to resolve for class Engine, an Object
      * (possibly null) to be the datum for this primitive instance,
      * and an object class referring to the datum to allow validation
      * of dynamically initialized ParameterizedPrimitive's.
@@ -249,7 +249,7 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
         setName(name);
         Class signature[] = new Class[1];
         signature[0] = this.getClass();
-        Class c = Class.forName("com.softwoehr.fiji.interpreter.engine");
+        Class c = Class.forName("com.softwoehr.fiji.interpreter.Engine");
         method = c.getMethod(methodName, signature);     /* All Arity/0*/
     }
     
@@ -282,9 +282,9 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
     // public void reinit() {
     //  }
     
-    /** Invoke engine method on has'd Object.
+    /** Invoke Engine method on has'd Object.
      * @param e  */
-    public void execute(engine e) {
+    public void execute(Engine e) {
         Object argArray[] = new Object[1];
         argArray[0] = this;
         try {
@@ -325,7 +325,7 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
      * i.e., that the declared object class is what is intended.
      * This method validate() thus only guards against runtime
      * non-instantiation or instantiation with the wrong type
-     * of object. Cf. engine.runtimeTo() which calls validate()
+     * of object. Cf. Engine.runtimeTo() which calls validate()
      * but doesn't compare to class Value because it's assumed
      * that the code creating the primitive knew what class was meant.
      * @return  */

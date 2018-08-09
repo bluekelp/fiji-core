@@ -151,22 +151,22 @@ public class SearchOrder implements SoftWoehr, verbose {
     
     /** Push the search order topped by number of Wordlists in search order.
      * @param z  */
-    public void getOrder(engine z) {
+    public void getOrder(Engine z) {
         for (Enumeration e = my_vector.elements(); e.hasMoreElements();) {
             z.push(e.nextElement());
         }                                                          /* End for*/
         z.push(new Long(my_vector.size()));
-    }                                     /* public void getOrder(engine z)*/
+    }                                     /* public void getOrder(Engine z)*/
     
     /** Grab search order from stack
      * @param z  */
-    public void setOrder(engine z) {
+    public void setOrder(Engine z) {
         reinit();                                        /* Empty search order.*/
         int numWordlists = ((Long) z.pop()).intValue();
         for (int i = 0; i < numWordlists; ++i) {
             my_vector.addElement((Wordlist)z.pop());                       /* Add wordlists to order.*/
         }                                                          /* End for*/
-    }                                     /* public void setOrder(engine z)*/
+    }                                     /* public void setOrder(Engine z)*/
     
     /** Return names of all words in the search order.
      * @return  */

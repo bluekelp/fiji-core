@@ -59,7 +59,7 @@ public class Error extends java.lang.Error implements SoftWoehr, verbose {
         /** Errors pertaining to com.SoftWoehr.desktop.shell. */
         public static class shell {
             
-            /** Invalid numeric conversion base for interpreter. */
+            /** Invalid numeric conversion base for Interpreter. */
             public static class BadBase extends com.softwoehr.fiji.base.Error {
                 
                 /** Arity/1 Throwable constructor.
@@ -195,7 +195,7 @@ public class Error extends java.lang.Error implements SoftWoehr, verbose {
                 }
             }                                                   /* CompileToValue*/
             
-            /** Name not found in the interpreter search order.*/
+            /** Name not found in the Interpreter search order.*/
             public static class NameNotFound extends com.softwoehr.fiji.base.Error {
                 
                 /** Arity/1 Throwable constructor.

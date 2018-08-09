@@ -77,7 +77,7 @@ class Primitive extends Semantic implements SoftWoehr, verbose {
     throws java.lang.ClassNotFoundException
     , java.lang.NoSuchMethodException {
         this.setName(name);
-        Class c = Class.forName("com.softwoehr.fiji.interpreter.engine");
+        Class c = Class.forName("com.softwoehr.fiji.interpreter.Engine");
         method = c.getMethod(methodName, new Class[0]);          /* All Arity/0*/
     }
     
@@ -93,7 +93,7 @@ class Primitive extends Semantic implements SoftWoehr, verbose {
     throws java.lang.ClassNotFoundException
     , java.lang.NoSuchMethodException {
         this.setName(name);
-        Class c = Class.forName("com.softwoehr.fiji.interpreter.engine");
+        Class c = Class.forName("com.softwoehr.fiji.interpreter.Engine");
         method = c.getMethod(methodName, new Class[0]);          /* All Arity/0*/
         compilationMethod = c.getMethod(compilationMethodName
         , new Class[0]);  /* All Arity/0*/
@@ -126,7 +126,7 @@ class Primitive extends Semantic implements SoftWoehr, verbose {
     /** Execution semantics
      * @param anEngine
      * @throws BadPrimitiveExecute  */
-    public void execute(engine anEngine)
+    public void execute(Engine anEngine)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute {
         try {
             method.invoke(anEngine, new Object[0]);      /* zero-arity invocation*/
@@ -149,7 +149,7 @@ class Primitive extends Semantic implements SoftWoehr, verbose {
      * @throws BadPrimitiveExecute
      * @throws BadDefinitionExecute  */
     
-    public void compile(engine e)
+    public void compile(Engine e)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute

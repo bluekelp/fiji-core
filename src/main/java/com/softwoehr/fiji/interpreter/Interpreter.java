@@ -1,4 +1,4 @@
-/* interpreter.java ...  */
+/* Interpreter.java ...  */
 /*********************************************/
 /* Copyright *C* 1999, All Rights Reserved.  */
 /* Jack J. Woehr jax@well.com jwoehr@ibm.net */
@@ -39,7 +39,7 @@ import  com.softwoehr.util.*;
  * @version $Revision: 1.1.1.1 $
  */
 
-public class interpreter implements verbose {
+public class Interpreter implements verbose {
 
     private PrintStream err;
     private PrintStream out;
@@ -49,8 +49,8 @@ public class interpreter implements verbose {
     /**  Helper for verbose mode. */
     private verbosity v = new verbosity(this);
     
-    /** An execution engine */
-    private engine myEngine;
+    /** An execution Engine */
+    private Engine myEngine;
     
     /** The tokenizer which gets our next lexeme. */
     private StringTokenizer st ;
@@ -71,22 +71,22 @@ public class interpreter implements verbose {
     
     private String defaultDelimiters = " \t\n\r";
     
-    public interpreter(PrintStream err, PrintStream out) {
+    public Interpreter(PrintStream err, PrintStream out) {
         this.err = err;
         this.out = out;
         reinit();
     }
     
-    /** Reset the interpreter, losing all previous state. */
+    /** Reset the Interpreter, losing all previous state. */
     public void reinit() {
-        myEngine = new engine(this);
+        myEngine = new Engine(this);
         v = new verbosity(this);
         warmReset();
     }
 
-    /** Get the engine associated with this interpreter.
+    /** Get the Engine associated with this Interpreter.
      */
-    public engine getEngine() {
+    public Engine getEngine() {
         return myEngine;
     }
     
@@ -118,13 +118,13 @@ public class interpreter implements verbose {
         return quitFlag;
     }
     
-    /** Set the interpreter numeric base.
+    /** Set the Interpreter numeric base.
      * @param i  */
     public void setBase(int i) {
         base = i;
     }
     
-    /** Get the interpreter numeric base.
+    /** Get the Interpreter numeric base.
      */
     public int getBase() {
         return base;
@@ -215,7 +215,7 @@ public class interpreter implements verbose {
     
     /** Issue the prompt as appropriate */
     public void prompt() {
-        if (engine.INTERPRETING == myEngine.state)       /* We're interpreting*/ {
+        if (Engine.INTERPRETING == myEngine.state)       /* We're interpreting*/ {
             output("\nok ");
         }
         else                                               /* We're compiling.*/ {
@@ -223,7 +223,7 @@ public class interpreter implements verbose {
         }                                                          /* End if*/
     }
     
-    /** Something for the engine to call when it does a warm(). */
+    /** Something for the Engine to call when it does a warm(). */
     void warmReset()  {
         st = null;
         tokenizerStack = new Stack<>();
@@ -260,7 +260,7 @@ public class interpreter implements verbose {
                 announce("Semantic is: " + semantic);
                 
                 if (null != semantic)      /* We found lexeme as dictionary entry.*/ {
-                    if (engine.INTERPRETING == myEngine.state) /* We're interpreting*/ {
+                    if (Engine.INTERPRETING == myEngine.state) /* We're interpreting*/ {
                         try {
                             announce("Executing interpretive semantics for "
                             + semantic.toString()
@@ -290,7 +290,7 @@ public class interpreter implements verbose {
                 }
                 
                 else           /* We didn't find the lexeme as a dictionary entry.*/ {
-                    if (engine.INTERPRETING == myEngine.state)/* We're interpreting.*/ {
+                    if (Engine.INTERPRETING == myEngine.state)/* We're interpreting.*/ {
                         Long a;
                         try                                  /* Try to make it a long.*/ {
                             a = Long.valueOf(aLexeme, base);
@@ -309,7 +309,7 @@ public class interpreter implements verbose {
                                 myEngine.compileLiteral(a);
                             }                                               /* End try*/
                             catch (Exception x) {
-                                announce("interpreter had problem compiling literal Long.");
+                                announce("Interpreter had problem compiling literal Long.");
                                 announce("Lexeme was: " + aLexeme);
                                 x.printStackTrace(err);
                                 myEngine.warm();
@@ -320,7 +320,7 @@ public class interpreter implements verbose {
                                 myEngine.compileLiteral(aLexeme);
                             }                                               /* End try*/
                             catch (Exception x) {
-                                announce("interpreter had problem compiling literal String.");
+                                announce("Interpreter had problem compiling literal String.");
                                 announce("Lexeme was: " + aLexeme);
                                 x.printStackTrace(err);
                                 myEngine.warm();
@@ -340,7 +340,7 @@ public class interpreter implements verbose {
             }                                                     /* End catch*/
         }                         /* End if (interpretation string non-null)*/
         return killFlag;
-    }                                      /* End of interpreter.interpret*/
+    }                                      /* End of Interpreter.interpret*/
     
     
    /* Load a file as FIJI source. */
@@ -359,7 +359,7 @@ public class interpreter implements verbose {
     
     /**
      * As this class overloads setVerbose()
-     * it control engine's verbosity, too.
+     * it control Engine's verbosity, too.
      * @see com.softwoehr.util.verbose#
      * @see com.softwoehr.util.verbosity#
      * @param tf  */
@@ -367,7 +367,7 @@ public class interpreter implements verbose {
         isverbose = tf;
         if (myEngine != null) {
             myEngine.setVerbose(tf);
-            announce("Setting engine verbose.");
+            announce("Setting Engine verbose.");
         }                                                          /* End if*/
     }
     
@@ -377,6 +377,6 @@ public class interpreter implements verbose {
      * @param s  */
     public void    announce    (String s)   {v.announce(s);   }
     
-}                                               /* End of interpreter class*/
+}                                               /* End of Interpreter class*/
 
-/*  End of interpreter.java */
+/*  End of Interpreter.java */

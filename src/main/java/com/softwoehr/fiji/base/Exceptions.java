@@ -114,7 +114,7 @@ public class Exceptions extends java.lang.Exception implements SoftWoehr, verbos
                 }
             }                                                     /* NotClassName*/
             
-            /** Invalid numeric conversion base for interpreter. */
+            /** Invalid numeric conversion base for Interpreter. */
             public static class BadBase extends com.softwoehr.fiji.base.Exceptions {
                 
                 /** Arity/1 Throwable constructor. */
@@ -254,7 +254,7 @@ public class Exceptions extends java.lang.Exception implements SoftWoehr, verbos
                 }
             }                                                   /* CompileToValue*/
             
-            /** Name not found in the interpreter search order.*/
+            /** Name not found in the Interpreter search order.*/
             public static class NameNotFound extends com.softwoehr.fiji.base.Exceptions {
                 
                 /** Arity/1 Throwable constructor. */

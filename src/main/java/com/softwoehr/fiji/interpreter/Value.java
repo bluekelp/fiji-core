@@ -110,7 +110,7 @@ public class Value extends Semantic implements SoftWoehr, verbose
   //  }
 
   /** Execution semantics are to push own datum. */
-  public void execute (engine e) {
+  public void execute (Engine e) {
     e.push(datum);
     }
 

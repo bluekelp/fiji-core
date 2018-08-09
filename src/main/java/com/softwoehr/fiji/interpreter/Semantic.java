@@ -106,7 +106,7 @@ public class Semantic implements SoftWoehr, verbose {
      * @param e
      * @throws BadPrimitiveExecute
      * @throws BadDefinitionExecute  */
-    public void execute(engine e)
+    public void execute(Engine e)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
         e.push(this);
@@ -120,7 +120,7 @@ public class Semantic implements SoftWoehr, verbose {
      * @throws BadPrimitiveExecute
      * @throws BadDefinitionExecute  */
     
-    public void compile(engine e)
+    public void compile(Engine e)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute

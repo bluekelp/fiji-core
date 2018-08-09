@@ -13,15 +13,15 @@
 
 package com.softwoehr.fiji;
 
-import com.softwoehr.fiji.interpreter.engine;
-import com.softwoehr.fiji.interpreter.interpreter;
+import com.softwoehr.fiji.interpreter.Engine;
+import com.softwoehr.fiji.interpreter.Interpreter;
 import com.softwoehr.util.Argument;
 import com.softwoehr.util.GetArgs;
 
 import java.io.*;
 
 /** This class merely serves as a launcher for the FIJI
- * interpreter running at the command line.
+ * Interpreter running at the command line.
  * @author  jax
  * @version $Id: FIJI.java,v 1.1.1.1 2001/08/21 02:35:20 jwoehr Exp $
  */
@@ -33,14 +33,14 @@ public class FIJI {
 
     private void runner(String argv[])
     {
-      interpreter i;
+      Interpreter i;
       InputStreamReader isr;
       BufferedReader br;
       GetArgs myArgs = new GetArgs(argv);/* Assimilate the command line.     */
 
-      /* Create the interpreter instance. */
+      /* Create the Interpreter instance. */
       try {
-        i = new interpreter(System.err, System.out);
+        i = new Interpreter(System.err, System.out);
       }                                                          /* End try*/
 
       catch (Exception e) {
@@ -74,7 +74,7 @@ public class FIJI {
             }                                                /* End catch*/
           }
           else {
-            String s = "(null) presented for interpreter numeric base.";
+            String s = "(null) presented for Interpreter numeric base.";
             System.out.println(s);
             throw new com.softwoehr.fiji.base.Error.desktop.shell.BadBase(s, null);
           }                                                     /* End if*/
@@ -109,7 +109,7 @@ public class FIJI {
 
       /* GPL announces itself. */
       System.out.println( "FIJI ForthIsh Java Interpreter "
-              + engine.fijiVersion()
+              + Engine.fijiVersion()
       );
       System.out.println("Copyright (C) 1999, 2001 by Jack J. Woehr.");
       System.out.println("FIJI comes with ABSOLUTELY NO WARRANTY;");
@@ -283,7 +283,7 @@ public class FIJI {
   /** Display main() command line usage. */
   private void usage() {
     System.err.println("Usage:");
-    System.err.println(" java com.SoftWoehr.FIJI.interpreter.interpreter [-b base] [-o output_codepage] [-v] [file file ...]");
+    System.err.println(" java com.SoftWoehr.FIJI.Interpreter.Interpreter [-b base] [-o output_codepage] [-v] [file file ...]");
     System.err.println(" -v                 .. enables verbose mode, weird, unintelligible debug msgs.");
     System.err.println(" -o output_codepage .. for VM/ESA with Java 1.1.4 use Cp1407.");
     System.err.println(" -b base            .. where base is numeric input base, e.g. 8 16 0x10 etc.");

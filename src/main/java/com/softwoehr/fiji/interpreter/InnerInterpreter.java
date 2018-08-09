@@ -34,7 +34,7 @@ import java.util.*;
 import  com.softwoehr.SoftWoehr;
 import  com.softwoehr.util.*;
 
-/** This is the interpreter of Definitions.
+/** This is the Interpreter of Definitions.
  *
  * This is the oddest class of the suite.
  *
@@ -52,7 +52,7 @@ import  com.softwoehr.util.*;
  * records which both get popped at the tail of the (effectively) recursive
  * call to InnerInterpreter.interpret().
  *
- * This all could have been shoehorned into the engine, but breaking
+ * This all could have been shoehorned into the Engine, but breaking
  * it out into its own class makes it easier to keep straight while coding.
  *
  * @author $Author: jwoehr $
@@ -85,13 +85,13 @@ public class InnerInterpreter implements SoftWoehr, verbose {
     /** Current definition + instruction pointer*/
     private Interpretation interpretation;
     
-    /** The engine we're associated with.*/
-    private engine myEngine;
+    /** The Engine we're associated with.*/
+    private Engine myEngine;
     
-    /** Arity/1 ctor. InnerInterpreter must be associated with an engine.
-     * @param e engine associated with this inner interpreter.
+    /** Arity/1 ctor. InnerInterpreter must be associated with an Engine.
+     * @param e Engine associated with this inner Interpreter.
      */
-    public InnerInterpreter(engine e) {
+    public InnerInterpreter(Engine e) {
         reinit(e);
     }
     
@@ -139,19 +139,19 @@ public class InnerInterpreter implements SoftWoehr, verbose {
     }
     
     /** Reinitialize the InnerInterpreter, discarding previous state.
-     * @param e The engine associated with this instance.
+     * @param e The Engine associated with this instance.
      */
-    public void reinit(engine e) {
+    public void reinit(Engine e) {
         myEngine = e;
         returnStack = new Stack();
         loopStack   = new Stack();
         interpretation = null;
     }
     
-    /** Return engine with which this instance is associated.
-     * @return engine associated with this instance.
+    /** Return Engine with which this instance is associated.
+     * @return Engine associated with this instance.
      */
-    public engine getEngine() { return myEngine; }
+    public Engine getEngine() { return myEngine; }
     
     /** Return current definition being interpreted by this instance.
      * @return The definition under interpretation.
@@ -324,7 +324,7 @@ public class InnerInterpreter implements SoftWoehr, verbose {
     public void    announce    (String s)   {v.announce(s);   }
     
     /** Demonstrate <code>InnerInterpreter</code>. Does nothing much currently.
-     * @param argv Argument to the inner interpreter test.
+     * @param argv Argument to the inner Interpreter test.
      */
     public static void main(String argv[]) {
         

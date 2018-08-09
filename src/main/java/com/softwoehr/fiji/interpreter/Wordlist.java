@@ -179,11 +179,11 @@ public class Wordlist extends Semantic implements SoftWoehr, verbose {
         return result;
     }                                             /* public String words ()*/
     
-    /** Create a default wordlist for initial engine.
+    /** Create a default wordlist for initial Engine.
      * Each invocation of this method results in
      * a unique instance. Alternatively, the
      * list could be a static member, but then
-     * it had better be read-only to interpreter
+     * it had better be read-only to Interpreter
      * instances due to its being shared.
      * @return  */
     public static Wordlist defaultWordlist() {

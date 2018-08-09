@@ -76,7 +76,7 @@ public class ControlFlowElement implements SoftWoehr, verbose {
      * specific Semantic  with a null element.
      * @param s
      * @param e  */
-    public ControlFlowElement(Semantic s, engine e) {
+    public ControlFlowElement(Semantic s, Engine e) {
         reinit(s,e);
     }
     
@@ -85,7 +85,7 @@ public class ControlFlowElement implements SoftWoehr, verbose {
      * @param s
      * @param e
      * @param c  */
-    public ControlFlowElement(Semantic s, engine e, Class c) {
+    public ControlFlowElement(Semantic s, Engine e, Class c) {
         reinit(s,e,c);
     }
     
@@ -118,7 +118,7 @@ public class ControlFlowElement implements SoftWoehr, verbose {
     /** Reinitialize the ControlFlowElement, discarding previous state.
      * @param s
      * @param e  */
-    public void reinit(Semantic s, engine e) {
+    public void reinit(Semantic s, Engine e) {
         reinit(s, e, s.getClass());
     }
     
@@ -126,7 +126,7 @@ public class ControlFlowElement implements SoftWoehr, verbose {
      * @param s
      * @param e
      * @param c  */
-    public void reinit(Semantic s, engine e, Class c) {
+    public void reinit(Semantic s, Engine e, Class c) {
         element = s;
         state = e.state;
         semanticClass = c;

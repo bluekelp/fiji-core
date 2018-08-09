@@ -37,7 +37,7 @@ import  com.softwoehr.util.*;
  * of a Java method call involves examining the
  * the class of the passed parameter. Consider,
  * however, the case of java.lang.String.equals(Object) ...
- * If the user provides a String, the interpreter tries
+ * If the user provides a String, the Interpreter tries
  * to resolve a call to java.lang.String.equals(String),
  * a method which does not exist.
  *

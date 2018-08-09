@@ -1,4 +1,4 @@
-/* engine.java ...  an execution engine.     */
+/* Engine.java ...  an execution Engine.     */
 /*********************************************/
 /* Copyright *C* 1999, 2001                  */
 /* All Rights Reserved.                      */
@@ -37,24 +37,24 @@ import com.softwoehr.fiji.JavaArgs;
 import com.softwoehr.SoftWoehr;
 import com.softwoehr.util.*;
 
-/** The execution engine for our interaction.
- * An instance of com.SoftWoehr.desktop.shell.interpreter
- * creates itself an instance of com.SoftWoehr.desktop.shell.engine.
- * The engine is the guts of the shell's work and contains the bodies
+/** The execution Engine for our interaction.
+ * An instance of com.SoftWoehr.desktop.shell.Interpreter
+ * creates itself an instance of com.SoftWoehr.desktop.shell.Engine.
+ * The Engine is the guts of the shell's work and contains the bodies
  * of the com.SoftWoehr.desktop.shell.Primitive instances of primitive
- * interpreter functions, since the engine knows how to carry out
+ * Interpreter functions, since the Engine knows how to carry out
  * these tasks.
  *
- *<p>The engine possess an object stack where each shell function
+ *<p>The Engine possess an object stack where each shell function
  * gets its parameters and deposits its results.
  *
  *<p>The descriptions of the methods below often contains a Forth-like
  * stack diagram referring to the effect of the operation on the object
- * stack maintained by the engine.
+ * stack maintained by the Engine.
  * @author $Author: jwoehr $
  * @version $Revision: 1.2 $
  */
-public class engine implements SoftWoehr, verbose {
+public class Engine implements SoftWoehr, verbose {
     
     /** Interpreting, not compiling. */
     public static final boolean INTERPRETING = false;
@@ -63,7 +63,7 @@ public class engine implements SoftWoehr, verbose {
     public static final boolean COMPILING = true;
     
     /** Revision level */
-    private static final String rcsid = "$Id: engine.java,v 1.2 2001/08/25 19:26:03 jwoehr Exp $";
+    private static final String rcsid = "$Id: Engine.java,v 1.2 2001/08/25 19:26:03 jwoehr Exp $";
     
     /** Implements com.SoftWoehr.SoftWoehr
      * @return The RCS id
@@ -161,8 +161,8 @@ public class engine implements SoftWoehr, verbose {
     /** Object stack. */
     public Stack<Object> stack;
     
-    /** Inner interpreter is the Definition interpreter.
-     * The inner interpreter has the return stack and
+    /** Inner Interpreter is the Definition Interpreter.
+     * The inner Interpreter has the return stack and
      * the current definition under interpretation.
      */
     public InnerInterpreter innerInterpreter;
@@ -176,8 +176,8 @@ public class engine implements SoftWoehr, verbose {
     /** Stack for unfinished Definitions and unresolved branches. */
     public Stack controlFlowStack;
     
-    /** The input interpreter with which this engine is associated.*/
-    public interpreter myInterpreter;
+    /** The input Interpreter with which this Engine is associated.*/
+    public Interpreter myInterpreter;
 
     private void output(String s) {
         myInterpreter.output(s);
@@ -196,10 +196,10 @@ public class engine implements SoftWoehr, verbose {
     /** The current wordlist to which new defs are added. */
     public Wordlist currentWordlist;
 
-    /** Open engine on an input interpreter and initialize cold.
-     * @param i the associated input interpreter
+    /** Open Engine on an input Interpreter and initialize cold.
+     * @param i the associated input Interpreter
      */
-    public engine(interpreter i) {
+    public Engine(Interpreter i) {
         cold();
         myInterpreter = i;
         loadClasses();
@@ -211,7 +211,7 @@ public class engine implements SoftWoehr, verbose {
      */
     public int shutdown() { return 0; }
     
-    /** Reinit engine like just came up. */
+    /** Reinit Engine like just came up. */
     public void cold() {
         warm();
         searchOrder = new SearchOrder();
@@ -220,26 +220,26 @@ public class engine implements SoftWoehr, verbose {
         currentWordlist = searchOrder.nthElement(0);                    /* == w*/
     }
     
-    /** Reinit engine but preserve some state. */
+    /** Reinit Engine but preserve some state. */
     public void warm() {
         stack = new Stack<>();
         innerInterpreter = new InnerInterpreter(this);
         controlFlowStack = new Stack();
         state = INTERPRETING;
-        if (null != myInterpreter) {     /* Interpreter calls engine.warm() when it wants to reset self.*/
+        if (null != myInterpreter) {     /* Interpreter calls Engine.warm() when it wants to reset self.*/
             myInterpreter.warmReset();
         }                                                           /* End if*/
     }
     
     /** Set state INTERPRETING/COMPILING.
-     * @param state <CODE>engine.INTERPRETING</CODE> if interpreting; <CODE>engine.COMPILING</CODE> if compiling.
+     * @param state <CODE>Engine.INTERPRETING</CODE> if interpreting; <CODE>Engine.COMPILING</CODE> if compiling.
      */
     public void setState(boolean state) {
         this.state = state;
     }
     
     /** Get state INTERPRETING/COMPILING.
-     * @return state <CODE>engine.INTERPRETING</CODE> if interpreting; <CODE>engine.COMPILING</CODE> if compiling.
+     * @return state <CODE>Engine.INTERPRETING</CODE> if interpreting; <CODE>Engine.COMPILING</CODE> if compiling.
      */
     public boolean getState() {
         return state;
@@ -273,7 +273,7 @@ public class engine implements SoftWoehr, verbose {
     public void    announce    (String s)   {v.announce(s);   }
     
     /** Find a semantic by name in one of the wordlists
-     * in the array of same currently searched by this engine.
+     * in the array of same currently searched by this Engine.
      * Return either the semantic or 'null'.
      * @param name name of the semantic
      * @return The Semantic object of that name.
@@ -551,14 +551,14 @@ public class engine implements SoftWoehr, verbose {
         }                                                           /* End if*/
     }                                                           /* dotdot()*/
     
-    /** Print out the inner interpreter state.
+    /** Print out the inner Interpreter state.
      * .r --        R: --
      */
     public void dot_r() {
         output(innerInterpreter.toString());
     }
     
-    /** Trigger a quit of the input interpreter loop
+    /** Trigger a quit of the input Interpreter loop
      * quit      o1 ... oN -- o1 ... oN
      */
     public void quit() {
@@ -969,7 +969,7 @@ public class engine implements SoftWoehr, verbose {
         pop();
     }
     
-    /** Signal interpreter that bye is requested. */
+    /** Signal Interpreter that bye is requested. */
     public void bye() {
         myInterpreter.setKillFlag(true);
     }
@@ -1429,7 +1429,7 @@ public class engine implements SoftWoehr, verbose {
         throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.CompileOnly(s, null);
     }
     
-    /** Set up engine for compilation.
+    /** Set up Engine for compilation.
      * @param d The definition into which Semantics will be compiled.
      */
     public void commenceDefinition(Definition d) {
@@ -1530,7 +1530,7 @@ public class engine implements SoftWoehr, verbose {
         push(l.getObject());
     }
     
-    /** Compile a literal already found by the interpreter or some other
+    /** Compile a literal already found by the Interpreter or some other
      * entity into a Definition. The literal object will push itself
      * at runtime of the Definition.
      * @param o The literal object.
@@ -1799,12 +1799,12 @@ public class engine implements SoftWoehr, verbose {
         
         if (p.validate()) {/* Now resolve the branch via the ref from the stack.*/
             int origin = ((Integer) p.getObject()).intValue();
-            int destination =   /* Okay - inner interpreter while loop tests .LT.*/
+            int destination =   /* Okay - inner Interpreter while loop tests .LT.*/
             getCurrentDefinition().compositionLength();
             p.setObject(new Integer((destination - origin) - 1));  /* Resolution.*/
       /* "Minus one" because this is the bump delta to the instruction
        * pointer, which latter has already been post-incremented in the
-       * inner interpreter loop.
+       * inner Interpreter loop.
        */
         }
         
@@ -2230,7 +2230,7 @@ public class engine implements SoftWoehr, verbose {
         output("\n");
     }
     
-    /** Set the interpreter verbose or non- at runtime. */
+    /** Set the Interpreter verbose or non- at runtime. */
     public void runtimeVerbose() {
         setVerbose(((Boolean)pop()).booleanValue());
     }
@@ -2368,6 +2368,6 @@ public class engine implements SoftWoehr, verbose {
         }                                                           /* End if*/
     }                                              /* public void discard()*/
     
-}                                                    /* End of engine class*/
+}                                                    /* End of Engine class*/
 
-/*  End of engine.java */
+/*  End of Engine.java */
