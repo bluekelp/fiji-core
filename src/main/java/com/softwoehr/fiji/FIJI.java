@@ -104,7 +104,7 @@ public class FIJI {
       //    catch (Exception e)
       //      {
       //        e.printStackTrace(System.err);
-      //        throw new com.SoftWoehr.FIJI.base.Error.bAcKtOmain(e);
+      //        throw new com.SoftWoehr.FIJI.base.Error.BackToMain(e);
       //      }                                                        /* End catch*/
 
       /* GPL announces itself. */

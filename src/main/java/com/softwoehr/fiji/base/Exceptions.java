@@ -355,30 +355,30 @@ public class Exceptions extends java.lang.Exception implements SoftWoehr, verbos
     }                                                              /* desktop*/
     
     /** A buncha Exceptions types. */
-    public static class bAcKtOmain extends com.softwoehr.fiji.base.Exceptions {
+    public static class BackToMain extends com.softwoehr.fiji.base.Exceptions {
         
         /** Arity/1 Throwable constructor. */
-        public bAcKtOmain(Throwable t) {
+        public BackToMain(Throwable t) {
             super(t);
         }
         
         /** Arity/2 Throwable constructor. */
-        public bAcKtOmain(String s, java.lang.Throwable t) {
+        public BackToMain(String s, java.lang.Throwable t) {
             super(s,t);
         }
         
     }
     
     /** A buncha Exceptions types. */
-    public static class bAdArGtOmain extends com.softwoehr.fiji.base.Exceptions {
+    public static class BadArgToMain extends com.softwoehr.fiji.base.Exceptions {
         
         /** Arity/1 Throwable constructor. */
-        public bAdArGtOmain(Throwable t) {
+        public BadArgToMain(Throwable t) {
             super(t);
         }
         
         /** Arity/2 Throwable constructor. */
-        public bAdArGtOmain(String s, java.lang.Throwable t) {
+        public BadArgToMain(String s, java.lang.Throwable t) {
             super(s,t);
         }
     }
