@@ -28,45 +28,38 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import  java.util.*;
-
-import  com.softwoehr.*;
-import  com.softwoehr.util.*;
+import java.util.Enumeration;
+import java.util.Vector;
 
 /** A class representing a list of Semantics to be executed.
  *
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class Definition extends Semantic implements verbose {
-    /**  Flags whether we are in verbose mode. */
-    public boolean isverbose = false;
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+public class Definition extends Semantic {
     /** This is the compiled definition */
     private Semantic body[];
-    
+
     /** This is the definition under compilation */
     private Vector composition;
-    
+
     /** If true, the word's execution semantics are performed
      * at compile time.
      */
     private boolean immediate;
-    
+
     /** Arity/0 ctor, an anonymous definition. */
     public Definition() {
         this("Anonymous Definition.");
     }
-    
+
     /** Arity/1 ctor, a named Definition.
      * @param s  */
     public Definition(String s) {
         super(s);
         immediate=false;
     }
-    
+
     /** Return a string representing the definition.
      * @return A string representation.
      */
@@ -74,44 +67,26 @@ public class Definition extends Semantic implements verbose {
         String result = "A Definition named " + getName();
         return result;
     }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @return  */
-    public boolean isVerbose()              {return isverbose;}
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param tf  */
-    public void    setVerbose  (boolean tf) {isverbose = tf;  }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param s  */
-    public void    announce    (String s)   {v.announce(s);   }
-    
+
     /** Set the word immediate, i.e.,  if true, its execution
      * semantics will be performed at compile time.
      * @param tf  */
     public void setImmediate(boolean tf) {
         immediate = tf;
     }
-    
+
     /** See if the word is immediate.
      * @return  */
     public boolean getImmediate() {
         return immediate;
     }
-    
+
     /** Start a definition. */
     public void commence() {
         body = null;
         composition = new Vector();
     }
-    
+
     /** Finish a definition. */
     public void complete() {
         body = new Semantic[composition.size()];
@@ -121,17 +96,17 @@ public class Definition extends Semantic implements verbose {
         }
         composition = null;
     }
-    
+
     /** Append to a definition
      * @param s  */
     public void append(Semantic s) {
         composition.addElement(s);
     }
-    
+
     /** Execution semantics
      * @param e
-     * @throws BadDefinitionExecute
-     * @throws BadPrimitiveExecute  */
+     * throws BadDefinitionExecute
+     * throws BadPrimitiveExecute  */
     public void execute(Engine e)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute {
@@ -147,12 +122,12 @@ public class Definition extends Semantic implements verbose {
             throw x;
         }                                                        /* End catch*/
     }
-    
+
     /** Compilation semantics.
      * @param e
-     * @throws BadDefinitionCompile
-     * @throws BadDefinitionExecute
-     * @throws BadPrimitiveExecute  */
+     * throws BadDefinitionCompile
+     * throws BadDefinitionExecute
+     * throws BadPrimitiveExecute  */
     public void compile(Engine e)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute
@@ -174,7 +149,7 @@ public class Definition extends Semantic implements verbose {
             }                                                      /* End catch*/
         }                                                           /* End if*/
     }
-    
+
     /** Decompilation semantics
      * @return  */
     public Semantic[] decompile() {
@@ -184,19 +159,19 @@ public class Definition extends Semantic implements verbose {
         }                                                          /* End for*/
         return result;
     }
-    
+
     /** Return index of last Semantic in list.
      * @return  */
     public int lastIndex() {
         return body.length - 1;
     }
-    
+
     /** Return length of Semantic list.
      * @return  */
     public int length() {
         return body.length;
     }
-    
+
     /** Returns nth Semantic in the list of Semantics which make up the
      * body of a Definition.
      * @param index
@@ -204,14 +179,14 @@ public class Definition extends Semantic implements verbose {
     public Semantic nthSemantic(int index) {
         return body[index];
     }
-    
+
     /** Returns the current length of the definition under composition.
      * Used to calculate branches.
      * @return  */
     public int compositionLength() {
         return composition.size();
     }
-    
+
 }                                                /* End of Definition class*/
 
 /*  End of Definition.java */

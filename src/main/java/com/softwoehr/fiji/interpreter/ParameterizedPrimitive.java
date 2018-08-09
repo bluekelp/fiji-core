@@ -28,10 +28,6 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.util.GetArgs;
-import com.softwoehr.util.verbose;
-import com.softwoehr.util.verbosity;
-
 /** ParameterizedPrimitive is an on-the-fly Primitive which
  * we declare to provide special runtimes to be compiled by
  * special compilation semantics, e.g., the runtime of
@@ -40,13 +36,7 @@ import com.softwoehr.util.verbosity;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class ParameterizedPrimitive extends Primitive implements verbose {
-    
-    /**  Flags whether we are in verbose mode. */
-    private boolean isverbose = true;
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+public class ParameterizedPrimitive extends Primitive {
     /** The object that this prim implicitly operates upon. */
     private Object myObject;
     private Class  myObjectClass;
@@ -74,7 +64,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
          * @param methodName
          * @param delta
          * @throws ClassNotFoundException
-         * @throws NoSuchMethodException  */        
+         * @throws NoSuchMethodException  */
         public Branch( String name
         , String methodName
         , int delta
@@ -84,7 +74,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
             super(name, methodName, new Integer(delta), intClass());
         }
     }                                                  /* End of Branch class*/
-    
+
     /** The primitive for an unconditional branch. */
     public static class UnconditionalBranch extends Branch {
         /** Construct an unconditional branch.
@@ -99,7 +89,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
             , delta
             );
         }
-        
+
         /** Return string representation of the primitive.
          * @return  */
         public String toString() {
@@ -109,7 +99,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
             return s;
         }
     }                                     /* End of UnconditionalBranch class*/
-    
+
     /** The primitive for a conditional branch. */
     public static class ConditionalBranch extends Branch {
         /** Construct a conditional branch.
@@ -124,7 +114,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
             , delta
             );
         }
-        
+
         /** Return string representation of the primitive.
          * @return  */
         public String toString() {
@@ -134,7 +124,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
             return s;
         }
     }                                       /* End of ConditionalBranch class*/
-    
+
     /** The primitive for a literal. */
     public static class Literal extends ParameterizedPrimitive {
         /** Construct a literal for any object.
@@ -150,7 +140,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
             , objClass()
             );
         }
-        
+
         /** Return string representation of the primitive.
          * @return  */
         public String toString() {
@@ -159,7 +149,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
             return s;
         }
     }                                                 /* End of Literal class*/
-    
+
     /** The primitive for a do. The Integer is the "leave" offset
      * in the Definition.
      */
@@ -167,40 +157,40 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
         /**
          * @param offset
          * @throws ClassNotFoundException
-         * @throws NoSuchMethodException  */        
+         * @throws NoSuchMethodException  */
         public Do   (int offset)   /* Offset in definition at which 'do' occurs*/
         throws java.lang.ClassNotFoundException
         , java.lang.NoSuchMethodException {
             super("(do)", "doDo", new Integer(offset), intClass());
         }
     }                                                      /* End of Do class*/
-    
+
     /** The primitive for a loop. */
     public static class Loop extends ParameterizedPrimitive {
         /**
          * @param delta
          * @throws ClassNotFoundException
-         * @throws NoSuchMethodException  */        
+         * @throws NoSuchMethodException  */
         public Loop   (int delta)
         throws java.lang.ClassNotFoundException
         , java.lang.NoSuchMethodException {
             super("(loop)", "loop", new Integer(delta), intClass());
         }
     }                                                    /* End of Loop class*/
-    
+
     /** The primitive for a +loop. */
     public static class PlusLoop extends ParameterizedPrimitive {
         /**
          * @param delta
          * @throws ClassNotFoundException
-         * @throws NoSuchMethodException  */        
+         * @throws NoSuchMethodException  */
         public PlusLoop   (int delta)
         throws java.lang.ClassNotFoundException
         , java.lang.NoSuchMethodException {
             super("(+loop)", "plusLoop", new Integer(delta), intClass());
         }
     }                                                    /* End of Loop class*/
-    
+
     /** Arity/4 ctor, passing in a name for the primitive,
      * a method name to resolve for class Engine, an Object
      * (possibly null) to be the datum for this primitive instance,
@@ -221,7 +211,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
     , java.lang.NoSuchMethodException {
         reinit(name, methodName, object, objectClass);
     }
-    
+
     /** Reinitialize object setting name, method name, object, object class.
      * @param name
      * @param methodName
@@ -244,7 +234,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
         Class c = Class.forName("com.softwoehr.fiji.interpreter.Engine");
         method = c.getMethod(methodName, signature);     /* All Arity/0*/
     }
-    
+
     /** Return string representation of object. Doesn't do any
      * checking for object validity.
      * @return  */
@@ -256,7 +246,7 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
         s += " with a declared Class of " + getObjectClass().toString();
         return s;
     }
-    
+
     /** Invoke Engine method on has'd Object.
      * @param e  */
     public void execute(Engine e) {
@@ -269,31 +259,31 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
             ex.printStackTrace(System.err);
         }                                                        /* End catch*/
     }
-    
+
     /** Get the object this paramprim operates on implicitly.
      * @return  */
     public Object getObject() {
         return myObject;
     }
-    
+
     /** Set the object this paramprim operates on implicitly.
      * @param o  */
     public void setObject(Object o) {
         myObject = o;
     }
-    
+
     /** Get the Class this paramprim operates on implicitly.
      * @return  */
     public Class getObjectClass() {
         return myObjectClass;
     }
-    
+
     /** Set the Class this paramprim operates on implicitly.
      * @param o  */
     public void setObjectClass(Class o) {
         myObjectClass = o;
     }
-    
+
     /** Validate that object and object class are instanced
      * and that object class equals declared object class.
      * The validation check presumes the programmer was right,
@@ -314,24 +304,6 @@ public class ParameterizedPrimitive extends Primitive implements verbose {
         }
         return result;
     }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @return  */
-    public boolean isVerbose()              {return isverbose;}
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param tf  */
-    public void    setVerbose  (boolean tf) {isverbose = tf;  }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param s  */
-    public void    announce    (String s)   {v.announce(s);   }
 }                                                      /* End of ParameterizedPrimitive class*/
 
 /*  End of ParameterizedPrimitive.java */

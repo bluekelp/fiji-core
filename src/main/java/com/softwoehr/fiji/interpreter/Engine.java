@@ -29,12 +29,17 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import java.io.*;
-import java.util.*;
-import java.lang.reflect.*;
-
 import com.softwoehr.fiji.JavaArgs;
-import com.softwoehr.util.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Enumeration;
+import java.util.Stack;
 
 /** The execution Engine for our interaction.
  * An instance of com.SoftWoehr.desktop.shell.Interpreter
@@ -53,80 +58,77 @@ import com.softwoehr.util.*;
  * @author $Author: jwoehr $
  * @version $Revision: 1.2 $
  */
-public class Engine implements verbose {
-    
+public class Engine {
+
     /** Interpreting, not compiling. */
     public static final boolean INTERPRETING = false;
-    
+
     /** Compiling, not interpreting. */
     public static final boolean COMPILING = true;
-    
+
     /**  Flags whether we are in verbose mode. */
     public boolean isverbose = false;
-    
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cObject    ;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cBoolean   ;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cString    ;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cLong      ;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cInteger   ;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cClass     ;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cJavaParam ;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cVariable  ;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cValue     ;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cDefinition;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cParameterizedPrimitive;
-    
+
     /** Reference to a Class object for comparisons to avoid
      * frequent calls to Class.forName()
      */
     public Class cLiteral;
-    
+
     /** Init the static class references. */
     private void loadClasses() {
         try {
@@ -151,22 +153,22 @@ public class Engine implements verbose {
 
     /** Object stack. */
     public Stack<Object> stack;
-    
+
     /** Inner Interpreter is the Definition Interpreter.
      * The inner Interpreter has the return stack and
      * the current definition under interpretation.
      */
     public InnerInterpreter innerInterpreter;
-    
+
     /** A ref to the current definition under composition. The
      * previous currentDefinition is pushed on the control
      * flow stack.
      */
     private Definition currentDefinition;
-    
+
     /** Stack for unfinished Definitions and unresolved branches. */
     public Stack controlFlowStack;
-    
+
     /** The input Interpreter with which this Engine is associated.*/
     public Interpreter myInterpreter;
 
@@ -177,13 +179,13 @@ public class Engine implements verbose {
     private void outputError(Exception e) {
         myInterpreter.outputError(e);
     }
-    
+
     /** Compilation state */
     public boolean state;
-    
+
     /** The search order */
     public SearchOrder searchOrder;
-    
+
     /** The current wordlist to which new defs are added. */
     public Wordlist currentWordlist;
 
@@ -195,13 +197,7 @@ public class Engine implements verbose {
         myInterpreter = i;
         loadClasses();
     }
-    
-    /** shutdown() here does nothing.
-     * @see com.softwoehr.SoftWoehr#
-     * @return Always returns 0
-     */
-    public int shutdown() { return 0; }
-    
+
     /** Reinit Engine like just came up. */
     public void cold() {
         warm();
@@ -210,7 +206,7 @@ public class Engine implements verbose {
         searchOrder.add(w);
         currentWordlist = searchOrder.nthElement(0);                    /* == w*/
     }
-    
+
     /** Reinit Engine but preserve some state. */
     public void warm() {
         stack = new Stack<>();
@@ -221,48 +217,40 @@ public class Engine implements verbose {
             myInterpreter.warmReset();
         }                                                           /* End if*/
     }
-    
+
     /** Set state INTERPRETING/COMPILING.
      * @param state <CODE>Engine.INTERPRETING</CODE> if interpreting; <CODE>Engine.COMPILING</CODE> if compiling.
      */
     public void setState(boolean state) {
         this.state = state;
     }
-    
+
     /** Get state INTERPRETING/COMPILING.
      * @return state <CODE>Engine.INTERPRETING</CODE> if interpreting; <CODE>Engine.COMPILING</CODE> if compiling.
      */
     public boolean getState() {
         return state;
     }
-    
+
     /** Returns verbosity of the debugging output.
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
      * @return <CODE>true</CODE> iff verbose.
      */
     public boolean isVerbose() {
         return isverbose;
     }
-    
+
     /** Sets verbosity of the debugging output.
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
      * @param tf <CODE>true</CODE> iff verbose.
      */
     public void    setVerbose  (boolean tf) {
         isverbose = tf;
-        searchOrder.setVerbose(isVerbose());
-        innerInterpreter.setVerbose(isVerbose());
     }
-    
+
     /** Outputs to verbose stream if verbose.
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
      * @param s Message to announce
      */
-    public void    announce    (String s)   {v.announce(s);   }
-    
+    public void    announce    (String s)   { if (isverbose) output(s);}
+
     /** Find a semantic by name in one of the wordlists
      * in the array of same currently searched by this Engine.
      * Return either the semantic or 'null'.
@@ -272,47 +260,47 @@ public class Engine implements verbose {
     public Semantic findSemantic(String name) {
         return searchOrder.find(name);
     }
-    
+
     /** Push a reference to an object onto the stack.
      * @param o The obj to push
      */
     public void push(Object o) {
         stack.push(o);
     }
-    
+
     /** Pop a reference to an object from the stack.
      * @return The obj popped.
      */
     public Object pop() {
         return stack.pop();
     }
-    
+
     /** Peek at TOS.
      * @return The object from the top of the stack, which still resides there.
      */
     public Object peek() {
         return stack.peek();
     }
-    
+
     /********************************/
   /* Here are the primitives.     */
   /* These all work on the stack. */
     /********************************/
-    
+
     /** ARF */
     public void arf() {
         output("\nHi there from arf!\n");
     }
-    
+
     /** noop           --  */
     public void noop() {
     }
-    
+
     /** depth      xn .. x1 -- n */
     public void depth() {
         push(new Long(stack.size()));
     }
-    
+
     /** dup          o -- o o
      * throws StackUnderflow If stack is empty.
      */
@@ -327,7 +315,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
         }                                                           /* End if*/
     }
-    
+
     /** drop          o --
      * throws StackUnderflow If stack is empty.
      */
@@ -342,7 +330,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
         }                                                           /* End if*/
     }
-    
+
     /** swap      o1 o2 -- o2 o1
      * throws StackUnderflow If stack is empty.
      */
@@ -358,7 +346,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
         }                                                           /* End if*/
     }
-    
+
     /** over        o1 o2 -- o1 o2 o1
      * throws StackUnderflow If stack is too shallow for operation.
      */
@@ -374,7 +362,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
         }                                                           /* End if*/
     }
-    
+
     /** rot        o1 o2 o3 -- o2 o3 o1
      * throws StackUnderflow If stack is too shallow for operation.
      */
@@ -392,7 +380,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
         }                                                           /* End if*/
     }
-    
+
     /** roll        om .. o((m-n)+1) om-n  m -- .. o((m-n)+1) om
      * throws StackUnderflow If stack is too shallow for operation.
      */
@@ -419,7 +407,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
         }                                                           /* End if*/
     }                                                /* public void roll ()*/
-    
+
     /** pick      om .. om-n m -- om .. om-n om
      * throws StackUnderflow If stack is too shallow for operation.
      */
@@ -445,7 +433,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
         }                                                           /* End if*/
     }
-    
+
     /** .s        o1 .. oN -- o1 .. oN */
     public void dot_s() {
         if (stack.size() > 0) {
@@ -457,14 +445,14 @@ public class Engine implements verbose {
                 else {
                     output("`null` ");
                 }                                                       /* End if*/
-                
+
             }
         }
         else {
             output("Empty stack. ");
         }
     }
-    
+
     /** .c        o1 .. oN -- o1 .. oN */
     public void dot_c() {
         if (stack.size() > 0) {
@@ -482,7 +470,7 @@ public class Engine implements verbose {
             output("Empty stack. ");
         }
     }
-    
+
     /** Primitive to display all stack entries and their classes.
      * .sc        o1 .. oN -- o1 .. oN
      */
@@ -502,7 +490,7 @@ public class Engine implements verbose {
             output("Empty stack. ");
         }
     }
-    
+
     /** .         o1 -- */
     public void dot() {
         if (stack.size() > 0) {
@@ -518,7 +506,7 @@ public class Engine implements verbose {
             output("Empty stack. ");
         }                                                           /* End if*/
     }
-    
+
     /** Display destructively all stack entries.
      * ..  o1 oN --
      */
@@ -541,21 +529,21 @@ public class Engine implements verbose {
             output("Empty stack. ");
         }                                                           /* End if*/
     }                                                           /* dotdot()*/
-    
+
     /** Print out the inner Interpreter state.
      * .r --        R: --
      */
     public void dot_r() {
         output(innerInterpreter.toString());
     }
-    
+
     /** Trigger a quit of the input Interpreter loop
      * quit      o1 ... oN -- o1 ... oN
      */
     public void quit() {
         myInterpreter.setQuitFlag(true);
     }
-    
+
     /** Turn a name into a class.
      * class     s1 -- c1
      * throws StackUnderflow if no name on stack
@@ -596,7 +584,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
         }                                                           /* End if*/
     }                                              /* End of classForName()*/
-    
+
     /** Convert an arg to a JavaParam with the class signature set.
      * ()        o stringClassName|Class -- javaParam
      * throws NotClassName If argument not a class name.
@@ -622,7 +610,7 @@ public class Engine implements verbose {
         }                                                        /* End catch*/
         push(new JavaParam(pop(), c));                   /* Create a JavaParam.*/
     }                                                 /* End of castParam()*/
-    
+
     /** Convert a reflection type to its primitive type.
      * This is necessary for methods type as 'int', etc.
      * primitive   class1 -- class2
@@ -651,7 +639,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow(s, null);
         }                                                           /* End if*/
     }
-    
+
     /** Convert a stack entry to the class object of its primitive type.
      * This had rather better be coded as a definition than as a Forth prim.
      * >primitive     o -- c
@@ -664,7 +652,7 @@ public class Engine implements verbose {
         getStackEntryClass();
         classToPrimitiveType();
     }
-    
+
     /** Create a JavaParam with the object characterized
      * as its primitive type. Again, this were better
      * a definition than a Forth prim.
@@ -681,7 +669,7 @@ public class Engine implements verbose {
         stackEntryToPrimitive();
         castParam();
     }
-    
+
     /** Create a JavaParam for an Integer characterized
      * as an int from the typical Long stack entry.
      * This had rather better be coded as a definition than as a Forth prim.
@@ -697,14 +685,14 @@ public class Engine implements verbose {
         push(new Integer(((Long)pop()).intValue()));
         stackEntryToPrimParam();
     }
-    
+
     /** FIND in the searchOrder.
      * find   s -- semantic
      */
     public void find() {
         push(findSemantic((String)pop()));
     }
-    
+
     /** Execute a semantic from the stack.
      * execute   x1 .. xn semantic -- ??
      * throws BadPrimitiveExecute If execution of primitive fails.
@@ -713,11 +701,11 @@ public class Engine implements verbose {
     public void execute()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute
-    
+
     {
         ((Semantic)pop()).execute(this);
     }
-    
+
     /** Compile a semantic from the stack.
      * compile   semantic --
      * throws BadPrimitiveCompile If compile of primitive fails.
@@ -732,7 +720,7 @@ public class Engine implements verbose {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
         ((Semantic)pop()).compile(this);
     }
-    
+
     /** Temporarily unset compile state.
      * Shouldn't be used unless a definition
      * is under composition.
@@ -740,66 +728,66 @@ public class Engine implements verbose {
     public void leftBracket() {
         setState(INTERPRETING);
     }
-    
+
     /** Set compile state. Shouldn't be used
      * unless a definition is under composition.
      */
     public void rightBracket() {
         setState(COMPILING);
     }
-    
+
     /** Test input base.
      * base? -- L
      */
     public void pushBase() {
         push(new Long(myInterpreter.getBase()));
     }
-    
+
     /** Set input base.
      * base L --
      */
     public void popBase() {
         myInterpreter.setBase(((Long)pop()).intValue());
     }
-    
+
     /** Test compile state.
      * state   --- t|f
      */
     public void doState() {
         push(new Boolean(getState()));
     }
-    
+
     /** Makes current definition immediate.
      */
     public void setCurrentImmediate() {
         currentDefinition.setImmediate(true);
     }
-    
+
     /** Tests Definition on top of stack for immediacy.
      */
     public void isImmediate() {
         push(new Boolean(((Definition)pop()).getImmediate()));
     }
-    
+
     /** >class   o1 -- c1 */
     public void getStackEntryClass() {
         push(pop().getClass());
     }
-    
+
     /** Transform a stack entry into its representative string.
      * toString      o1 -- s1
      */
     public void stackEntryToString() {
         push(pop().toString());
     }
-    
+
     /** Push a javaArgs object to accumulate arguments.
      * (      -- javaArgs
      */
     public void javaArgs() {
         push(new JavaArgs());
     }
-    
+
     /** Pop an object off the stack and add it to the
      * JavaArgs vector underneath. Converts it to
      * a JavaParam if it's not one already. The reason
@@ -810,7 +798,7 @@ public class Engine implements verbose {
     public void accumulateArg() {
         Object o = pop();  /* The actual argument, possibly already a JavaParam*/
         Class c = null;
-        
+
         if (o.getClass() == cJavaParam) {                   /* If it's already a JavaParam, accumulate as-is.*/
             ((JavaArgs) peek()).addElement(o);
         }
@@ -818,7 +806,7 @@ public class Engine implements verbose {
             ((JavaArgs) peek()).addElement(new JavaParam(o));
         }                                                           /* End if*/
     }
-    
+
     /** Resove and make the call.
      * )     o1 methodname  javaArgs -- o2
      */
@@ -833,7 +821,7 @@ public class Engine implements verbose {
             callJavaMethod(o, methodName, javaArgs);
         }                                                           /* End if*/
     }                                                     /* End callJava()*/
-    
+
     /** Resolve and call a method, not a constructor.
      * @param o The object on which to call the (static or instance) method.
      * @param methodName Name of method.
@@ -845,7 +833,7 @@ public class Engine implements verbose {
     , JavaArgs javaArgs
     ) {
         Method method     = null;          /* The method we'll invoke.         */
-        try {                              /* Resolve the method.*/ 
+        try {                              /* Resolve the method.*/
             if (cClass == o.getClass()) {  /* It's a class object, not an instance object.*/
                 try {                       /* Try to resolve it as an object method.*/
                     method     =
@@ -867,7 +855,7 @@ public class Engine implements verbose {
             outputError(e);
         }                                                        /* End catch*/
     }                                                 /* End callJavaMethod*/
-    
+
     /** Resolve and call a constructor, not a method.
      * @param o The object on which to call the constructor.
      * @param javaArgs The arg array to pass to the method.
@@ -876,7 +864,7 @@ public class Engine implements verbose {
     , JavaArgs javaArgs
     ) {
         Constructor constructor = null;    /* The constructor we'll invoke.    */
-        
+
         try                                          /* Resolve the constructor*/ {
             constructor  =
             ((Class) o).getConstructor(javaArgs.toClassArray());
@@ -887,14 +875,14 @@ public class Engine implements verbose {
         try {                                               /* Execute the call*/
             push(constructor.newInstance(javaArgs.toObjectArray()));
         }
-        
+
         catch (Exception e) {
             outputError(e);
         }                                                        /* End catch*/
     }                                                 /* End callJavaMethod*/
-    
+
     /** Return a java.lang.Field for an object instance.
-     * @param o  The object whose field to find.   
+     * @param o  The object whose field to find.
      * @param fieldName Name of field to find.
      * throws NoSuchFieldException Field doesn't exist.
      * @return The Field instance.
@@ -912,14 +900,14 @@ public class Engine implements verbose {
         Field f = c.getField(fieldName);   /* Find the field name.             */
         return f;
     }                 /* public Field findField(Object o, String fieldName)*/
-    
+
     /** Push next lexeme as a string literal.
      * '   TIB: lexeme --      -- s
      */
     public void lexeme() {
         push(myInterpreter.nextLexeme());
     }
-    
+
     /** Grab a lexeme delimited specifically.
      * This being Arity/1 can't be a primitive,
      * which are all Arity/0.
@@ -928,7 +916,7 @@ public class Engine implements verbose {
     public void lexeme(String delimiters) {
         push(myInterpreter.nextLexeme(delimiters));
     }
-    
+
     /** Grab a lexeme delimited specifically,
      * possibly consuming the delimiter in the process.
      * This being Arity/1 can't be a primitive,
@@ -939,57 +927,57 @@ public class Engine implements verbose {
     public void lexeme(String delimiters, boolean consumeDelim) {
         push(myInterpreter.nextLexeme(delimiters, consumeDelim));
     }
-    
+
     /** Parse a string up to the next doublequote or EOL
      * "      lexeme --   -- s
      */
     public void doubleQuote() {
         lexeme("\"\n\r", true);
     }
-    
+
     /** Parse a string up to the next backtick or EOL
      * `      lexeme --   -- s
      */
     public void backTick() {
         lexeme("`\n\r", true);
     }
-    
+
     /** Parse and discard text between backslashes. */
     public void comment() {
         lexeme("\\", true);
         pop();
     }
-    
+
     /** Signal Interpreter that bye is requested. */
     public void bye() {
         myInterpreter.setKillFlag(true);
     }
-    
+
     /** System exit. */
     public void sysexit() {
         int rc = ((Long)pop()).intValue();
         System.exit(rc);
     }
-    
+
     /** Leave boolean true on stack */
     public void pushTrue() {
         push(new Boolean(true));
     }
-    
+
     /** Leave boolean false on stack */
     public void pushFalse() {
         push(new Boolean(false));
     }
-    
+
     /** Leave null on stack */
     public void pushNull() {
         push(null);
     }
-    
+
     /**************************/
   /* Comparison and Logical */
     /**************************/
-    
+
     /** Invert the boolean on top of stack. */
     public void not() {
         push( new Boolean(
@@ -997,28 +985,28 @@ public class Engine implements verbose {
         )
         );
     }                                                 /* public void not ()*/
-    
+
     /** AND two booleans on top of stack. */
     public void and() {
         boolean lhs = ((Boolean) pop()).booleanValue();
         boolean rhs = ((Boolean) pop()).booleanValue();
         push(new Boolean(lhs && rhs));
     }                                                 /* public void and ()*/
-    
+
     /** OR two booleans on top of stack. */
     public void or() {
         boolean lhs = ((Boolean) pop()).booleanValue();
         boolean rhs = ((Boolean) pop()).booleanValue();
         push(new Boolean(lhs || rhs));
     }                                                  /* public void or ()*/
-    
+
     /** XOR two booleans on top of stack. */
     public void xor() {
         boolean lhs = ((Boolean) pop()).booleanValue();
         boolean rhs = ((Boolean) pop()).booleanValue();
         push(new Boolean(lhs ^ rhs));
     }                                                 /* public void xor ()*/
-    
+
     /** Compare two objects for equality. */
     public void isEqual() {
         Object a = pop();
@@ -1035,7 +1023,7 @@ public class Engine implements verbose {
             push(new Boolean(a.equals(b)));
         }                                                           /* End if*/
     }                                             /* public void isEqual ()*/
-    
+
     /** Compare two objects for inequality. */
     public void isUnequal() {
         Object a = pop();
@@ -1052,7 +1040,7 @@ public class Engine implements verbose {
             push(new Boolean(!a.equals(b)));
         }                                                           /* End if*/
     }                                           /* public void isUnequal ()*/
-    
+
     /** Compare two numbers (i.e., java.lang.Long's) or
      * two strings for greater-than.
      * > o1 o2 -- Boolean
@@ -1075,7 +1063,7 @@ public class Engine implements verbose {
             // throw bAdAdD (if not both same class)
         }                                                           /* End if*/
     }                                         /* public void greaterThan ()*/
-    
+
     /** Compare two numbers (i.e., java.lang.Long's) or
      * two strings for less-than
      * < o1 o2 -- Boolean
@@ -1098,11 +1086,11 @@ public class Engine implements verbose {
             // throw bAdAdD (if not both same class)
         }                                                           /* End if*/
     }                                         /* public void greaterThan ()*/
-    
+
     /**************/
   /* Arithmetic */
     /**************/
-    
+
     /** Add two numbers or two strings.
      * Should also work on ints, doubles, floats, etc., but doesn't yet.
      */
@@ -1119,7 +1107,7 @@ public class Engine implements verbose {
             // throw bAdAdD (if not both same class)
         }                                                           /* End if*/
     }
-    
+
     /** Multiply two longs.
      * *  l1 l2 -- l1/l2
      * Should work on some other classes.
@@ -1129,7 +1117,7 @@ public class Engine implements verbose {
         Long multiplicand = (Long) pop();
         push(new Long(multiplicand.longValue() * multiplier.longValue()));
     }
-    
+
     /** Divide two longs.
      * /  l1 l2 -- l1/l2
      *  Should work on some other classes.
@@ -1139,7 +1127,7 @@ public class Engine implements verbose {
         Long dividend = (Long) pop();
         push(new Long(dividend.longValue() / divisor.longValue()));
     }
-    
+
     /** Subtract two longs.
      * -  l1 l2 -- (l1 - l2)
      *  Should work on some other classes.
@@ -1149,7 +1137,7 @@ public class Engine implements verbose {
         Long sum        = (Long) pop();
         push(new Long(sum.longValue() - subtrahend.longValue()));
     }
-    
+
     /** Modulus of two longs.
      * %  l1 l2 -- l1%l2
      *  Should work on some other classes.
@@ -1159,7 +1147,7 @@ public class Engine implements verbose {
         Long dividend = (Long) pop();
         push(new Long(dividend.longValue() % divisor.longValue()));
     }
-    
+
     /** Create a new java.lang.reflect.Array of one dimension.
      * array   Long StringClassname -- Array
      * -or-
@@ -1178,13 +1166,13 @@ public class Engine implements verbose {
         if (o.getClass() == cString)          /* It's a string name of a class.*/ {
             classForName();              /* Convert string to class on the stack.*/
         }
-        
+
         aClass = (Class) pop();    /* class object for the type desired.*/
-        
+
         int n = ((Long)pop()).intValue();  /* Convert long to Integer          */
         push(Array.newInstance(aClass, n));
     }
-    
+
     /** Create a new java.lang.reflect.Array of n dimensions.
      * dimarray   L1 .. Ln nL StringClassname -- Array
      * -or-
@@ -1216,11 +1204,11 @@ public class Engine implements verbose {
         }                                                          /* End for*/
         push(Array.newInstance(aClass, dimArray));
     }
-    
+
     /**********************/
   /* Variables & Values */
     /**********************/
-    
+
     /** Parse input for a valid name.
      * throws BadName If no valid name found.
      * @return The name.
@@ -1242,7 +1230,7 @@ public class Engine implements verbose {
         }                                                           /* End if*/
         return s;
     }                                                   /* parseValidName()*/
-    
+
     /** Create a new variable and add it to the current wordlist.
      * throws BadName  if no valid name found.
      */
@@ -1251,7 +1239,7 @@ public class Engine implements verbose {
         String s = parseValidName();
         currentWordlist.put(new Variable(s));
     }
-    
+
     /** Store an object into a variable.
      * throws NonVariable If object for store isn't a variable.
      */
@@ -1275,7 +1263,7 @@ public class Engine implements verbose {
             }                                                      /* End catch*/
         }                                                           /* End if*/
     }
-    
+
     /** Fetch an object from its storage in a variable.
      * throws NonVariable If object for store isn't a variable.
      */
@@ -1299,9 +1287,9 @@ public class Engine implements verbose {
             }                                                      /* End catch*/
         }                                                           /* End if*/
     }
-    
+
     /** Fetch a wordlist from the search order, converting it to a value. */
-    
+
     /** Create a new value and add it to the current wordlist.
      * throws BadName If no valid name found.
      */
@@ -1310,7 +1298,7 @@ public class Engine implements verbose {
         String s = parseValidName();
         currentWordlist.put(new Value(s));
     }
-    
+
     /** Stuff a Value.
      * throws NonValue If target is not a Value
      * throws NameNotFound If name not found in wordlist(s).
@@ -1321,7 +1309,7 @@ public class Engine implements verbose {
     ,  com.softwoehr.fiji.base.Exceptions.desktop.shell.BadName {
         parseValue().setDatum(pop());
     }
-    
+
     /** Stuff a Value at runtime, a Value which we
      * tucked into an on-the-fly ParameterizedPrimitive.
      * @param p ParamterizedPrimitive to received value.
@@ -1335,7 +1323,7 @@ public class Engine implements verbose {
         }
         ((Value) p.getObject()).setDatum(pop());
     }
-    
+
     /** Create a non-wordlist primitive on the fly to handle
      * compile-time use of "to".
      * throws CompileToValue If the compile-to-value-operation fails.
@@ -1359,7 +1347,7 @@ public class Engine implements verbose {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.CompileToValue(s, e);
         }                                                        /* End catch*/
     }
-    
+
     /** Grab the next lexeme, find it in the search order and determine
      * that it is a Value.
      * throws NameNotFound If name not found in wordlist(s)
@@ -1378,7 +1366,7 @@ public class Engine implements verbose {
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.NameNotFound(s, null);
         }                                                           /* End if*/
-        
+
         if (aSemantic.getClass() != cValue) {
             String s = aName + " is not a Value.";
             announce(s);
@@ -1386,17 +1374,17 @@ public class Engine implements verbose {
         }                                                           /* End if*/
         return (Value) aSemantic;
     }
-    
+
     /*************/
   /* Compiling */
     /*************/
-    
+
     /** Return the current definition under composition.
      * @return  the current definition. */
     public Definition getCurrentDefinition() {
         return currentDefinition;
     }
-    
+
     /** Push the current definition under composition to the control flow
      * stack and make the new definition the current definition.
      * @param d the current definition.
@@ -1409,7 +1397,7 @@ public class Engine implements verbose {
         ));
         currentDefinition = d;                    /* Set new current definition*/
     }
-    
+
     /** An interpret-time action for compile-only words, it throws.
      * throws CompileOnly If a compile-only Semantic is invoked outside compile mode.
      */
@@ -1419,7 +1407,7 @@ public class Engine implements verbose {
         announce(s);
         throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.CompileOnly(s, null);
     }
-    
+
     /** Set up Engine for compilation.
      * @param d The definition into which Semantics will be compiled.
      */
@@ -1429,7 +1417,7 @@ public class Engine implements verbose {
         d.commence();                                   /* Init the definition.*/
         state = COMPILING;                     /* We'd need a state stack, too.*/
     }
-    
+
     /** Finish compilation and link new definition into current wordlist.
      * throws ControlFlowStackImbalance If definition didn't balance out during compilation. */
     public void concludeDefinition()
@@ -1455,7 +1443,7 @@ public class Engine implements verbose {
             com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance(s, null);
         }                                                           /* End if*/
     }
-    
+
     /** Finish compilation and leave token on the stack. Don't link
      * into any wordlist.
      * throws ControlFlowStackImbalance If definition didn't balance out during compilation.  */
@@ -1481,7 +1469,7 @@ public class Engine implements verbose {
             com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance(s, null);
         }                                                           /* End if*/
     }
-    
+
     /** Create a new Definition in the current wordlist.
      * Immediacy applied by setImmediate().
      * @param name Name of the new definition.
@@ -1490,7 +1478,7 @@ public class Engine implements verbose {
         Definition d = new Definition(name);     /* Need nesting stack of same.*/
         commenceDefinition(d);                 /* Init engined for compilation.*/
     }
-    
+
     /** Create a new Definition in the current wordlist
      * parsing name from input.
      *
@@ -1501,7 +1489,7 @@ public class Engine implements verbose {
         String name = parseValidName();
         newDefinition(name);
     }
-    
+
     /** Create a new anonmous Definition in the current wordlist.
      * NOTE that we're not dealing with immediacy yet.
      */
@@ -1509,18 +1497,18 @@ public class Engine implements verbose {
         Definition d = new Definition();     /* Need nesting stack of same.*/
         commenceDefinition(d);                 /* Init engined for compilation.*/
     }
-    
+
     /************/
   /* Literals */
     /************/
-    
+
     /** Runtime for pushing a compiled literal on the stack.
      * @param l The literal to push.
      */
     public void doLiteral(ParameterizedPrimitive.Literal l) {
         push(l.getObject());
     }
-    
+
     /** Compile a literal already found by the Interpreter or some other
      * entity into a Definition. The literal object will push itself
      * at runtime of the Definition.
@@ -1541,7 +1529,7 @@ public class Engine implements verbose {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
         new ParameterizedPrimitive.Literal(o).compile(this);
     }
-    
+
     /** Parse up to next doublequote and compile
      * stack --       input: text" --
      * throws NoSuchMethodException self-explanatory
@@ -1561,7 +1549,7 @@ public class Engine implements verbose {
         doubleQuote();
         compileLiteral(pop());
     }
-    
+
     /** Parse up to next backtick and compile
      * stack --       input: text` --
      * throws NoSuchMethodException self-explanatory
@@ -1581,37 +1569,37 @@ public class Engine implements verbose {
         backTick();
         compileLiteral(pop());
     }
-    
+
     /********************/
   /* Control flow     */
     /********************/
-    
+
     /** Exit the currently executing Definition.*/
     public void doExit() {
         innerInterpreter.exitCurrentDefinition();
     }
-    
+
     /** Execute a control flow change within the currently executing definition.
      * @param delta delta by which to inc/dec the instruction pointer.
      */
     public void bump(Integer delta) {
         innerInterpreter.bump(delta.intValue());
     }
-    
+
     /** Save a control flow entry on the control flow stack.
      * @param e the control flow entry
      */
     public void pushControl(ControlFlowElement e) {
         controlFlowStack.push(e);
     }
-    
+
     /** Retrieve a control flow entry from the control flow stack.
      * @return the control flow entry
      */
     public ControlFlowElement popControl() {
         return (ControlFlowElement) controlFlowStack.pop();
     }
-    
+
     /** Retrieve a control flow entry guaranteed to contain a
      * ParameterizedPrimitive. Returns null on empty stack.
      *
@@ -1632,7 +1620,7 @@ public class Engine implements verbose {
         }                                                           /* End if*/
         return c;
     }                     /* public ControlFlowElement popParamPrimControl()*/
-    
+
     /** Execute the runtime of an unconditional branch. This is called from
      * a ParameterizedPrimitive so has an embedded object, the Integer which
      * is stored in the prim object indicating the index bump.
@@ -1651,7 +1639,7 @@ public class Engine implements verbose {
         Integer i = (Integer) p.getObject();
         bump(i);
     }                     /* public void doBranch(ParameterizedPrimitive p)*/
-    
+
     /** This method is here just as an alias so that strict resolution can occur
      * from within the ctor for ParameterizedPrimitive.UnconditionalBranch p).
      * The point is that ParameterizedPrimitive.ConditionalBranch() calls
@@ -1663,7 +1651,7 @@ public class Engine implements verbose {
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.InvalidParameterObject {
         doUnconditionalBranch((ParameterizedPrimitive.Branch) p);
     }
-    
+
     /** Execute the runtime of a conditional branch. This is called from
      * a ParameterizedPrimitive so has an embedded object, the Integer which
      * is stored in the prim object indicating the index bump.
@@ -1682,12 +1670,12 @@ public class Engine implements verbose {
             announce(s);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.ConditionalNonBoolean(s, null);
         }                                                           /* End if*/
-        
+
         if (!((Boolean)o).booleanValue()) {           /* If true, don't branch.*/
             doUnconditionalBranch(p);
         }                                                           /* End if*/
     }                   /* public void doIfBranch(ParameterizedPrimitive p)*/
-    
+
     /** Compile an unresolved conditional branch.
      * throws NoSuchMethodException self-explanatory
      * throws ClassNotFoundException self-explanatory
@@ -1725,7 +1713,7 @@ public class Engine implements verbose {
         pushControl(new ControlFlowElement(p, this, cParameterizedPrimitive));
         // relocList.ifBranches.markReloc(p);
     }
-    
+
     /** Compile an unresolved unconditional branch.
      * throws NoSuchMethodException self-explanatory
      * throws ClassNotFoundException self-explanatory
@@ -1762,7 +1750,7 @@ public class Engine implements verbose {
         pushControl(new ControlFlowElement(p, this, cParameterizedPrimitive));
         // relocList.ifBranches.markReloc(p);
     }                                       /* public void compileBranch ()*/
-    
+
     /** Resolve a conditional or unconditional branch by popping control stack,
      * evaluating the integer offset at which the Parameterized
      * Primitive recorded itself in the (to resolution) unidentified
@@ -1777,17 +1765,17 @@ public class Engine implements verbose {
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution {
         ControlFlowElement c = popParamPrimControl();/* Throws if non a ParamPrim.*/
-        
+
         if (null == c)                                  /* Did we get anything?*/ {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
         }                                                           /* End if*/
-        
+
         ParameterizedPrimitive p =  /* Manipulate branch in definition via ref.*/
         (ParameterizedPrimitive) c.getElement();
-        
+
         if (p.validate()) {/* Now resolve the branch via the ref from the stack.*/
             int origin = ((Integer) p.getObject()).intValue();
             int destination =   /* Okay - inner Interpreter while loop tests .LT.*/
@@ -1798,7 +1786,7 @@ public class Engine implements verbose {
        * inner Interpreter loop.
        */
         }
-        
+
         else                                                      /* Not valid.*/ {
             String s = "Branch resolution failure.";
             announce(s);
@@ -1806,7 +1794,7 @@ public class Engine implements verbose {
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
         }                                                           /* End if*/
     }                                        /* public void resolveBranch()*/
-    
+
     /** Make an 'else' by laying down an unconditional branch out
      * of the true-clause of the 'if' and then resolving the 'if'
      * to point just past it.
@@ -1838,13 +1826,13 @@ public class Engine implements verbose {
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
         }                                                           /* End if*/
-        
+
     /* Keep unresolved in hand while laying down a new unresolved unconditional. */
         compileBranch();   /* Now quick like a bunny lay down a new unresolved.*/
         pushControl(c);/* Sneakily push back the previously retrieved unresolved.*/
         resolveBranch();/* Resolve the previously unresolved, leaving new unres.*/
     }                              /* public void compileAndResolveBranch()*/
-    
+
     /** Push an unresolved unconditional branch. I.e., this is 'begin'.
      * The unconditional branch can be discarded for a conditional branch
      * if it turns out the the 'begin' is resolved by an 'until' instead
@@ -1874,7 +1862,7 @@ public class Engine implements verbose {
         }                                                        /* End catch*/
         pushControl(new ControlFlowElement(p, this, cParameterizedPrimitive));
     }                             /* public void pushUnconditionalBranch ()*/
-    
+
     /** Compile an 'again', that is, resolve and compile
      * the unconditional branch pushed to the control
      * flow stack by 'begin'.
@@ -1922,7 +1910,7 @@ public class Engine implements verbose {
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
         }                                                           /* End if*/
     }                  /* public void compileUnconditionalBackwardsBranch()*/
-    
+
     /** Compile an 'until', that is, calc the delta from the unconditional
      * backwards branch pushed to the control flow stack by 'begin' and
      * compile a conditional branch.
@@ -1981,7 +1969,7 @@ public class Engine implements verbose {
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
         }                                                           /* End if*/
     }                    /* public void compileConditionalBackwardsBranch()*/
-    
+
     /** Compile an 'repeat', that is, resove the unconditional
      * backwards branch pushed to the control flow stack by 'begin' and
      * compile it, all after resolving the conditional forward branch
@@ -2013,7 +2001,7 @@ public class Engine implements verbose {
         compileUnconditionalBackwardsBranch();/* Resolve the 'repeat' to 'begin'.*/
         resolveBranch();            /* Resolve the 'while' to past the 'begin'.*/
     }                                   /* public void resolveTwoBranches()*/
-    
+
     /** The runtime for 'do', i.e., push the indices to control stack.
      * @param p The <CODE>Do</CODE> Semantic we are going to run.
      */
@@ -2026,7 +2014,7 @@ public class Engine implements verbose {
         announce("'do' egress is " + new Integer(egress));
         innerInterpreter.startLoop(limit, index, egress);
     }
-    
+
     /** Push control flow entry representing an unresolved 'do' and compile
      * the runtime for it.
      * throws NoSuchMethodException self-explanatory
@@ -2066,7 +2054,7 @@ public class Engine implements verbose {
         p.compile(this);
         // relocList.ifBranches.markReloc(p);
     }
-    
+
     /** Runtime for 'loop'. Called from a ParameterizedPrimitive having
      * embedded object, the Integer stored indicating the bump value.
      * @param p The <code>Loop</code> Semantic we are going to execute.
@@ -2078,7 +2066,7 @@ public class Engine implements verbose {
             bump(i);
         }                                                           /* End if*/
     }                   /* public void loop (ParameterizedPrimitive.Loop p)*/
-    
+
     /** Runtime for '+loop'. Called from a ParameterizedPrimitive having
      * embedded object, the Integer stored indicating the bump value.
      * @param p  */
@@ -2090,7 +2078,7 @@ public class Engine implements verbose {
             bump(i);
         }                                                           /* End if*/
     }                   /* public void loop (ParameterizedPrimitive.Loop p)*/
-    
+
     /** Compile a 'loop' resolved to where the 'do' was encountered by
      * popping control stack,  evaluating the integer offset at
      * which the ParameterizedPrimitive recorded from the
@@ -2115,17 +2103,17 @@ public class Engine implements verbose {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
         ControlFlowElement c = popParamPrimControl();/* Throws if non a ParamPrim.*/
-        
+
         if (null == c)                                  /* Did we get anything?*/ {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
         }                                                           /* End if*/
-        
+
         ParameterizedPrimitive p =  /* Manipulate branch in definition via ref.*/
         (ParameterizedPrimitive) c.getElement();
-        
+
         if (p.validate()) {/* Now resolve the back branch via the ref from stack.*/
             int destination = ((Integer) p.getObject()).intValue();
             int origin =                /* Add one because inner interp will have*/
@@ -2136,7 +2124,7 @@ public class Engine implements verbose {
             p = new ParameterizedPrimitive.Loop(delta);/* Create the resolved Loop.*/
             p.compile(this);                        /* Compile the resolved loop.*/
         }
-        
+
         else                                                      /* Not valid.*/ {
             String s = "Branch resolution failure.";
             announce(s);
@@ -2144,7 +2132,7 @@ public class Engine implements verbose {
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
         }                                                           /* End if*/
     }                                          /* public void compileLoop()*/
-    
+
     /** Compile a '+loop' resolved to where the 'loop' was encountered by
      * popping control stack,  evaluating the integer offset at
      * which the ParameterizedPrimitive recorded from the
@@ -2169,17 +2157,17 @@ public class Engine implements verbose {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
         ControlFlowElement c = popParamPrimControl();/* Throws if non a ParamPrim.*/
-        
+
         if (null == c)                                  /* Did we get anything?*/ {
             String s = "Branch resolution failure.";
             announce(s);
             throw new
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
         }                                                           /* End if*/
-        
+
         ParameterizedPrimitive p =  /* Manipulate branch in definition via ref.*/
         (ParameterizedPrimitive) c.getElement();
-        
+
         if (p.validate()) {/* Now resolve the back branch via the ref from stack.*/
             int destination = ((Integer) p.getObject()).intValue();
             int origin =                /* Add one because inner interp will have*/
@@ -2193,7 +2181,7 @@ public class Engine implements verbose {
             .PlusLoop(delta);                       /* Backwards Resolution.*/
             p.compile(this);                                 /* Compile the loop.*/
         }
-        
+
         else                                                      /* Not valid.*/ {
             String s = "Branch resolution failure.";
             announce(s);
@@ -2201,31 +2189,31 @@ public class Engine implements verbose {
             com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution(s, null);
         }                                                           /* End if*/
     }                                      /* public void compilePlusLoop()*/
-    
+
     /** Return a loop index. */
     public void index() {
         push(new Long(innerInterpreter.ithIndex(((Long)pop()).intValue())));
     }                                               /* public void index ()*/
-    
+
     /** Perform a leave at runtime */
     public void doLeave() {
         innerInterpreter.leaveLoop();
     }
-    
+
     /*************/
   /* Utilities */
     /*************/
-    
+
     /** Do a newline on the output. */
     public void cr() {
         output("\n");
     }
-    
+
     /** Set the Interpreter verbose or non- at runtime. */
     public void runtimeVerbose() {
         setVerbose(((Boolean)pop()).booleanValue());
     }
-    
+
     /** Decompile and print out. */
     public void decompile() {
         Semantic s = (Semantic) pop();
@@ -2241,7 +2229,7 @@ public class Engine implements verbose {
         }                                                          /* End for*/
         output(";\n");
     }                                           /* public void decompile ()*/
-    
+
     /** Execute a host command.
      * throws IOException  */
     public void system()
@@ -2249,12 +2237,12 @@ public class Engine implements verbose {
         String s = (String) pop();
         Runtime.getRuntime().exec(s);
     }
-    
+
     /** Interpret a string as fiji input. */
     public void interpret() {
         myInterpreter.interpret((String)pop());
     }                                           /* public void interpret ()*/
-    
+
     /** Load FIJI source from a file. */
     public void load() {
         String fileName = (String) pop();
@@ -2281,22 +2269,22 @@ public class Engine implements verbose {
             outputError(e);
         }                                                        /* End catch*/
     }                                                 /* public void load()*/
-    
+
     /** The version of FIJI
      * @return  */
     public static String fijiVersion() {
         return  "1.2";
     }
-    
+
     /** Push the version of FIJI */
     public void version() {
         push(fijiVersion());
     }
-    
+
     /*************/
   /* Wordlists */
     /*************/
-    
+
     /** Create a new Wordlist and add it to the current wordlist.
      * throws BadName If no valid name found.  */
     public void newWordlist()
@@ -2304,32 +2292,32 @@ public class Engine implements verbose {
         String s = parseValidName();
         currentWordlist.put(new Wordlist(s));
     }
-    
+
     /** Fetch the search order to stack. */
     public void getOrder() {
         searchOrder.getOrder(this);
     }                                             /* public void getOrder()*/
-    
+
     /** Set search order from stack. */
     public void setOrder() {
         searchOrder.setOrder(this);
     }                                             /* public void setOrder()*/
-    
+
     /** Set current Wordlist to the Wordlist on the top of the stack. */
     public void setCurrent() {
         currentWordlist = (Wordlist) pop();
     }
-    
+
     /** Get current Wordlist. */
     public void getCurrent() {
         push(currentWordlist);
     }
-    
+
     /** List all the words in the accessed Wordlists. */
     public void words() {
         output(searchOrder.words());
     }
-    
+
     /** Pop the active Semantic of a wordlist entry in first
      * place found in the search order, discarding the entry
      * if no previous Semantic exists by that name.
@@ -2344,7 +2332,7 @@ public class Engine implements verbose {
             output(name + " not found.\n");
         }                                                           /* End if*/
     }                                              /* public void forget ()*/
-    
+
     /** Discard a wordlist entry in first
      * place found in the search order.
      *
@@ -2358,7 +2346,7 @@ public class Engine implements verbose {
             output(name + " not found.\n");
         }                                                           /* End if*/
     }                                              /* public void discard()*/
-    
+
 }                                                    /* End of Engine class*/
 
 /*  End of Engine.java */

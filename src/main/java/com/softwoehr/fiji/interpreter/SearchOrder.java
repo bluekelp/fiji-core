@@ -28,9 +28,6 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.util.verbose;
-import com.softwoehr.util.verbosity;
-
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -39,16 +36,11 @@ import java.util.Vector;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class SearchOrder implements verbose {
-    
-    /**  Flags whether we are in verbose mode. */
-    private boolean isverbose = true;
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+public class SearchOrder {
+
     /** Vector which holds the search order */
     private Vector<Wordlist> my_vector = new Vector<>();
-    
+
     /** Arity/0 ctor. */
     public SearchOrder() {
         reinit();
@@ -58,7 +50,7 @@ public class SearchOrder implements verbose {
     public void reinit() {
         my_vector.setSize(0);
     }
-    
+
     /** Find a Semantic (or null) somewhere in the search order.
      * @param name
      * @return  */
@@ -74,7 +66,7 @@ public class SearchOrder implements verbose {
         }                                                          /* End for*/
         return result;
     }                                  /* public Semantic find(String name)*/
-    
+
     /* Pop the active Semantic of a wordlist entry by finding
      * the first occurrence of same in the search order. Remove
      * the entry if no previous Semantic for the name exists.
@@ -97,7 +89,7 @@ public class SearchOrder implements verbose {
         }                                                          /* End for*/
         return rc;
     }                                  /* public void boolean (String name)*/
-    
+
     /* Discard utterly a wordlist entry by finding
      * the first occurrence of same in the search order.
      *
@@ -119,7 +111,7 @@ public class SearchOrder implements verbose {
         }                                                          /* End for*/
         return rc;
     }                                 /* public boolean forget(String name)*/
-    
+
     /** Push the search order topped by number of Wordlists in search order.
      * @param z  */
     public void getOrder(Engine z) {
@@ -128,7 +120,7 @@ public class SearchOrder implements verbose {
         }                                                          /* End for*/
         z.push(new Long(my_vector.size()));
     }                                     /* public void getOrder(Engine z)*/
-    
+
     /** Grab search order from stack
      * @param z  */
     public void setOrder(Engine z) {
@@ -138,7 +130,7 @@ public class SearchOrder implements verbose {
             my_vector.addElement((Wordlist)z.pop());                       /* Add wordlists to order.*/
         }                                                          /* End for*/
     }                                     /* public void setOrder(Engine z)*/
-    
+
     /** Return names of all words in the search order.
      * @return  */
     public String words() {
@@ -146,47 +138,21 @@ public class SearchOrder implements verbose {
         my_vector.forEach(wl -> sb.append(wl.words()));
         return sb.toString();
     }                                             /* public String words () */
-    
-    
+
+
     /** Add a Wordlist to the SearchOrder
      * @param w
      * @return  */
     public boolean add(Wordlist w) {
         return my_vector.add(w);
     }
-    
+
     /** A simple Wordlist-typed method to addElement().
      * @param i
      * @return  */
     public Wordlist nthElement(int i) {
         return (Wordlist) my_vector.elementAt(i);
     }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @return  */
-    public boolean isVerbose()              {return isverbose;}
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param tf  */
-    public void    setVerbose  (boolean tf) {
-        isverbose = tf;
-        announce("Setting search order verbose.");
-        Wordlist w = null;
-        for (Enumeration e = my_vector.elements(); e.hasMoreElements();) {
-            w = (Wordlist) (e.nextElement());
-            w.setVerbose(isVerbose());
-        }                                                          /* End for*/
-    }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param s  */
-    public void    announce    (String s)   {v.announce(s);   }
 }                                                      /* End of SearchOrder class*/
 
 /*  End of SearchOrder.java */

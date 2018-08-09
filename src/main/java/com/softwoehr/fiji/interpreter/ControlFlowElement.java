@@ -29,10 +29,6 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.util.GetArgs;
-import com.softwoehr.util.verbose;
-import com.softwoehr.util.verbosity;
-
 /** ControlFlowElement wrappers a Semantic pushed on the control flow
  * stack along with information about the context when the entry
  * was pushed. Definitions may nest and the current definition is
@@ -45,24 +41,19 @@ import com.softwoehr.util.verbosity;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class ControlFlowElement implements verbose {
-    /**  Flags whether we are in verbose mode. */
-    private boolean isverbose = true;
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+public class ControlFlowElement {
     /** The Semantic this entry represents. */
     public Semantic element;
-    
+
     /** Interpret/compile state at time this entry was created. */
     public boolean state;
-    
+
     /** The Class this ControlFlowElement represents, since
      * sometimes this.element is null, e.g., in the case
      * of a pushed null currentDefinition.
      */
     public Class semanticClass;
-    
+
     /** Creates a ControlFlowElement for a
      * specific Semantic  with a null element.
      * @param s
@@ -70,7 +61,7 @@ public class ControlFlowElement implements verbose {
     public ControlFlowElement(Semantic s, Engine e) {
         reinit(s,e);
     }
-    
+
     /** Creates a ControlFlowElement representing specific
      * type of Semantic with a non-null element.
      * @param s
@@ -79,19 +70,11 @@ public class ControlFlowElement implements verbose {
     public ControlFlowElement(Semantic s, Engine e, Class c) {
         reinit(s,e,c);
     }
-    
+
     /** Return a string representation of the object.
      * @return  */
     public String toString()
     {return super.toString();}
-    
-    /** Finalize the object.
-     *
-     *@exception Throwable If something throws during finalization.
-     */
-    protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
-        super.finalize();
-    }
 
     /** Reinitialize the ControlFlowElement, discarding previous state.
      * @param s
@@ -99,7 +82,7 @@ public class ControlFlowElement implements verbose {
     public void reinit(Semantic s, Engine e) {
         reinit(s, e, s.getClass());
     }
-    
+
     /** Reinitialize the ControlFlowElement, discarding previous state.
      * @param s
      * @param e
@@ -109,36 +92,18 @@ public class ControlFlowElement implements verbose {
         state = e.state;
         semanticClass = c;
     }
-    
+
     /** Return the class of the Semantic element this entry represents.
      * @return  */
     public Class elementClass() {
         return semanticClass;
     }
-    
+
     /** Return the Semantic element this entry represents.
      * @return  */
     public Semantic getElement() {
         return element;
     }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @return  */
-    public boolean isVerbose()              {return isverbose;}
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param tf  */
-    public void    setVerbose  (boolean tf) {isverbose = tf;  }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param s  */
-    public void    announce    (String s)   {v.announce(s);   }
 }                                        /* End of ControlFlowElement class*/
 
 /*  End of ControlFlowElement.java */

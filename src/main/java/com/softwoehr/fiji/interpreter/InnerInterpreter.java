@@ -29,10 +29,6 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.util.GetArgs;
-import com.softwoehr.util.verbose;
-import com.softwoehr.util.verbosity;
-
 import java.util.Enumeration;
 import java.util.Stack;
 
@@ -60,38 +56,32 @@ import java.util.Stack;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class InnerInterpreter implements verbose {
-    
-    /**  Flags whether we are in verbose mode. */
-    private boolean isverbose = false;
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+public class InnerInterpreter {
     /** Nesting definitions. */
     private Stack returnStack;
-    
+
     /** Nested LOOPs. */
     private Stack loopStack;
-    
+
     /** Current definition + instruction pointer*/
     private Interpretation interpretation;
-    
+
     /** The Engine we're associated with.*/
     private Engine myEngine;
-    
+
     /** Arity/1 ctor. InnerInterpreter must be associated with an Engine.
      * @param e Engine associated with this inner Interpreter.
      */
     public InnerInterpreter(Engine e) {
         reinit(e);
     }
-    
+
     /** Dump the return stack, effectively.
      * @return String representation of this object.
      */
     public String toString() {
         String result = "An InnerInterpreter with the following status:\n";
-        
+
         result += "Current definition: ";
         if (null == interpretation) {
             result +=  "No current definition.";
@@ -100,7 +90,7 @@ public class InnerInterpreter implements verbose {
             result += interpretation.definition.toString();
         }                                                           /* End if*/
         result += "\nReturn stack:";
-        
+
         Enumeration e = returnStack.elements();
         if (e.hasMoreElements()) {
             result += "\n";
@@ -114,7 +104,7 @@ public class InnerInterpreter implements verbose {
         }                                                           /* End if*/
         return result;
     }
-    
+
     /** Reinitialize the InnerInterpreter, discarding previous state.
      * @param e The Engine associated with this instance.
      */
@@ -124,12 +114,12 @@ public class InnerInterpreter implements verbose {
         loopStack   = new Stack();
         interpretation = null;
     }
-    
+
     /** Return Engine with which this instance is associated.
      * @return Engine associated with this instance.
      */
     public Engine getEngine() { return myEngine; }
-    
+
     /** Return current definition being interpreted by this instance.
      * @return The definition under interpretation.
      */
@@ -140,7 +130,7 @@ public class InnerInterpreter implements verbose {
         }                                                           /* End if*/
         return d;
     }                          /* public Definition getCurrentDefinition ()*/
-    
+
     /** Push into a Definition.
      * @param d New definition for interpretation.
      */
@@ -150,7 +140,7 @@ public class InnerInterpreter implements verbose {
         }                                                           /* End if*/
         interpretation = new Interpretation(d);    /* Now this becomes current.*/
     }
-    
+
     /** Pop out of a Definition.
      * @return The Definition which had been under interpretation but is no longer,
      * having been discarded in favor of the popped def resuming interpretation.
@@ -165,12 +155,12 @@ public class InnerInterpreter implements verbose {
         }                                                           /* End if*/
         return wasCurrent;
     }
-    
+
     /** Run the current Definition
      * @param d Definition to interpret
      *
-     * @throws BadPrimitiveExecute If a prim blows up.
-     * @throws BadDefinitionExecute If a def blows up.
+     * throws BadPrimitiveExecute If a prim blows up.
+     * throws BadDefinitionExecute If a def blows up.
      */
     public void interpret(Definition d)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
@@ -183,12 +173,12 @@ public class InnerInterpreter implements verbose {
         }                                                        /* End while*/
         unnest();
     }
-    
+
     /** Exit the current Definition. */
     public void exitCurrentDefinition() {
         interpretation.index = interpretation.definition.lastIndex() + 1;
     }
-    
+
     /** Add positive or negative delta to the instruction pointer.
      * This is how control flow works, in conjunction with ParameterizedPrimitive.
      *
@@ -202,7 +192,7 @@ public class InnerInterpreter implements verbose {
         , interpretation.definition.lastIndex() + 1      /* Past end.*/
         );    /* No real reason to min() it, 'while' loop just exits.*/
     }
-    
+
     /** Push the indices for a loop, checking for and avoiding loops
      * commencing with identical indices (32 bit loops are long!!!).
      * @param limit Loop limit
@@ -224,13 +214,13 @@ public class InnerInterpreter implements verbose {
             interpretation.index = egress;    /* If loop indices identical, skip.*/
         }                                                           /* End if*/
     }           /* public void startLoop (int limit, int index, int egress)*/
-    
+
     /** Exit the loop on hitting a 'leave'. */
     public void leaveLoop() {
         Loop l = (Loop) loopStack.pop();
         interpretation.index = l.egress;
     }
-    
+
     /** Increment a loop record and return true if done.
      * @return <CODE>true</CODE> iff the loop is done.
      */
@@ -243,7 +233,7 @@ public class InnerInterpreter implements verbose {
         }                                                           /* End if*/
         return result;
     }                                             /* public boolean loop ()*/
-    
+
     /** Increment a loop record by an increment and return true if done.
      * @param increment increment to plusloop by
      * @return <CODE>true</CODE> iff done.
@@ -266,7 +256,7 @@ public class InnerInterpreter implements verbose {
         }                                                           /* End if*/
         return result;
     }                            /* public boolean plusLoop (int increment)*/
-    
+
     /** Return the loop index for the i'th loop.
      * @param i nesting level of the desired loop index, zero 0 based.
      * @return The index for that i'th loop.
@@ -277,39 +267,19 @@ public class InnerInterpreter implements verbose {
         Loop l = (Loop) loopStack.elementAt(desired);
         return l.index;
     }
-    
-    /** Tests verbosity.
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @return <CODE>true</CODE> if this object is verbose
-     */
-    public boolean isVerbose()              {return isverbose;}
-    
-    /** Set this object verbose.
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param tf <CODE>true</CODE> for verbose, <CODE>false</CODE>
-     * otherwise
-     */
-    public void    setVerbose  (boolean tf) {isverbose = tf;  }
-    
-    /** Announce (output) if verbose.
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param s String to announce if verbose
-     */
-    public void    announce    (String s)   {v.announce(s);   }
+
+    public void    announce    (String s)   { myEngine.announce(s); }
 }                                          /* End of InnerInterpreter class*/
 
 /** The entry on the return stack. */
 class Interpretation {
-    
+
     /** Instruction pointer, i.e., offset in Semantic list.*/
     public int index;
-    
+
     /** Current Definition. */
     public Definition definition;
-    
+
     /** Construct an inner interpretive entry from a Definition to be executed.
      * @param d Definition to be contained in inner interpretive entry.
      */
@@ -321,16 +291,16 @@ class Interpretation {
 
 /** The entry on the loop stack. */
 class Loop {
-    
+
     /** The loop limit .*/
     public int limit;
-    
+
     /** The loop index. */
     public int index;
-    
+
     /** The one-past-the-loop offset in the definition. */
     public int egress;
-    
+
     /** Instance object with limit, index and place to exit the loop.
      * @param limit Loop limit, loop exits when boundary between this
      * limit and (this limit - 1) is crossed in either direction.
@@ -343,7 +313,7 @@ class Loop {
         this.index  = index;
         this.egress = egress;
     }
-    
+
     /** Bumps index and returns true if the new
      * index is equal to the limit.
      * @return true if the new
@@ -356,7 +326,7 @@ class Loop {
         }                                                           /* End if*/
         return result;
     }                                             /* public boolean loop ()*/
-    
+
     /** Bumps index by increment and returns true
      * if index is crossed the boundary between
      * the loop limit and the loop limit minus one.

@@ -28,10 +28,9 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import  java.util.*;
-
-import  com.softwoehr.*;
-import  com.softwoehr.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Stack;
 
 /** This is a word list of Semantics. They
  * are keyed by their names. If a Semantic of an
@@ -39,70 +38,34 @@ import  com.softwoehr.util.*;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class Wordlist extends Semantic implements verbose {
-    /**  Flags whether we are in verbose mode. */
-    public boolean isverbose = false;
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+public class Wordlist extends Semantic {
     private Hashtable wordlist;
-    
+
     /** Arity/0 ctor. */
     public Wordlist() {
         reinit("Anonymous Wordlist.");
     }
-    
+
     /** Arity/1 ctor.
      * @param name  */
     public Wordlist(String name) {
         reinit(name);
     }
-    
+
     /** Reinit discarding previous state.
      * @param name  */
     public void reinit(String name) {
         setName(name);
         wordlist=new Hashtable();
     }
-    
+
     /** Do a string dump wordlist's name.
      * @return  */
     public String toString() {
         String result = "A Wordlist named " + getName();
         return result;
     }
-    
-    /** shutdown() here does nothing.
-     * @see com.softwoehr.SoftWoehr#
-     * @return  */
-    public int shutdown() { return 0; }
-    
-    /**
-     * @throws Throwable  */
-    protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
-        super.finalize();
-    }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @return  */
-    public boolean isVerbose()              {return isverbose;}
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param tf  */
-    public void    setVerbose  (boolean tf) {isverbose = tf;
-    announce(getName() + " Wordlist is set verbose.");
-    }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param s  */
-    public void    announce    (String s)   {v.announce(s);   }
-    
+
     /** Add a Semantic in, comes with its own key. If key
      * already exists, push the previous Semantic for the key
      * (so that it can later be restored if the user 'forget's
@@ -120,12 +83,12 @@ public class Wordlist extends Semantic implements verbose {
             entry.push(s);
         }                                                           /* End if*/
     }                                        /* public void put(Semantic s)*/
-    
+
     /** Find a WordlistEntry by name in a wordlist. */
     private WordlistEntry findEntry(String name) {
         return (WordlistEntry)wordlist.get(name);
     }                             /* public Semantic findEntry(String name)*/
-    
+
     /** Find a Semantic by name in a wordlist.
      * @param name
      * @return  */
@@ -137,7 +100,7 @@ public class Wordlist extends Semantic implements verbose {
         }                                                           /* End if*/
         return s;
     }                                  /* public Semantic find(String name)*/
-    
+
     /** 'Forget' the active Semantic for a name, popping the previous
      * Semantic in its place. If no previous Semantic
      * is stacked, remove the entry from the Wordlist.
@@ -151,13 +114,13 @@ public class Wordlist extends Semantic implements verbose {
             }                                                         /* End if*/
         }                                                           /* End if*/
     }                                   /* public void forget (String name)*/
-    
+
     /** Utterly discard a wordlist entry.
      * @param name  */
     public void discard(String name) {
         wordlist.remove(name);
     }
-    
+
     /** Return a string of all words in the wordlist.
      * @return  */
     public String words() {
@@ -167,12 +130,11 @@ public class Wordlist extends Semantic implements verbose {
             entry = (WordlistEntry) (e.nextElement());
             if (null != entry) {
                 result += entry.getName() + " ";
-                announce(result + "\n");
             }
         }                                                          /* End for*/
         return result;
     }                                             /* public String words ()*/
-    
+
     /** Create a default wordlist for initial Engine.
      * Each invocation of this method results in
      * a unique instance. Alternatively, the
@@ -367,36 +329,36 @@ class WordlistEntry {
         semantic = s;
         semanticStack = null;/* Only have a stack if one needed, memory impact.*/
     }
-    
+
     /**
      * @return  */
     public String toString()
     {return super.toString();}
-    
+
     /**
      * @throws Throwable  */
     protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
         super.finalize();
     }
-    
+
     /** The active Semantic of a word. */
     private Semantic semantic;
-    
+
     /** The stack of previous Semantics of this same word. */
     private Stack semanticStack;
-    
+
     /** Get the Semantic to which this entry refers.
      * @return  */
     public Semantic getSemantic() {
         return semantic;
     }
-    
+
     /** Get the name of the semantic to which this entry refers.
      * @return  */
     public String getName() {
         return semantic.getName();
     }
-    
+
     /** Change the active Semantic.
      * @param s  */
     public void push(Semantic s) {
@@ -406,7 +368,7 @@ class WordlistEntry {
         semanticStack.push(semantic);
         semantic = s;
     }                              /* public void pushSemantic (Semantic s)*/
-    
+
     /** Pop the Semantic stack to restore an active Semantic,
      * discarding that which was the active Semantic. Returns
      * that Semantic which becomes the active Semantic as a

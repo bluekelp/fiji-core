@@ -28,38 +28,14 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.util.GetArgs;
-import com.softwoehr.util.verbose;
-import com.softwoehr.util.verbosity;
-
- /**
+/**
    *
    * @author $Author: jwoehr $
    * @version $Revision: 1.1.1.1 $
    */
-public class Variable extends Semantic implements verbose
+public class Variable extends Semantic
 {
-  /**  Flags whether we are in verbose mode. */
-  private boolean isverbose = true;
-  /**  Helper for verbose mode. */
-  private verbosity v = new verbosity(this);
-
-  /**********************************************/
-  /*% SoftWoehr default variables section ends. */
-  /**********************************************/
-
-  /***********************************/
-  /*% User variables section starts. */
-  /***********************************/
   private Object datum = null;
-
-  /*********************************/
-  /*% User variables section ends. */
-  /*********************************/
-
-  /*********************************/
-  /*% User methods section starts. */
-  /*********************************/
 
   /** Arity/0 ctor, anonymous */
   public Variable () {
@@ -84,32 +60,6 @@ public class Variable extends Semantic implements verbose
   public void store (Engine e) {
     datum = e.pop();
     }
-
-  /*******************************/
-  /*% User methods section ends. */
-  /*******************************/
-
-  /**********************************************/
-  /*% SoftWoehr default methods section starts. */
-  /**********************************************/
-
-   /**
-    * @see com.softwoehr.util.verbose
-    * @see com.softwoehr.util.verbosity
-    */
-   public boolean isVerbose()              {return isverbose;}
-
-   /**
-    * @see com.softwoehr.util.verbose
-    * @see com.softwoehr.util.verbosity
-    */
-   public void    setVerbose  (boolean tf) {isverbose = tf;  }
-
-   /**
-    * @see com.softwoehr.util.verbose
-    * @see com.softwoehr.util.verbosity
-    */
-   public void    announce    (String s)   {v.announce(s);   }
 }                                                      /* End of Variable class*/
 
 /*  End of Variable.java */

@@ -75,25 +75,8 @@ import java.util.Vector;
   * @version $Revision: 1.1.1.1 $
   * see com.softwoehr.Argument
   */
-public class GetArgs implements verbose
+public class GetArgs
 {
-  /*****************************************/
-  /*% SoftWoehr default variables section. */
-  /*****************************************/
-
-  /**  Flags whether we are in verbose mode. */
-  private boolean isverbose = true;
-  /**  Helper for verbose mode. */
-  private verbosity v = new verbosity(this);
-
-  /**********************************************/
-  /*% SoftWoehr default variables section ends. */
-  /**********************************************/
-
-  /***********************************/
-  /*% User variables section starts. */
-  /***********************************/
-
   /** Holds the Argument objects, as many as parsed. */
   private Vector optList, argList;
 
@@ -264,32 +247,6 @@ public class GetArgs implements verbose
   public int argumentCount () {
     return argList.size();
     }
-
-  /*******************************/
-  /*% User methods section ends. */
-  /*******************************/
-
-  /**********************************************/
-  /*% SoftWoehr default methods section starts. */
-  /**********************************************/
-
-   /**
-    * @see com.softwoehr.util.verbose
-    * @see com.softwoehr.util.verbosity
-    */
-   public boolean isVerbose()              {return isverbose;}
-
-   /**
-    * @see com.softwoehr.util.verbose
-    * @see com.softwoehr.util.verbosity
-    */
-   public void    setVerbose  (boolean tf) {isverbose = tf;  }
-
-   /**
-    * @see com.softwoehr.util.verbose
-    * @see com.softwoehr.util.verbosity
-    */
-   public void    announce    (String s)   {v.announce(s);   }
 }
 
 /* End of GetArgs.java */

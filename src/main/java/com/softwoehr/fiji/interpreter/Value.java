@@ -28,26 +28,13 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.util.GetArgs;
-import com.softwoehr.util.verbose;
-import com.softwoehr.util.verbosity;
-
- /** Value is a self-fetching Variable.
+/** Value is a self-fetching Variable.
    *
    * @author $Author: jwoehr $
    * @version $Revision: 1.1.1.1 $
    */
-public class Value extends Semantic implements verbose
+public class Value extends Semantic
 {
-  /**  Flags whether we are in verbose mode. */
-  private boolean isverbose = true;
-  /**  Helper for verbose mode. */
-  private verbosity v = new verbosity(this);
-
-  /**********************************************/
-  /*% SoftWoehr default variables section ends. */
-  /**********************************************/
-
   /***********************************/
   /*% User variables section starts. */
   /***********************************/
@@ -90,32 +77,6 @@ public class Value extends Semantic implements verbose
   public void setDatum(Object o) {
     datum = o;
     }
-
-  /*******************************/
-  /*% User methods section ends. */
-  /*******************************/
-
-  /**********************************************/
-  /*% SoftWoehr default methods section starts. */
-  /**********************************************/
-
-   /**
-    * @see com.softwoehr.util.verbose
-    * @see com.softwoehr.util.verbosity
-    */
-   public boolean isVerbose()              {return isverbose;}
-
-   /**
-    * @see com.softwoehr.util.verbose
-    * @see com.softwoehr.util.verbosity
-    */
-   public void    setVerbose  (boolean tf) {isverbose = tf;  }
-
-   /**
-    * @see com.softwoehr.util.verbose
-    * @see com.softwoehr.util.verbosity
-    */
-   public void    announce    (String s)   {v.announce(s);   }
 }                                                      /* End of Value class*/
 
 /*  End of Value.java */
