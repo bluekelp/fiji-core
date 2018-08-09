@@ -59,11 +59,7 @@ public class FIJI {
       for (int x = 0; x < myArgs.optionCount(); x++) {
         Argument a = myArgs.nthOption(x);
 
-        if (a.option.equals("-v")) {
-          i.setVerbose(true);
-          i.announce("Verbose mode set.\n");
-        }
-        else if (a.option.equals("-b")) {
+        if (a.option.equals("-b")) {
           if (a.argument != null ) {
             try {
               i.setBase(Integer.decode(a.argument));
@@ -283,8 +279,7 @@ public class FIJI {
   /** Display main() command line usage. */
   private void usage() {
     System.err.println("Usage:");
-    System.err.println(" java com.SoftWoehr.FIJI.Interpreter.Interpreter [-b base] [-o output_codepage] [-v] [file file ...]");
-    System.err.println(" -v                 .. enables verbose mode, weird, unintelligible debug msgs.");
+    System.err.println(" java com.SoftWoehr.FIJI.Interpreter.Interpreter [-b base] [-o output_codepage] [file file ...]");
     System.err.println(" -o output_codepage .. for VM/ESA with Java 1.1.4 use Cp1407.");
     System.err.println(" -b base            .. where base is numeric input base, e.g. 8 16 0x10 etc.");
     System.err.println(" file file ...      .. these files will be loaded as FIJI source code.");

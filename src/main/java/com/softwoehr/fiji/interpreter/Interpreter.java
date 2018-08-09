@@ -39,16 +39,11 @@ import  com.softwoehr.util.*;
  * @version $Revision: 1.1.1.1 $
  */
 
-public class Interpreter implements verbose {
+public class Interpreter {
 
     private PrintStream err;
     private PrintStream out;
-    
-    /**  Flags whether we are in verbose mode. */
-    private boolean isverbose = false;
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+
     /** An execution Engine */
     private Engine myEngine;
     
@@ -80,7 +75,6 @@ public class Interpreter implements verbose {
     /** Reset the Interpreter, losing all previous state. */
     public void reinit() {
         myEngine = new Engine(this);
-        v = new verbosity(this);
         warmReset();
     }
 
@@ -255,16 +249,11 @@ public class Interpreter implements verbose {
             && !killFlag
             && !quitFlag) {
                 aLexeme = nextLexeme();                          /* Grab next one.*/
-                announce("Lexeme is: " + aLexeme);
                 semantic = myEngine.findSemantic(aLexeme); /* Find in wordlist(s).*/
-                announce("Semantic is: " + semantic);
-                
+
                 if (null != semantic)      /* We found lexeme as dictionary entry.*/ {
                     if (Engine.INTERPRETING == myEngine.state) /* We're interpreting*/ {
                         try {
-                            announce("Executing interpretive semantics for "
-                            + semantic.toString()
-                            );
                             semantic.execute(myEngine);                     /* So do it.*/
                         }                                                 /* End try*/
                         catch (Exception e) {
@@ -350,33 +339,9 @@ public class Interpreter implements verbose {
         myEngine.push(filename);
         myEngine.load();
     }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     */
-    public boolean isVerbose()              {return isverbose;}
-    
-    /**
-     * As this class overloads setVerbose()
-     * it control Engine's verbosity, too.
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param tf  */
-    public void    setVerbose  (boolean tf) {
-        isverbose = tf;
-        if (myEngine != null) {
-            myEngine.setVerbose(tf);
-            announce("Setting Engine verbose.");
-        }                                                          /* End if*/
-    }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param s  */
-    public void    announce    (String s)   {v.announce(s);   }
-    
+
+    public void    announce    (String s)   {}
+
 }                                               /* End of Interpreter class*/
 
 /*  End of Interpreter.java */
