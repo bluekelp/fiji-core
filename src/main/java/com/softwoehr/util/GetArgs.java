@@ -83,25 +83,15 @@ public class GetArgs
   /** Option introducers. */
   private String optionIntroducers = "-";
 
-  /*********************************/
-  /*% User variables section ends. */
-  /*********************************/
-
-  /*********************************/
-  /*% User methods section starts. */
-  /*********************************/
-
   /** Arity/1 constructor. The arity/0 exists uselessly.
     * If you must use GetArgs/0 be sure to call reinit/1.
     */
-  public GetArgs (String argv[]) { reinit(argv); }
-
+  public GetArgs (String argv[]) {
   /** Reinitialize the object, discarding previous state.
     * Creates two arrays, one of options and their
     * (possibly null) arguments, the other of plain arguments.
     * The members of these lists are accessible via other methods.
     */
-  public void reinit (String argv[]) {
     int i;
 
     optList = new Vector();

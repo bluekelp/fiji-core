@@ -330,17 +330,6 @@ class WordlistEntry {
         semanticStack = null;/* Only have a stack if one needed, memory impact.*/
     }
 
-    /**
-     * @return  */
-    public String toString()
-    {return super.toString();}
-
-    /**
-     * @throws Throwable  */
-    protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
-        super.finalize();
-    }
-
     /** The active Semantic of a word. */
     private Semantic semantic;
 

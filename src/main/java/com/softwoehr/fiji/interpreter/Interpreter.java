@@ -46,32 +46,32 @@ public class Interpreter {
 
     /** An execution Engine */
     private Engine myEngine;
-    
+
     /** The tokenizer which gets our next lexeme. */
     private StringTokenizer st ;
-    
+
     /** Stack needed so we can nest interpretation, e.g.,
      * when we load a file.
      */
     private Stack<StringTokenizer> tokenizerStack;
-    
+
     /** We want to exit if this is true. */
     private boolean killFlag = false;
-    
+
     /** We want to quit interp loop if this is true. */
     private boolean quitFlag = false;
-    
+
     /** Number base for interpretation. */
     private int base = 10;
-    
+
     private String defaultDelimiters = " \t\n\r";
-    
+
     public Interpreter(PrintStream err, PrintStream out) {
         this.err = err;
         this.out = out;
         reinit();
     }
-    
+
     /** Reset the Interpreter, losing all previous state. */
     public void reinit() {
         myEngine = new Engine(this);
@@ -83,59 +83,55 @@ public class Interpreter {
     public Engine getEngine() {
         return myEngine;
     }
-    
-    protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
-        super.finalize();
-    }
-    
+
     /** Set the kill flag.
      * @param tf  */
     void setKillFlag(boolean tf) {
         killFlag = tf;
     }
-    
+
     /** Get the kill flag.
      */
     public boolean getKillFlag() {
         return killFlag;
     }
-    
+
     /** Set the quit flag.
      * @param tf  */
     void setQuitFlag(boolean tf) {
         quitFlag = tf;
     }
-    
+
     /** Get the quit flag.
      */
     public boolean getQuitFlag() {
         return quitFlag;
     }
-    
+
     /** Set the Interpreter numeric base.
      * @param i  */
     public void setBase(int i) {
         base = i;
     }
-    
+
     /** Get the Interpreter numeric base.
      */
     public int getBase() {
         return base;
     }
-    
+
     /** Set the string tokenizing default delimiters.
      * @param delims  */
     public void setDefaultDelimiters(String delims) {
         defaultDelimiters = delims;
     }
-    
+
     /** Get the string tokenizing default delimiters.
      */
     public String getDefaultDelimiters() {
         return defaultDelimiters;
     }
-    
+
     /** Get next lexeme in string being interpret()'ed
      * using the delimiter set passed in the 'delims'
      * argument.
@@ -155,13 +151,13 @@ public class Interpreter {
         }                                                           /* End if*/
         return s;
     }                            /* public String nextLexeme(String delims)*/
-    
+
     /** Get next lexeme in string being interpret()'ed using default delims.
      */
     String nextLexeme() {
         return nextLexeme(defaultDelimiters);
     }                                         /* public String nextLexeme()*/
-    
+
     /** Get next lexeme in string being interpret()'ed
      * using the delimiter set passed in the 'delims'
      * argument, with the option of consuming the
@@ -188,7 +184,7 @@ public class Interpreter {
         }                                                           /* End if*/
         return s;
     }                    /* nextLexeme(String delims, boolean consumeDelim)*/
-    
+
     /** Number of lexemes left in string being interpret()'ed .
      */
     private int countLexemes() {
@@ -202,7 +198,7 @@ public class Interpreter {
     public void outputError(Exception e) {
         e.printStackTrace(err);
     }
-    
+
     /** Issue the prompt as appropriate */
     public void prompt() {
         if (Engine.INTERPRETING == myEngine.state)       /* We're interpreting*/ {
@@ -212,7 +208,7 @@ public class Interpreter {
             output("\n(...) ");
         }                                                          /* End if*/
     }
-    
+
     /** Something for the Engine to call when it does a warm(). */
     void warmReset()  {
         st = null;
@@ -221,7 +217,7 @@ public class Interpreter {
         setQuitFlag(false);
         setBase(10);
     }
-    
+
     /** Interpret one String.
      * returns true if we should stop
      * @param s  */
@@ -229,10 +225,10 @@ public class Interpreter {
         announce("String to interpret is: " + s);
         String aLexeme;                   /* Holds a lexeme as we examine it. */
         Semantic semantic;/* Holds a semantic as we decide what to do with it.*/
-        
+
         setKillFlag(false);                     /* Indicate we're in business.*/
         setQuitFlag(false);                     /* Indicate we're in business.*/
-        
+
      /* Interpret the passed-in string */
         if (s != null)                 /* Don't try to tokenize a null string.*/ {
             tokenizerStack.push(st);  /* Save (possibly null) current tokenizer.*/
@@ -240,7 +236,7 @@ public class Interpreter {
             , defaultDelimiters  /* List of delimiters.*/
             , false             /* Delim not in return.*/
             );
-            
+
             while ((countLexemes() > 0)            /* For all lexemes in string.*/
             && !killFlag
             && !quitFlag) {
@@ -258,7 +254,7 @@ public class Interpreter {
                             myEngine.warm();
                         }                                               /* End catch*/
                     }                                                    /* End if*/
-                    
+
                     else                                         /* We're compiling.*/ {
                         try {
                             announce("Executing compile semantics for "
@@ -273,7 +269,7 @@ public class Interpreter {
                         }                                               /* End catch*/
                     }                                                    /* End if*/
                 }
-                
+
                 else           /* We didn't find the lexeme as a dictionary entry.*/ {
                     if (Engine.INTERPRETING == myEngine.state)/* We're interpreting.*/ {
                         Long a;
@@ -285,7 +281,7 @@ public class Interpreter {
                             myEngine.stack.push(aLexeme);            /* Push the lexeme.*/
                         }                                               /* End catch*/
                     }
-                    
+
                     else                                         /* We're compiling.*/ {
                         long a = 0;
                         try                                  /* Try to make it a long.*/ {
@@ -326,8 +322,8 @@ public class Interpreter {
         }                         /* End if (interpretation string non-null)*/
         return killFlag;
     }                                      /* End of Interpreter.interpret*/
-    
-    
+
+
    /* Load a file as FIJI source. */
     /**
      * @param filename  */

@@ -71,11 +71,6 @@ public class ControlFlowElement {
         reinit(s,e,c);
     }
 
-    /** Return a string representation of the object.
-     * @return  */
-    public String toString()
-    {return super.toString();}
-
     /** Reinitialize the ControlFlowElement, discarding previous state.
      * @param s
      * @param e  */
