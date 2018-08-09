@@ -31,7 +31,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>com.SoftWoehr.FIJI.FIJI</mainClass>
+                    <mainClass>com.softwoehr.fiji.FIJI</mainClass>
                     <arguments>
                         <!--<argument>argument1</argument>-->
                     </arguments>
