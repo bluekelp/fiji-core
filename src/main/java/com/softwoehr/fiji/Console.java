@@ -1,5 +1,5 @@
 /*
- * FIJI.java
+ * Console.java
  * Copyright *C* 2001 Jack J. Woehr
  * All Rights Reserved
  * PO Box 51, Golden, Colorado 80402-0051 USA
@@ -21,13 +21,12 @@ import com.softwoehr.util.GetArgs;
 import java.io.*;
 
 /** This class merely serves as a launcher for the FIJI
- * Interpreter running at the command line.
+ * interpreter running at the command line.
  * @author  jax
- * @version $Id: FIJI.java,v 1.1.1.1 2001/08/21 02:35:20 jwoehr Exp $
  */
-public class FIJI {
+public class Console {
     public static void main(String argv[]) {
-      FIJI f = new FIJI();
+      Console f = new Console();
       f.runner(argv);
     }
 
@@ -100,7 +99,7 @@ public class FIJI {
       //    catch (Exception e)
       //      {
       //        e.printStackTrace(System.err);
-      //        throw new com.SoftWoehr.FIJI.base.Error.BackToMain(e);
+      //        throw new com.softwoehr.fiji.base.Error.BackToMain(e);
       //      }                                                        /* End catch*/
 
       /* GPL announces itself. */
@@ -279,7 +278,7 @@ public class FIJI {
   /** Display main() command line usage. */
   private void usage() {
     System.err.println("Usage:");
-    System.err.println(" java com.SoftWoehr.FIJI.Interpreter.Interpreter [-b base] [-o output_codepage] [file file ...]");
+    System.err.println(" java com.softwoehr.fiji.Main [-b base] [-o output_codepage] [file file ...]");
     System.err.println(" -o output_codepage .. for VM/ESA with Java 1.1.4 use Cp1407.");
     System.err.println(" -b base            .. where base is numeric input base, e.g. 8 16 0x10 etc.");
     System.err.println(" file file ...      .. these files will be loaded as FIJI source code.");
