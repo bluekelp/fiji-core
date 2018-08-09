@@ -70,8 +70,8 @@ public class Semantic {
      * throws BadPrimitiveExecute
      * throws BadDefinitionExecute  */
     public void execute(Engine e)
-    throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
+    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute {
         e.push(this);
     }
 
@@ -84,10 +84,10 @@ public class Semantic {
      * throws BadDefinitionExecute  */
 
     public void compile(Engine e)
-    throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
+    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveCompile
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute {
         e.getCurrentDefinition().append(this);
     }
 

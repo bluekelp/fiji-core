@@ -163,8 +163,8 @@ public class InnerInterpreter {
      * throws BadDefinitionExecute If a def blows up.
      */
     public void interpret(Definition d)
-    throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
+    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute {
         nest(d);
         while (interpretation.index <= interpretation.definition.lastIndex()) {
             Semantic s =     /* Here's where the instruction pointer gets bumped.*/

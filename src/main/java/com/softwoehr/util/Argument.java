@@ -35,7 +35,7 @@ package com.softwoehr.util;
   * line that the arg or opt-arg pair came in.
   * @author $Author: jwoehr $
   * @version $Revision: 1.1.1.1 $
-  * @see com.softwoehr.GetArgs
+  * @see GetArgs
   */
 public class Argument
 {
@@ -68,6 +68,4 @@ public class Argument
 
   /** Return the argument portion (if any) of the Argument. */
   public String getArgument() {return argument;}
-}                                                  /* End of Argument class*/
-
-/* End of Argument.java */
+}

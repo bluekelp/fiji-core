@@ -87,7 +87,7 @@ class Primitive extends Semantic {
      * @param anEngine
      * throws BadPrimitiveExecute  */
     public void execute(Engine anEngine)
-    throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute {
+    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute {
         try {
             method.invoke(anEngine);
         }
@@ -95,7 +95,7 @@ class Primitive extends Semantic {
             String s = "Problem executing method from FIJI primitive " + getName();
             System.out.println(s);
             e.printStackTrace(System.err);
-            throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute(s, e);
+            throw new com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute(s, e);
         }
     }
 
@@ -110,10 +110,10 @@ class Primitive extends Semantic {
      * throws BadDefinitionExecute  */
 
     public void compile(Engine e)
-    throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
+    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveCompile
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute {
         if (null == compilationMethod) {
             super.compile(e);
         }
@@ -125,7 +125,7 @@ class Primitive extends Semantic {
                 String s = "Problem executing compilation method from FIJI primitive " + getName();
                 System.out.println(s);
                 ex.printStackTrace(System.err);
-                throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile(s, ex);
+                throw new com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveCompile(s, ex);
             }
         }
     }

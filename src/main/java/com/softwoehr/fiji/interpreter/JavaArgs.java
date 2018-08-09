@@ -1,4 +1,4 @@
-package com.softwoehr.fiji;
+package com.softwoehr.fiji.interpreter;
 
 import com.softwoehr.fiji.interpreter.JavaParam;
 

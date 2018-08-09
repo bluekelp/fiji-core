@@ -45,7 +45,7 @@ public class Interpreter {
     private PrintStream err;
     private PrintStream out;
 
-    private Engine myEngine;
+    private Engine engine;
 
     // The tokenizer which gets our next lexeme.
     private StringTokenizer st;
@@ -75,12 +75,12 @@ public class Interpreter {
 
     // Reset the Interpreter, losing all previous state.
     private void reinit() {
-        myEngine = new Engine(this);
+        engine = new Engine(this);
         warmReset();
     }
 
     public Engine getEngine() {
-        return myEngine;
+        return engine;
     }
 
     void setKillFlag() {
@@ -163,7 +163,7 @@ public class Interpreter {
 
     // Issue the prompt as appropriate
     public void prompt() {
-        if (Engine.INTERPRETING == myEngine.state)       /* We're interpreting*/ {
+        if (Engine.INTERPRETING == engine.state)       /* We're interpreting*/ {
             output("\nok ");
         } else                                               /* We're compiling.*/ {
             output("\n(...) ");
@@ -200,58 +200,58 @@ public class Interpreter {
                     && !killFlag
                     && !quitFlag) {
                 aLexeme = nextLexeme();                          /* Grab next one.*/
-                semantic = myEngine.findSemantic(aLexeme); /* Find in wordlist(s).*/
+                semantic = engine.findSemantic(aLexeme); /* Find in wordlist(s).*/
 
                 if (null != semantic)      /* We found lexeme as dictionary entry.*/ {
-                    if (Engine.INTERPRETING == myEngine.state) /* We're interpreting*/ {
+                    if (Engine.INTERPRETING == engine.state) /* We're interpreting*/ {
                         try {
-                            semantic.execute(myEngine);                     /* So do it.*/
+                            semantic.execute(engine);                     /* So do it.*/
                         } catch (Exception e) {
                             e.printStackTrace(err);
                             output(e.getMessage());
-                            myEngine.warm();
+                            engine.warm();
                         }
                     } else                                         /* We're compiling.*/ {
                         try {
                             announce("Executing compile semantics for "
                                     + semantic.toString()
                             );
-                            semantic.compile(myEngine);                /* So compile it.*/
+                            semantic.compile(engine);                /* So compile it.*/
                         } catch (Exception e) {
                             e.printStackTrace(err);
                             output(e.getMessage());
-                            myEngine.warm();
+                            engine.warm();
                         }
                     }
                 } else           /* We didn't find the lexeme as a dictionary entry.*/ {
-                    if (Engine.INTERPRETING == myEngine.state)/* We're interpreting.*/ {
+                    if (Engine.INTERPRETING == engine.state)/* We're interpreting.*/ {
                         Long a;
                         try                                  /* Try to make it a long.*/ {
                             a = Long.valueOf(aLexeme, base);
-                            myEngine.stack.push(a);                    /* Push the long.*/
+                            engine.stack.push(a);                    /* Push the long.*/
                         } catch (NumberFormatException e)              /* Wasn't a long.*/ {
-                            myEngine.stack.push(aLexeme);            /* Push the lexeme.*/
+                            engine.stack.push(aLexeme);            /* Push the lexeme.*/
                         }
                     } else                                         /* We're compiling.*/ {
                         long a;
                         try                                  /* Try to make it a long.*/ {
                             a = Long.parseLong(aLexeme);
                             try            /* Try to compile the long as a literal Long.*/ {
-                                myEngine.compileLiteral(a);
+                                engine.compileLiteral(a);
                             } catch (Exception x) {
                                 announce("Interpreter had problem compiling literal Long.");
                                 announce("Lexeme was: " + aLexeme);
                                 x.printStackTrace(err);
-                                myEngine.warm();
+                                engine.warm();
                             }
                         } catch (NumberFormatException e)              /* Wasn't a long.*/ {
                             try        /* Try to compile the lexeme as a string literal.*/ {
-                                myEngine.compileLiteral(aLexeme);
+                                engine.compileLiteral(aLexeme);
                             } catch (Exception x) {
                                 announce("Interpreter had problem compiling literal String.");
                                 announce("Lexeme was: " + aLexeme);
                                 x.printStackTrace(err);
-                                myEngine.warm();
+                                engine.warm();
                             }
                         }
                     }
@@ -263,7 +263,7 @@ public class Interpreter {
                 }
             } catch (Exception e) {
                 e.printStackTrace(err);
-                myEngine.warm();
+                engine.warm();
             }
         }
         return killFlag;
@@ -272,8 +272,8 @@ public class Interpreter {
 
     /* Load a file as FIJI source. */
     public void load(String filename) {
-        myEngine.push(filename);
-        myEngine.load();
+        engine.push(filename);
+        engine.load();
     }
 
     private void announce(String s) {

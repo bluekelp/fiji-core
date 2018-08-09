@@ -26,7 +26,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package com.softwoehr.fiji.base;
+package com.softwoehr.fiji.errors;
 
 /** An Exception base class for SoftWoehr.
  *
@@ -40,7 +40,7 @@ public class Exceptions extends java.lang.Exception {
         public static class shell {
 
             /** Stack too shallow for operation. */
-            public static class StackUnderflow extends com.softwoehr.fiji.base.Exceptions {
+            public static class StackUnderflow extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public StackUnderflow(Throwable t) {
@@ -54,7 +54,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                   /* StackUnderflow*/
 
             /** An entity was passed as an instance of a class but is not. */
-            public static class NotClassInstance extends com.softwoehr.fiji.base.Exceptions {
+            public static class NotClassInstance extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public NotClassInstance(Throwable t) {
@@ -68,7 +68,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                 /* NotClassInstance*/
 
             /** An entity was passed as an instance of a reflected class but is not. */
-            public static class NonReflectedType extends com.softwoehr.fiji.base.Exceptions {
+            public static class NonReflectedType extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public NonReflectedType(Throwable t) {
@@ -82,7 +82,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                 /* NonReflectedType*/
 
             /** A String was passed to represent a class name but doesn't. */
-            public static class NotClassName extends com.softwoehr.fiji.base.Exceptions {
+            public static class NotClassName extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public NotClassName(Throwable t) {
@@ -96,7 +96,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                     /* NotClassName*/
 
             /** Invalid numeric conversion base for Interpreter. */
-            public static class BadBase extends com.softwoehr.fiji.base.Exceptions {
+            public static class BadBase extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public BadBase(Throwable t) {
@@ -110,7 +110,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                          /* BadBase*/
 
             /** Invalid character display code page requested from host system.*/
-            public static class BadEncoding extends com.softwoehr.fiji.base.Exceptions {
+            public static class BadEncoding extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public BadEncoding(Throwable t) {
@@ -124,7 +124,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                      /* BadEncoding*/
 
             /** Invalid name offered for a Semantic.*/
-            public static class BadName extends com.softwoehr.fiji.base.Exceptions {
+            public static class BadName extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public BadName(Throwable t) {
@@ -138,7 +138,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                      /* BadEncoding*/
 
             /** Attempt to perform a Variable operation on a non-Variable.*/
-            public static class NonVariable extends com.softwoehr.fiji.base.Exceptions {
+            public static class NonVariable extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public NonVariable(Throwable t) {
@@ -152,7 +152,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                      /* NonVariable*/
 
             /** Attempt to perform a Value operation on a non-Value.*/
-            public static class NonValue extends com.softwoehr.fiji.base.Exceptions {
+            public static class NonValue extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public NonValue(Throwable t) {
@@ -166,7 +166,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                         /* NonValue*/
 
             /** Exception encoutered in execution semantics of a Primitive.*/
-            public static class BadPrimitiveExecute extends com.softwoehr.fiji.base.Exceptions {
+            public static class BadPrimitiveExecute extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public BadPrimitiveExecute(Throwable t) {
@@ -180,7 +180,7 @@ public class Exceptions extends java.lang.Exception {
             }                                              /* BadPrimitiveExecute*/
 
             /** Exception encoutered in execution semantics of a Definition.*/
-            public static class BadDefinitionExecute extends com.softwoehr.fiji.base.Exceptions {
+            public static class BadDefinitionExecute extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public BadDefinitionExecute(Throwable t) {
@@ -194,7 +194,7 @@ public class Exceptions extends java.lang.Exception {
             }                                             /* BadDefinitionExecute*/
 
             /** Exception encoutered in compilation semantics of a Primitive.*/
-            public static class BadPrimitiveCompile extends com.softwoehr.fiji.base.Exceptions {
+            public static class BadPrimitiveCompile extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public BadPrimitiveCompile(Throwable t) {
@@ -208,7 +208,7 @@ public class Exceptions extends java.lang.Exception {
             }                                              /* BadPrimitiveCompile*/
 
             /** Exception encoutered in compilation semantics of a Definition.*/
-            public static class BadDefinitionCompile extends com.softwoehr.fiji.base.Exceptions {
+            public static class BadDefinitionCompile extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public BadDefinitionCompile(Throwable t) {
@@ -222,7 +222,7 @@ public class Exceptions extends java.lang.Exception {
             }                                             /* BadDefinitionCompile*/
 
             /** Exception encoutered in compilation semantics of a Value.*/
-            public static class CompileToValue extends com.softwoehr.fiji.base.Exceptions {
+            public static class CompileToValue extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public CompileToValue(Throwable t) {
@@ -236,7 +236,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                   /* CompileToValue*/
 
             /** Name not found in the Interpreter search order.*/
-            public static class NameNotFound extends com.softwoehr.fiji.base.Exceptions {
+            public static class NameNotFound extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public NameNotFound(Throwable t) {
@@ -250,7 +250,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                     /* NameNotFound*/
 
             /** Control flow stack imbalance.*/
-            public static class ControlFlowStackImbalance extends com.softwoehr.fiji.base.Exceptions {
+            public static class ControlFlowStackImbalance extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public ControlFlowStackImbalance(Throwable t) {
@@ -264,7 +264,7 @@ public class Exceptions extends java.lang.Exception {
             }                                        /* ControlFlowStackImbalance*/
 
             /** ParamaterizedPrimitive possess useless parameter object.*/
-            public static class InvalidParameterObject extends com.softwoehr.fiji.base.Exceptions {
+            public static class InvalidParameterObject extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public InvalidParameterObject(Throwable t) {
@@ -278,7 +278,7 @@ public class Exceptions extends java.lang.Exception {
             }                                           /* InvalidParameterObject*/
 
             /** Non-Boolean passed to a conditional. */
-            public static class ConditionalNonBoolean extends com.softwoehr.fiji.base.Exceptions {
+            public static class ConditionalNonBoolean extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public ConditionalNonBoolean(Throwable t) {
@@ -292,7 +292,7 @@ public class Exceptions extends java.lang.Exception {
             }                                            /* ConditionalNonBoolean*/
 
             /** Problem during branch resolution, bad branch, bad object types, etc. */
-            public static class BranchResolution extends com.softwoehr.fiji.base.Exceptions {
+            public static class BranchResolution extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public BranchResolution(Throwable t) {
@@ -306,7 +306,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                 /* BranchResolution*/
 
             /** Interpret-time use of compile-only syntax. */
-            public static class CompileOnly extends com.softwoehr.fiji.base.Exceptions {
+            public static class CompileOnly extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public CompileOnly(Throwable t) {
@@ -320,7 +320,7 @@ public class Exceptions extends java.lang.Exception {
             }                                                      /* CompileOnly*/
 
             /** Problem compiling an if-branch. */
-            public static class OpenIfBranch extends com.softwoehr.fiji.base.Exceptions {
+            public static class OpenIfBranch extends com.softwoehr.fiji.errors.Exceptions {
 
                 /** Arity/1 Throwable constructor. */
                 public OpenIfBranch(Throwable t) {

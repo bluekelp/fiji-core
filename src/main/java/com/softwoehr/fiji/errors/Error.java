@@ -26,7 +26,7 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-package com.softwoehr.fiji.base;
+package com.softwoehr.fiji.errors;
 
 /** An Error class for SoftWoehr
  *
@@ -40,7 +40,7 @@ public class Error extends java.lang.Error {
         public static class shell {
 
             /** Invalid numeric conversion base for Interpreter. */
-            public static class BadBase extends com.softwoehr.fiji.base.Error {
+            public static class BadBase extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -57,7 +57,7 @@ public class Error extends java.lang.Error {
             }                                                          /* BadBase*/
 
             /** Invalid character display code page requested from host system.*/
-            public static class BadEncoding extends com.softwoehr.fiji.base.Error {
+            public static class BadEncoding extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -74,7 +74,7 @@ public class Error extends java.lang.Error {
             }                                                      /* BadEncoding*/
 
             /** Invalid name offered for a Semantic.*/
-            public static class BadName extends com.softwoehr.fiji.base.Error {
+            public static class BadName extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -91,7 +91,7 @@ public class Error extends java.lang.Error {
             }                                                      /* BadEncoding*/
 
             /** Attempt to perform a Variable operation on a non-Variable.*/
-            public static class NonVariable extends com.softwoehr.fiji.base.Error {
+            public static class NonVariable extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -108,7 +108,7 @@ public class Error extends java.lang.Error {
             }                                                      /* NonVariable*/
 
             /** Attempt to perform a Value operation on a non-Value.*/
-            public static class NonValue extends com.softwoehr.fiji.base.Error {
+            public static class NonValue extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -125,7 +125,7 @@ public class Error extends java.lang.Error {
             }                                                         /* NonValue*/
 
             /** Exception encoutered in execution semantics of a Primitive.*/
-            public static class BadPrimitiveExecute extends com.softwoehr.fiji.base.Error {
+            public static class BadPrimitiveExecute extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -142,7 +142,7 @@ public class Error extends java.lang.Error {
             }                                              /* BadPrimitiveExecute*/
 
             /** Exception encoutered in compilation semantics of a Primitive.*/
-            public static class BadPrimitiveCompile extends com.softwoehr.fiji.base.Error {
+            public static class BadPrimitiveCompile extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -159,7 +159,7 @@ public class Error extends java.lang.Error {
             }                                              /* BadPrimitiveCompile*/
 
             /** Exception encoutered in compilation semantics of a Primitive.*/
-            public static class CompileToValue extends com.softwoehr.fiji.base.Error {
+            public static class CompileToValue extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -176,7 +176,7 @@ public class Error extends java.lang.Error {
             }                                                   /* CompileToValue*/
 
             /** Name not found in the Interpreter search order.*/
-            public static class NameNotFound extends com.softwoehr.fiji.base.Error {
+            public static class NameNotFound extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -193,7 +193,7 @@ public class Error extends java.lang.Error {
             }                                                     /* NameNotFound*/
 
             /** Control flow stack imbalance.*/
-            public static class ControlFlowStackImbalance extends com.softwoehr.fiji.base.Error {
+            public static class ControlFlowStackImbalance extends com.softwoehr.fiji.errors.Error {
 
                 /** Arity/1 Throwable constructor.
                  * @param t  */
@@ -212,7 +212,7 @@ public class Error extends java.lang.Error {
     }                                                              /* desktop*/
 
     /** A buncha error types. */
-    public static class BackToMain extends com.softwoehr.fiji.base.Error {
+    public static class BackToMain extends com.softwoehr.fiji.errors.Error {
 
         /** Arity/1 Throwable constructor.
          * @param t  */
@@ -230,7 +230,7 @@ public class Error extends java.lang.Error {
     }
 
     /** A buncha error types. */
-    public static class BadArgToMain extends com.softwoehr.fiji.base.Error {
+    public static class BadArgToMain extends com.softwoehr.fiji.errors.Error {
 
         /** Arity/1 Throwable constructor.
          * @param t  */

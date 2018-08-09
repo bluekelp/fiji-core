@@ -108,15 +108,15 @@ public class Definition extends Semantic {
      * throws BadDefinitionExecute
      * throws BadPrimitiveExecute  */
     public void execute(Engine e)
-    throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute {
+    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute {
         try {
             e.innerInterpreter.interpret(this);
         }                                                          /* End try*/
-        catch (com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute  ex) {
+        catch (com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute  ex) {
             String s = "Problem in Definition.execute() for " + getName();
-            com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute x =
-            new com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute
+            com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute x =
+            new com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute
             (s, ex);
             ex.printStackTrace(System.err);
             throw x;
@@ -129,9 +129,9 @@ public class Definition extends Semantic {
      * throws BadDefinitionExecute
      * throws BadPrimitiveExecute  */
     public void compile(Engine e)
-    throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute {
+    throws com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionExecute
+    , com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveExecute {
         if (immediate) {
             execute(e);
         }
@@ -139,10 +139,10 @@ public class Definition extends Semantic {
             try {
                 super.compile(e);
             }                                                        /* End try*/
-            catch (com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile ex) {
+            catch (com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadPrimitiveCompile ex) {
                 String s = "Problem in Definition.compile() for " + getName();
-                com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile x =
-                new com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
+                com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile x =
+                new com.softwoehr.fiji.errors.Exceptions.desktop.shell.BadDefinitionCompile
                 (s, ex);
                 ex.printStackTrace(System.err);
                 throw x;

@@ -13,7 +13,7 @@
 
 package com.softwoehr.fiji;
 
-import com.softwoehr.fiji.base.Error;
+import com.softwoehr.fiji.errors.Error;
 import com.softwoehr.fiji.interpreter.Engine;
 import com.softwoehr.fiji.interpreter.Interpreter;
 import com.softwoehr.util.Argument;
@@ -36,7 +36,7 @@ public class Console {
       Interpreter i;
       InputStreamReader isr;
       BufferedReader br;
-      GetArgs myArgs = new GetArgs(argv);/* Assimilate the command line.     */
+      GetArgs args = new GetArgs(argv);/* Assimilate the command line.     */
 
       /* Create the Interpreter instance. */
       try {
@@ -51,29 +51,25 @@ public class Console {
          *  The stack trace.
          */
         throw new Error.BackToMain(e);
-      }                                                        /* End catch*/
+      }
 
-      /* Examine the arguments. */
-      //    try
-      //      {
-      for (int x = 0; x < myArgs.optionCount(); x++) {
-        Argument a = myArgs.nthOption(x);
+      for (Argument a : args.options) {
 
         if (a.option.equals("-b")) {
           if (a.argument != null ) {
             try {
               i.setBase(Integer.decode(a.argument));
-            }                                                  /* End try*/
+            }
             catch (Exception e) {
               e.printStackTrace(System.err);
-              throw new com.softwoehr.fiji.base.Error.desktop.shell.BadBase(e);
-            }                                                /* End catch*/
+              throw new com.softwoehr.fiji.errors.Error.desktop.shell.BadBase(e);
+            }
           }
           else {
             String s = "(null) presented for Interpreter numeric base.";
             System.out.println(s);
-            throw new com.softwoehr.fiji.base.Error.desktop.shell.BadBase(s, null);
-          }                                                     /* End if*/
+            throw new com.softwoehr.fiji.errors.Error.desktop.shell.BadBase(s, null);
+          }
         }
         else if (a.option.equals("-o")) {
           if (a.argument != null) {
@@ -82,26 +78,20 @@ public class Console {
           else {
             String s = "Bad output stream encoding proposed: " + a.option;
             System.out.println(s);
-            throw new com.softwoehr.fiji.base.Error.desktop.shell.BadEncoding(s, null);
-          }                                                     /* End if*/
-        }                                                       /* End if*/
+            throw new com.softwoehr.fiji.errors.Error.desktop.shell.BadEncoding(s, null);
+          }
+        }
         else if (a.option.equals("-h") || a.option.equals("--")) {
           usage();
           return;
-        }                                                       /* End if*/
+        }
         else {
           String s = "Bad option " + a.option + " " + a.argument;
           System.err.println(s);
           usage();
           throw new Error.BadArgToMain(s, null);
-        }                                                       /* End if*/
-      }                                                        /* End for*/
-      //      }                                                          /* End try*/
-      //    catch (Exception e)
-      //      {
-      //        e.printStackTrace(System.err);
-      //        throw new com.softwoehr.fiji.base.Error.BackToMain(e);
-      //      }                                                        /* End catch*/
+        }
+      }
 
       /* GPL announces itself. */
       System.out.println( "FIJI ForthIsh Java Interpreter "
@@ -114,29 +104,25 @@ public class Console {
       System.out.println("This is free software, and you are welcome to redistribute it");
       System.out.println("under certain conditions enumerated in COPYING and/or COPYING.LIB.");
 
-      /* Set up to run. */
       try {
-        setOutput(System.out);/* Note this occurs after setOutputEncoding()*/
-        setInput(System.in);
         isr = new InputStreamReader(System.in);
         br = new BufferedReader(isr);
-      }                                                          /* End try*/
+      }
       catch (Exception e) {
         e.printStackTrace(System.err);
         throw new Error.BackToMain(e);
-      }                                                        /* End catch*/
+      }
 
-      /* Now treat every argument as a file to load. */
-      for (int j = 0; j < myArgs.argumentCount() ; j++) {
+      for (Argument a : args.arguments) {
+        /* Now treat every argument as a file to load. */
         try {
-          Argument a =  myArgs.nthArgument(j);
           i.load(a.argument);
-        }                                                        /* End try*/
+        }
         catch (Exception e) {
           e.printStackTrace(System.err);
           break;
-        }                                                      /* End catch*/
-      }                               /* Done loading any source arguments.*/
+        }
+      }
 
       /* Begin to parse interactive input. */
       i.prompt();
@@ -147,8 +133,8 @@ public class Console {
           boolean stop = i.interpret(tib);
           if (stop) break;
           else i.prompt();
-        }                                                      /* End try*/
-        catch (EOFException e) {                          /* No more input.*/
+        }
+        catch (EOFException e) {
           break;
         }
         catch (IOException e) {
@@ -157,97 +143,15 @@ public class Console {
         }
         catch (Exception e) {
           e.printStackTrace(System.err);
-        }                                                    /* End catch*/
-      }                                                        /* End while*/
+        }
+      }
       try {
         br.close();
-      }                                                         /* End try*/
-      catch (Exception e) {
-        e.printStackTrace(System.err);
-      }                                                       /* End catch*/
-    }
-
-  /** Close current input stream. */
-  private void closeCurrentInput() {
-    try {
-      if (null != currentInput) {
-        currentInput.close();
-        currentInput = null;
-      }                                                         /* End if*/
-    }                                                          /* End try*/
-    catch (Exception e) {
-      e.printStackTrace(System.err);
-    }                                                        /* End catch*/
-  }
-
-  /** Close current output stream. */
-  private void closeCurrentOutput() {
-    try {
-      if (null != currentOutput) {
-        currentOutput.close();
-        currentOutput = null;
       }
-    }                                                          /* End try*/
-    catch (Exception e) {
-      e.printStackTrace(System.err);
-    }                                                        /* End catch*/
-  }
-
-  /** Output a string
-   * @param s  */
-  private void output(String s) {
-    try {
-      getOutputStreamWriter().write(s);
-      getOutputStreamWriter().flush();
-    }                                                          /* End try*/
-    catch (Exception e) {
-      e.printStackTrace(System.err);
-    }                                                        /* End catch*/
-  }
-
-  /** Set the current input
-   * @param i  */
-  private void setInput(InputStream i) {
-    currentInput = i;
-  }
-
-  /** Get the current input
-   */
-  private InputStream getInput() {
-    return currentInput;
-  }
-
-  /** Set the current output
-   * @param o  */
-  private void setOutput(OutputStream o) {
-    currentOutput = o;
-    if (getOutputStreamEncoding() == null) {
-      outputStreamWriter = new OutputStreamWriter(currentOutput);
-    }
-    else {
-      try {
-        outputStreamWriter
-                = new OutputStreamWriter( currentOutput
-                , getOutputStreamEncoding()
-        );
-      }                                                        /* End try*/
       catch (Exception e) {
         e.printStackTrace(System.err);
-      }                                                      /* End catch*/
-    }                                                           /* End if*/
-  }
-
-  /** Get the current output
-   */
-  private OutputStream getOutput() {
-    return currentOutput;
-  }
-
-  /** Get the output stream writer
-   */
-  private OutputStreamWriter getOutputStreamWriter() {
-    return outputStreamWriter;
-  }
+      }
+    }
 
   /** Set output stream encoding to a given codepage.
    * One must subsequently do a <code>setOutput()</code> to make
@@ -258,25 +162,9 @@ public class Console {
     outputStreamEncoding = codepage;
   }
 
-  /** Get output stream codepage name.
-   */
-  private String getOutputStreamEncoding() {
-    return outputStreamEncoding;
-  }
-
-  /** An input stream */
-  private InputStream currentInput;
-
-  /** An output stream */
-  private OutputStream currentOutput;
-
-  /** Output stream writer to handle host codepage issues. */
-  private OutputStreamWriter outputStreamWriter;
-
-  /** Encoding used by OutputStreamWriter */
+  // Encoding used by OutputStreamWriter
   private String outputStreamEncoding;
 
-  /** Display main() command line usage. */
   private void usage() {
     System.err.println("Usage:");
     System.err.println(" java com.softwoehr.fiji.Main [-b base] [-o output_codepage] [file file ...]");
