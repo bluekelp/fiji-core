@@ -222,36 +222,36 @@ public class Error extends java.lang.Error implements verbose {
     }                                                              /* desktop*/
     
     /** A buncha error types. */
-    public static class bAcKtOmain extends com.softwoehr.fiji.base.Error {
+    public static class BackToMain extends com.softwoehr.fiji.base.Error {
         
         /** Arity/1 Throwable constructor.
          * @param t  */
-        public bAcKtOmain(Throwable t) {
+        public BackToMain(Throwable t) {
             super(t);
         }
         
         /** Arity/2 Throwable constructor.
          * @param s
          * @param t  */
-        public bAcKtOmain(String s, java.lang.Throwable t) {
+        public BackToMain(String s, java.lang.Throwable t) {
             super(s,t);
         }
         
     }
     
     /** A buncha error types. */
-    public static class bAdArGtOmain extends com.softwoehr.fiji.base.Error {
+    public static class BadArgToMain extends com.softwoehr.fiji.base.Error {
         
         /** Arity/1 Throwable constructor.
          * @param t  */
-        public bAdArGtOmain(Throwable t) {
+        public BadArgToMain(Throwable t) {
             super(t);
         }
         
         /** Arity/2 Throwable constructor.
          * @param s
          * @param t  */
-        public bAdArGtOmain(String s, java.lang.Throwable t) {
+        public BadArgToMain(String s, java.lang.Throwable t) {
             super(s,t);
         }
     }

@@ -13,6 +13,7 @@
 
 package com.softwoehr.fiji;
 
+import com.softwoehr.fiji.base.Error;
 import com.softwoehr.fiji.interpreter.Engine;
 import com.softwoehr.fiji.interpreter.Interpreter;
 import com.softwoehr.util.Argument;
@@ -49,7 +50,7 @@ public class Console {
          *  exhaustively enumerating candidate classes and testing them?
          *  The stack trace.
          */
-        throw new com.softwoehr.fiji.base.Error.bAcKtOmain(e);
+        throw new Error.BackToMain(e);
       }                                                        /* End catch*/
 
       /* Examine the arguments. */
@@ -92,7 +93,7 @@ public class Console {
           String s = "Bad option " + a.option + " " + a.argument;
           System.err.println(s);
           usage();
-          throw new com.softwoehr.fiji.base.Error.bAdArGtOmain(s, null);
+          throw new Error.BadArgToMain(s, null);
         }                                                       /* End if*/
       }                                                        /* End for*/
       //      }                                                          /* End try*/
@@ -122,7 +123,7 @@ public class Console {
       }                                                          /* End try*/
       catch (Exception e) {
         e.printStackTrace(System.err);
-        throw new com.softwoehr.fiji.base.Error.bAcKtOmain(e);
+        throw new Error.BackToMain(e);
       }                                                        /* End catch*/
 
       /* Now treat every argument as a file to load. */
