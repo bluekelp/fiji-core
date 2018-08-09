@@ -550,7 +550,7 @@ public class Engine {
     public void castParam()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassName {
         Object o = peek();
-        Class c = null;
+        Class c;
         try {                                   /* Is TOS a Class object already?*/
             if (o.getClass() == cClass) {
                 c = (Class) pop();                                  /* Yes, use it.*/
@@ -644,7 +644,7 @@ public class Engine {
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NonReflectedType
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassName {
-        push(new Integer(((Long)pop()).intValue()));
+        push(((Long) pop()).intValue());
         stackEntryToPrimParam();
     }
 
@@ -875,9 +875,8 @@ public class Engine {
         else {
             c = x;                     /* It's an instance, use the gotten class.*/
         }
-        Field f = c.getField(fieldName);   /* Find the field name.             */
-        return f;
-    }                 /* public Field findField(Object o, String fieldName)*/
+        return c.getField(fieldName);   /* Find the field name.             */
+    }
 
     /** Push next lexeme as a string literal.
      * '   TIB: lexeme --      -- s
@@ -923,6 +922,7 @@ public class Engine {
     }
 
     /** Parse and discard text between backslashes. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void comment() {
         lexeme("\\", true);
         pop();
@@ -959,9 +959,7 @@ public class Engine {
         push(null);
     }
 
-    /**************************/
-  /* Comparison and Logical */
-    /**************************/
+    // Comparison and Logical
 
     /** Invert the boolean on top of stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -1066,9 +1064,7 @@ public class Engine {
         // TODO throw bAdAdD (if not both same class)?
     }
 
-    //*************/
-  /* Arithmetic */
-    //*************/
+    // Arithmetic
 
     /** Add two numbers or two strings.
      * Should also work on ints, doubles, floats, etc., but doesn't yet.
@@ -1189,9 +1185,7 @@ public class Engine {
         push(Array.newInstance(aClass, dimArray));
     }
 
-    //*********************/
-  /* Variables & Values */
-    //*********************/
+    // Variables & Values
 
     /** Parse input for a valid name.
      * throws BadName If no valid name found.
@@ -1366,9 +1360,7 @@ public class Engine {
         return (Value) aSemantic;
     }
 
-    //*************/
-  /* Compiling */
-    //*************/
+    // Compiling
 
     /** Return the current definition under composition.
      * @return  the current definition. */
@@ -1495,9 +1487,7 @@ public class Engine {
         commenceDefinition(d);                 /* Init engined for compilation.*/
     }
 
-    //***********/
-  /* Literals */
-    //***********/
+    // Literals
 
     /** Runtime for pushing a compiled literal on the stack.
      * @param l The literal to push.
@@ -1570,9 +1560,7 @@ public class Engine {
         compileLiteral(pop());
     }
 
-    //********************/
-  /* Control flow     */
-    //********************/
+    // Control flow
 
     /** Exit the currently executing Definition.*/
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -2080,7 +2068,7 @@ public class Engine {
 
     /** Runtime for '+loop'. Called from a ParameterizedPrimitive having
      * embedded object, the Integer stored indicating the bump value.
-     * @param p  */
+     */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void plusLoop(ParameterizedPrimitive.PlusLoop p) {
         int increment = ((Long)pop()).intValue();/* Get loop increment from stack.*/
@@ -2214,9 +2202,7 @@ public class Engine {
         innerInterpreter.leaveLoop();
     }
 
-    //************/
-  /* Utilities */
-    //************/
+    // Utilities
 
     /** Do a newline on the output. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -2291,9 +2277,7 @@ public class Engine {
         push(fijiVersion());
     }
 
-    //************/
-  /* Wordlists */
-    //************/
+    // Wordlists
 
     /** Create a new Wordlist and add it to the current wordlist.
      * throws BadName If no valid name found.  */
