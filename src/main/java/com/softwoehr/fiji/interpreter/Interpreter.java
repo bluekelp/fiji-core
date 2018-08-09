@@ -192,11 +192,7 @@ public class Interpreter {
     /** Number of lexemes left in string being interpret()'ed .
      */
     private int countLexemes() {
-        int count = 0;
-        if (null != st) {
-            count = st.countTokens();
-        }                                                           /* End if*/
-        return count;
+        return st != null ? st.countTokens() : 0;
     }
 
     public void output(String s) {

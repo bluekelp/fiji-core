@@ -28,20 +28,12 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.util.verbose;
-import com.softwoehr.util.verbosity;
-
 /**
  *
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class Semantic implements verbose {
-    /**  Flags whether we are in verbose mode. */
-    public boolean isverbose = false;
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+public class Semantic {
     private String myName;
     
     /** Arity/0 ctor. */
@@ -59,25 +51,7 @@ public class Semantic implements verbose {
      * @return  */
     public String toString()
     {return "A Semantic named " + getName();}
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @return  */
-    public boolean isVerbose()              {return isverbose;}
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param tf  */
-    public void    setVerbose  (boolean tf) {isverbose = tf;  }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param s  */
-    public void    announce    (String s)   {v.announce(s);   }
-    
+
     /** Identification.
      * @return  */
     public String getName() {
@@ -93,8 +67,8 @@ public class Semantic implements verbose {
     /** Execution semantics, the default behavior
      * being to push self to stack.
      * @param e
-     * @throws BadPrimitiveExecute
-     * @throws BadDefinitionExecute  */
+     * throws BadPrimitiveExecute
+     * throws BadDefinitionExecute  */
     public void execute(Engine e)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
@@ -104,10 +78,10 @@ public class Semantic implements verbose {
     /** Compilation semantics, the default behavior
      * being to append self to the current definition.
      * @param e
-     * @throws BadPrimitiveCompile
-     * @throws BadDefinitionCompile
-     * @throws BadPrimitiveExecute
-     * @throws BadDefinitionExecute  */
+     * throws BadPrimitiveCompile
+     * throws BadDefinitionCompile
+     * throws BadPrimitiveExecute
+     * throws BadDefinitionExecute  */
     
     public void compile(Engine e)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile
