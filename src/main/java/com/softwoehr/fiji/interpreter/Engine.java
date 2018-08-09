@@ -510,7 +510,7 @@ public class Engine {
      */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void quit() {
-        myInterpreter.setQuitFlag(true);
+        myInterpreter.setQuitFlag();
     }
 
     /**
@@ -964,7 +964,7 @@ public class Engine {
     // Signal Interpreter that bye is requested.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void bye() {
-        myInterpreter.setKillFlag(true);
+        myInterpreter.setKillFlag();
     }
 
     // System exit.
