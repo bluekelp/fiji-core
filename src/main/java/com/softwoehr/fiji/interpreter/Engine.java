@@ -1,16 +1,16 @@
 /* Engine.java ...  an execution Engine.     */
-/*********************************************/
+//********************************************/
 /* Copyright *C* 1999, 2001                  */
 /* All Rights Reserved.                      */
 /* Jack J. Woehr jax@softwoehr.com           */
 /* http://www.well.com/user/jax/rcfb         */
 /* P.O. Box 51, Golden, Colorado 80402-0051  */
-/*********************************************/
+//********************************************/
 /*                                           */
 /*    This Program is Free SoftWoehr.        */
 /*                                           */
 /* THERE IS NO GUARANTEE, NO WARRANTY AT ALL */
-/*********************************************/
+//********************************************/
 /*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 package com.softwoehr.fiji.interpreter;
 
 import com.softwoehr.fiji.JavaArgs;
+import com.softwoehr.fiji.base.Exceptions;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -61,83 +62,35 @@ import java.util.Stack;
 public class Engine {
 
     /** Interpreting, not compiling. */
-    public static final boolean INTERPRETING = false;
+    static final boolean INTERPRETING = false;
 
     /** Compiling, not interpreting. */
-    public static final boolean COMPILING = true;
+    private static final boolean COMPILING = true;
 
     /**  Flags whether we are in verbose mode. */
-    public boolean isverbose = false;
+    private boolean isverbose = false;
 
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cObject    ;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cBoolean   ;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cString    ;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cLong      ;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cInteger   ;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cClass     ;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cJavaParam ;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cVariable  ;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cValue     ;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cDefinition;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cParameterizedPrimitive;
-
-    /** Reference to a Class object for comparisons to avoid
-     * frequent calls to Class.forName()
-     */
-    public Class cLiteral;
+    // References to a Class object for comparisons to avoid frequent calls to Class.forName()
+    private Class cBoolean   ;
+    private Class cString    ;
+    private Class cLong      ;
+    private Class cClass     ;
+    private Class cJavaParam ;
+    private Class cVariable  ;
+    private Class cValue     ;
+    private Class cDefinition;
+    private Class cParameterizedPrimitive;
+    private Class cLiteral;
 
     /** Init the static class references. */
     private void loadClasses() {
         try {
             cString    = Class.forName("java.lang.String");
             cLong      = Class.forName("java.lang.Long");
-            cInteger   = Class.forName("java.lang.Integer");
+//            cInteger   = Class.forName("java.lang.Integer");
             cClass     = Class.forName("java.lang.Class");
             cBoolean   = Class.forName("java.lang.Boolean");
-            cObject    = Class.forName("java.lang.Object");
+//            cObject    = Class.forName("java.lang.Object");
             cJavaParam = Class.forName("com.softwoehr.fiji.interpreter.JavaParam");
             cVariable  = Class.forName("com.softwoehr.fiji.interpreter.Variable");
             cValue     = Class.forName("com.softwoehr.fiji.interpreter.Value");
@@ -158,7 +111,7 @@ public class Engine {
      * The inner Interpreter has the return stack and
      * the current definition under interpretation.
      */
-    public InnerInterpreter innerInterpreter;
+    InnerInterpreter innerInterpreter;
 
     /** A ref to the current definition under composition. The
      * previous currentDefinition is pushed on the control
@@ -167,10 +120,10 @@ public class Engine {
     private Definition currentDefinition;
 
     /** Stack for unfinished Definitions and unresolved branches. */
-    public Stack controlFlowStack;
+    private Stack controlFlowStack;
 
     /** The input Interpreter with which this Engine is associated.*/
-    public Interpreter myInterpreter;
+    private Interpreter myInterpreter;
 
     private void output(String s) {
         myInterpreter.output(s);
@@ -181,13 +134,13 @@ public class Engine {
     }
 
     /** Compilation state */
-    public boolean state;
+    boolean state;
 
     /** The search order */
-    public SearchOrder searchOrder;
+    private SearchOrder searchOrder;
 
     /** The current wordlist to which new defs are added. */
-    public Wordlist currentWordlist;
+    private Wordlist currentWordlist;
 
     /** Open Engine on an input Interpreter and initialize cold.
      * @param i the associated input Interpreter
@@ -281,11 +234,6 @@ public class Engine {
         return stack.peek();
     }
 
-    /********************************/
-  /* Here are the primitives.     */
-  /* These all work on the stack. */
-    /********************************/
-
     /** ARF */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void arf() {
@@ -300,7 +248,7 @@ public class Engine {
     /** depth      xn .. x1 -- n */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void depth() {
-        push(new Long(stack.size()));
+        push((long) stack.size());
     }
 
     /** dup          o -- o o
@@ -525,8 +473,8 @@ public class Engine {
      */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dotdot() {
-        String s = "";
-        Object o = null;
+        String s;
+        Object o;
         if (stack.size() > 0) {
             while (stack.size() > 0) {
                 o = stack.pop();
@@ -568,7 +516,7 @@ public class Engine {
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void classForName()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
-    , com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassName
+    , Exceptions.desktop.shell.NotClassName
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassInstance {
         if (stack.size() > 0) {
             try {
@@ -581,7 +529,7 @@ public class Engine {
                         String s = name + " is not a class name.";
                         announce(s);
                         outputError(e);
-                        throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassName(s, e);
+                        throw new Exceptions.desktop.shell.NotClassName(s, e);
                     }                                                  /* End catch*/
                 }
                 else {
@@ -768,7 +716,7 @@ public class Engine {
      */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void pushBase() {
-        push(new Long(myInterpreter.getBase()));
+        push((long) myInterpreter.getBase());
     }
 
     /** Set input base.
@@ -784,7 +732,7 @@ public class Engine {
      */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doState() {
-        push(new Boolean(getState()));
+        push(getState());
     }
 
     /** Makes current definition immediate.
@@ -798,7 +746,7 @@ public class Engine {
      */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void isImmediate() {
-        push(new Boolean(((Definition)pop()).getImmediate()));
+        push(((Definition) pop()).getImmediate());
     }
 
     /** >class   o1 -- c1 */
@@ -963,7 +911,7 @@ public class Engine {
      * @param delimiters Delimiters for the tokenizer.
      * @param consumeDelim <CODE>true</CODE> if delimiter is consumed in the parsing.
      */
-    public void lexeme(String delimiters, boolean consumeDelim) {
+    private void lexeme(String delimiters, boolean consumeDelim) {
         push(myInterpreter.nextLexeme(delimiters, consumeDelim));
     }
 
@@ -1005,13 +953,13 @@ public class Engine {
     /** Leave boolean true on stack */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void pushTrue() {
-        push(new Boolean(true));
+        push(Boolean.TRUE);
     }
 
     /** Leave boolean false on stack */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void pushFalse() {
-        push(new Boolean(false));
+        push(Boolean.FALSE);
     }
 
     /** Leave null on stack */
@@ -1027,34 +975,32 @@ public class Engine {
     /** Invert the boolean on top of stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void not() {
-        push( new Boolean(
-        ((Boolean) pop()).booleanValue() == false
-        )
+        push((Boolean) pop() == false
         );
     }                                                 /* public void not ()*/
 
     /** AND two booleans on top of stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void and() {
-        boolean lhs = ((Boolean) pop()).booleanValue();
-        boolean rhs = ((Boolean) pop()).booleanValue();
-        push(new Boolean(lhs && rhs));
+        boolean lhs = (Boolean) pop();
+        boolean rhs = (Boolean) pop();
+        push(lhs && rhs);
     }                                                 /* public void and ()*/
 
     /** OR two booleans on top of stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void or() {
-        boolean lhs = ((Boolean) pop()).booleanValue();
-        boolean rhs = ((Boolean) pop()).booleanValue();
-        push(new Boolean(lhs || rhs));
+        boolean lhs = (Boolean) pop();
+        boolean rhs = (Boolean) pop();
+        push(lhs || rhs);
     }                                                  /* public void or ()*/
 
     /** XOR two booleans on top of stack. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void xor() {
-        boolean lhs = ((Boolean) pop()).booleanValue();
-        boolean rhs = ((Boolean) pop()).booleanValue();
-        push(new Boolean(lhs ^ rhs));
+        boolean lhs = (Boolean) pop();
+        boolean rhs = (Boolean) pop();
+        push(lhs ^ rhs);
     }                                                 /* public void xor ()*/
 
     /** Compare two objects for equality. */
@@ -1064,14 +1010,14 @@ public class Engine {
         Object b = pop();
         if (a == null || b == null) {
             if (a == null && b == null) {
-                push(new Boolean(true));
+                push(Boolean.TRUE);
             }
             else {
-                push(new Boolean(false));
+                push(Boolean.FALSE);
             }                                                         /* End if*/
         }
         else {
-            push(new Boolean(a.equals(b)));
+            push(a.equals(b));
         }                                                           /* End if*/
     }                                             /* public void isEqual ()*/
 
@@ -1082,14 +1028,14 @@ public class Engine {
         Object b = pop();
         if (a == null || b == null) {
             if (a == null && b == null) {
-                push(new Boolean(false));
+                push(Boolean.FALSE);
             }
             else {
-                push(new Boolean(true));
+                push(Boolean.TRUE);
             }                                                         /* End if*/
         }
         else {
-            push(new Boolean(!a.equals(b)));
+            push(!a.equals(b));
         }                                                           /* End if*/
     }                                           /* public void isUnequal ()*/
 
@@ -1102,20 +1048,16 @@ public class Engine {
         Object o = pop();
         final Class c  = o.getClass();
         if (c == cString) {
-            push( new Boolean(0
-            <
-            ((String) pop()).compareTo((String) o)
-            ));
+            push(0
+                    <
+                    ((String) pop()).compareTo((String) o));
         }
         else if (c == cLong) {
-            push( new Boolean( ((Long)pop()).longValue()
-            > ((Long)o)    .longValue()
-            ));
+            push((Long) pop()
+                    > (Long) o);
         }
-        else {
-            // throw bAdAdD (if not both same class)
-        }                                                           /* End if*/
-    }                                         /* public void greaterThan ()*/
+        // TODO throw bAdAdD (if not both same class)?
+    }
 
     /** Compare two numbers (i.e., java.lang.Long's) or
      * two strings for less-than
@@ -1126,24 +1068,20 @@ public class Engine {
         Object o = pop();
         final Class c  = o.getClass();
         if (c == cString) {
-            push( new Boolean(0
-            >
-            ((String) pop()).compareTo((String) o)
-            ));
+            push(0
+                    >
+                    ((String) pop()).compareTo((String) o));
         }
         else if (c == cLong) {
-            push( new Boolean( ((Long)pop()).longValue()
-            < ((Long)o)    .longValue()
-            ));
+            push((Long) pop()
+                    < (Long) o);
         }
-        else {
-            // throw bAdAdD (if not both same class)
-        }                                                           /* End if*/
-    }                                         /* public void greaterThan ()*/
+        // TODO throw bAdAdD (if not both same class)?
+    }
 
-    /**************/
+    //*************/
   /* Arithmetic */
-    /**************/
+    //*************/
 
     /** Add two numbers or two strings.
      * Should also work on ints, doubles, floats, etc., but doesn't yet.
@@ -1153,14 +1091,12 @@ public class Engine {
         Object o = pop();
         final Class c  = o.getClass();
         if (c == cString) {
-            push(new String((String) pop() + (String) o));
+            push((String) pop() + o);
         }
         else if (c == cLong) {
-            push(new Long(((Long)o).longValue() + ((Long)pop()).longValue()));
+            push((Long) o + (Long) pop());
         }
-        else {
-            // throw bAdAdD (if not both same class)
-        }                                                           /* End if*/
+        // TODO throw bAdAdD (if not both same class)?
     }
 
     /** Multiply two longs.
@@ -1171,7 +1107,7 @@ public class Engine {
     public void mul() {
         Long multiplier   = (Long) pop();
         Long multiplicand = (Long) pop();
-        push(new Long(multiplicand.longValue() * multiplier.longValue()));
+        push(multiplicand * multiplier);
     }
 
     /** Divide two longs.
@@ -1182,7 +1118,7 @@ public class Engine {
     public void div() {
         Long divisor = (Long) pop();
         Long dividend = (Long) pop();
-        push(new Long(dividend.longValue() / divisor.longValue()));
+        push(dividend / divisor);
     }
 
     /** Subtract two longs.
@@ -1193,7 +1129,7 @@ public class Engine {
     public void sub() {
         Long subtrahend = (Long) pop();
         Long sum        = (Long) pop();
-        push(new Long(sum.longValue() - subtrahend.longValue()));
+        push(sum - subtrahend);
     }
 
     /** Modulus of two longs.
@@ -1204,7 +1140,7 @@ public class Engine {
     public void mod() {
         Long divisor = (Long) pop();
         Long dividend = (Long) pop();
-        push(new Long(dividend.longValue() % divisor.longValue()));
+        push(dividend % divisor);
     }
 
     /** Create a new java.lang.reflect.Array of one dimension.
@@ -1221,7 +1157,7 @@ public class Engine {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassName
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassInstance {
-        Class aClass = null;
+        Class aClass;
         Object o = peek();
         if (o.getClass() == cString)          /* It's a string name of a class.*/ {
             classForName();              /* Convert string to class on the stack.*/
@@ -1248,7 +1184,7 @@ public class Engine {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassName
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassInstance {
-        Class aClass = null;
+        Class aClass;
         Object o = pop();
         if (o.getClass() == cString)          /* It's a string name of a class.*/ {
             push(o);
@@ -1266,9 +1202,9 @@ public class Engine {
         push(Array.newInstance(aClass, dimArray));
     }
 
-    /**********************/
+    //*********************/
   /* Variables & Values */
-    /**********************/
+    //*********************/
 
     /** Parse input for a valid name.
      * throws BadName If no valid name found.
@@ -1352,7 +1288,7 @@ public class Engine {
         }                                                           /* End if*/
     }
 
-    /** Fetch a wordlist from the search order, converting it to a value. */
+    // Fetch a wordlist from the search order, converting it to a value.
 
     /** Create a new value and add it to the current wordlist.
      * throws BadName If no valid name found.
@@ -1572,9 +1508,9 @@ public class Engine {
         commenceDefinition(d);                 /* Init engined for compilation.*/
     }
 
-    /************/
+    //***********/
   /* Literals */
-    /************/
+    //***********/
 
     /** Runtime for pushing a compiled literal on the stack.
      * @param l The literal to push.
@@ -1661,7 +1597,7 @@ public class Engine {
      * @param delta delta by which to inc/dec the instruction pointer.
      */
     private void bump(Integer delta) {
-        innerInterpreter.bump(delta.intValue());
+        innerInterpreter.bump(delta);
     }
 
     /** Save a control flow entry on the control flow stack.
@@ -1751,7 +1687,7 @@ public class Engine {
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.ConditionalNonBoolean(s, null);
         }                                                           /* End if*/
 
-        if (!((Boolean)o).booleanValue()) {           /* If true, don't branch.*/
+        if (!(Boolean) o) {           /* If true, don't branch.*/
             doUnconditionalBranch(p);
         }                                                           /* End if*/
     }                   /* public void doIfBranch(ParameterizedPrimitive p)*/
@@ -1860,10 +1796,10 @@ public class Engine {
         (ParameterizedPrimitive) c.getElement();
 
         if (p.validate()) {/* Now resolve the branch via the ref from the stack.*/
-            int origin = ((Integer) p.getObject()).intValue();
+            int origin = (Integer) p.getObject();
             int destination =   /* Okay - inner Interpreter while loop tests .LT.*/
             getCurrentDefinition().compositionLength();
-            p.setObject(new Integer((destination - origin) - 1));  /* Resolution.*/
+            p.setObject((destination - origin) - 1);  /* Resolution.*/
       /* "Minus one" because this is the bump delta to the instruction
        * pointer, which latter has already been post-incremented in the
        * inner Interpreter loop.
@@ -1983,10 +1919,10 @@ public class Engine {
         ParameterizedPrimitive p =         /* Grab branch to be resolved.      */
         (ParameterizedPrimitive) c.getElement();
         if (p.validate()) {/* Now resolve the branch via the ref from the stack.*/
-            int destination = ((Integer) p.getObject()).intValue();
+            int destination = (Integer) p.getObject();
             int origin =
             getCurrentDefinition().compositionLength();
-            p.setObject(new Integer((destination-origin) - 1));/* Resolution backwards.*/
+            p.setObject((destination - origin) - 1);/* Resolution backwards.*/
             p.compile(this);                                      /* Lay it down.*/
         }
         else                                                      /* Not valid.*/ {
@@ -2032,7 +1968,7 @@ public class Engine {
         ParameterizedPrimitive p =         /* Grab branch to be resolved.      */
         (ParameterizedPrimitive) c.getElement();
         if (p.validate()) {/* Now resolve the branch via the ref from the stack.*/
-            int destination = ((Integer) p.getObject()).intValue();
+            int destination = (Integer) p.getObject();
             int origin =
             getCurrentDefinition().compositionLength();
             try {
@@ -2096,11 +2032,11 @@ public class Engine {
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doDo(ParameterizedPrimitive.Do p) {
         int index = ((Long)pop()).intValue();
-        announce("'do' index is " + new Integer(index));
+        announce("'do' index is " + index);
         int limit = ((Long)pop()).intValue();
-        announce("'do' limit is " + new Integer(limit));
-        int egress = ((Integer) p.getObject()).intValue();
-        announce("'do' egress is " + new Integer(egress));
+        announce("'do' limit is " + limit);
+        int egress = (Integer) p.getObject();
+        announce("'do' egress is " + egress);
         innerInterpreter.startLoop(limit, index, egress);
     }
 
@@ -2208,12 +2144,12 @@ public class Engine {
         (ParameterizedPrimitive) c.getElement();
 
         if (p.validate()) {/* Now resolve the back branch via the ref from stack.*/
-            int destination = ((Integer) p.getObject()).intValue();
+            int destination = (Integer) p.getObject();
             int origin =                /* Add one because inner interp will have*/
       /*  postincremented  past this compilation. */
             getCurrentDefinition().compositionLength() + 1;
             int delta = destination - origin;/* Backwards value.                 */
-            p.setObject(new Integer(origin)); /* 'leave' Resolution for the 'do'.*/
+            p.setObject(origin); /* 'leave' Resolution for the 'do'.*/
             p = new ParameterizedPrimitive.Loop(delta);/* Create the resolved Loop.*/
             p.compile(this);                        /* Compile the resolved loop.*/
         }
@@ -2263,13 +2199,13 @@ public class Engine {
         (ParameterizedPrimitive) c.getElement();
 
         if (p.validate()) {/* Now resolve the back branch via the ref from stack.*/
-            int destination = ((Integer) p.getObject()).intValue();
+            int destination = (Integer) p.getObject();
             int origin =                /* Add one because inner interp will have*/
       /*  postincremented  past this compilation. */
             getCurrentDefinition().compositionLength() + 1;
             int delta = destination - origin;/* Backwards Resolution.            */
-            announce("Delta compiling +loop is " + new Integer(delta));
-            p.setObject(new Integer(origin)); /* 'leave' Resolution for the 'do'.*/
+            announce("Delta compiling +loop is " + delta);
+            p.setObject(origin); /* 'leave' Resolution for the 'do'.*/
             p =                             /* Now create the PlusLoop, resolved.*/
             new ParameterizedPrimitive     /* Create new PlusLoop.             */
             .PlusLoop(delta);                       /* Backwards Resolution.*/
@@ -2287,7 +2223,7 @@ public class Engine {
     /** Return a loop index. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void index() {
-        push(new Long(innerInterpreter.ithIndex(((Long)pop()).intValue())));
+        push((long) innerInterpreter.ithIndex(((Long) pop()).intValue()));
     }                                               /* public void index ()*/
 
     /** Perform a leave at runtime */
@@ -2296,9 +2232,9 @@ public class Engine {
         innerInterpreter.leaveLoop();
     }
 
-    /*************/
+    //************/
   /* Utilities */
-    /*************/
+    //************/
 
     /** Do a newline on the output. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -2309,7 +2245,7 @@ public class Engine {
     /** Set the Interpreter verbose or non- at runtime. */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void runtimeVerbose() {
-        setVerbose(((Boolean)pop()).booleanValue());
+        setVerbose((Boolean) pop());
     }
 
     /** Decompile and print out. */
@@ -2363,8 +2299,6 @@ public class Engine {
         }                                                        /* End catch*/
     }                                                 /* public void load()*/
 
-    /** The version of FIJI
-     * @return  */
     public static String fijiVersion() {
         return  "1.2";
     }
@@ -2375,9 +2309,9 @@ public class Engine {
         push(fijiVersion());
     }
 
-    /*************/
+    //************/
   /* Wordlists */
-    /*************/
+    //************/
 
     /** Create a new Wordlist and add it to the current wordlist.
      * throws BadName If no valid name found.  */
