@@ -154,7 +154,7 @@ public class engine implements SoftWoehr, verbose {
             cLiteral =   /* Since name resolution by forName() won't work this one.*/
             new ParameterizedPrimitive.Literal("").getClass();
         } catch (Exception e) {
-            myInterpreter.outputError(e);
+            outputError(e);
         }
     }
 
@@ -178,6 +178,14 @@ public class engine implements SoftWoehr, verbose {
     
     /** The input interpreter with which this engine is associated.*/
     public interpreter myInterpreter;
+
+    private void output(String s) {
+        myInterpreter.output(s);
+    }
+
+    private void outputError(Exception e) {
+        myInterpreter.outputError(e);
+    }
     
     /** Compilation state */
     public boolean state;
@@ -302,7 +310,7 @@ public class engine implements SoftWoehr, verbose {
     
     /** ARF */
     public void arf() {
-        myInterpreter.output("\nHi there from arf!\n");
+        output("\nHi there from arf!\n");
     }
     
     /** noop           --  */
@@ -453,16 +461,16 @@ public class engine implements SoftWoehr, verbose {
             for (Enumeration e = stack.elements(); e.hasMoreElements();) {
                 Object o = e.nextElement();
                 if (null != o) {
-                    myInterpreter.output("`" + o + "` ");
+                    output("`" + o + "` ");
                 }
                 else {
-                    myInterpreter.output("`null` ");
+                    output("`null` ");
                 }                                                       /* End if*/
                 
             }
         }
         else {
-            myInterpreter.output("Empty stack. ");
+            output("Empty stack. ");
         }
     }
     
@@ -472,15 +480,15 @@ public class engine implements SoftWoehr, verbose {
             for (Enumeration e = stack.elements(); e.hasMoreElements();) {
                 Object o = e.nextElement();
                 if (null != o) {
-                    myInterpreter.output("`" + o.getClass() + "` ");
+                    output("`" + o.getClass() + "` ");
                 }
                 else {
-                    myInterpreter.output("`null` ");
+                    output("`null` ");
                 }                                                       /* End if*/
             }
         }
         else {
-            myInterpreter.output("Empty stack. ");
+            output("Empty stack. ");
         }
     }
     
@@ -492,15 +500,15 @@ public class engine implements SoftWoehr, verbose {
             for (Enumeration e = stack.elements(); e.hasMoreElements();) {
                 Object o = e.nextElement();
                 if (null != o) {
-                    myInterpreter.output("`" + o + " /*" + o.getClass() + "*/` ");
+                    output("`" + o + " /*" + o.getClass() + "*/` ");
                 }
                 else {
-                    myInterpreter.output("`null` ");
+                    output("`null` ");
                 }                                                       /* End if*/
             }
         }
         else {
-            myInterpreter.output("Empty stack. ");
+            output("Empty stack. ");
         }
     }
     
@@ -509,14 +517,14 @@ public class engine implements SoftWoehr, verbose {
         if (stack.size() > 0) {
             Object o = pop();
             if (null != o) {
-                myInterpreter.output(o.toString() + " ");
+                output(o.toString() + " ");
             }
             else {
-                myInterpreter.output("`null` ");
+                output("`null` ");
             }                                                         /* End if*/
         }
         else {
-            myInterpreter.output("Empty stack. ");
+            output("Empty stack. ");
         }                                                           /* End if*/
     }
     
@@ -535,11 +543,11 @@ public class engine implements SoftWoehr, verbose {
                 else {
                     s = "`null`";
                 }                                                       /* End if*/
-                myInterpreter.output(s + " ");
+                output(s + " ");
             }                                                      /* End while*/
         }                                                           /* End if*/
         else {
-            myInterpreter.output("Empty stack. ");
+            output("Empty stack. ");
         }                                                           /* End if*/
     }                                                           /* dotdot()*/
     
@@ -547,7 +555,7 @@ public class engine implements SoftWoehr, verbose {
      * .r --        R: --
      */
     public void dot_r() {
-        myInterpreter.output(innerInterpreter.toString());
+        output(innerInterpreter.toString());
     }
     
     /** Trigger a quit of the input interpreter loop
@@ -576,7 +584,7 @@ public class engine implements SoftWoehr, verbose {
                     catch (Exception e) {
                         String s = name + " is not a class name.";
                         announce(s);
-                        myInterpreter.outputError(e);
+                        outputError(e);
                         throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.NotClassName(s, e);
                     }                                                  /* End catch*/
                 }
@@ -587,7 +595,7 @@ public class engine implements SoftWoehr, verbose {
             }                                                        /* End try*/
             catch (Exception e) {
                 String s = "classForName() couldn't getClass() on top-of-stack item.";
-                myInterpreter.outputError(e);
+                outputError(e);
                 throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.NotClassInstance(s, e);
             }                                                      /* End catch*/
         }                                                           /* End if*/
@@ -618,7 +626,7 @@ public class engine implements SoftWoehr, verbose {
         catch (Exception e) {
       /* The only thing likely to throw above is classForName() */
             String s = "castParam() couldn't classForName() on top-of-stack item.";
-            myInterpreter.outputError(e);
+            outputError(e);
             throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.NotClassName(s, e);
         }                                                        /* End catch*/
         push(new JavaParam(pop(), c));                   /* Create a JavaParam.*/
@@ -642,7 +650,7 @@ public class engine implements SoftWoehr, verbose {
             catch (Exception e) {
                 String s = "classToPrimitiveType() found a  non-reflected type.";
                 announce(s);
-                myInterpreter.outputError(e);
+                outputError(e);
                 throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.NonReflectedType(s, e);
             }                                                      /* End catch*/
         }
@@ -865,7 +873,7 @@ public class engine implements SoftWoehr, verbose {
             push(oo);
         }                                                          /* End try*/
         catch (Exception e) {
-            myInterpreter.outputError(e);
+            outputError(e);
         }                                                        /* End catch*/
     }                                                 /* End callJavaMethod*/
     
@@ -883,14 +891,14 @@ public class engine implements SoftWoehr, verbose {
             ((Class) o).getConstructor(javaArgs.toClassArray());
         }                                                          /* End try*/
         catch (Exception e) {
-            myInterpreter.outputError(e);
+            outputError(e);
         }                                                        /* End catch*/
         try {                                               /* Execute the call*/
             push(constructor.newInstance(javaArgs.toObjectArray()));
         }
         
         catch (Exception e) {
-            myInterpreter.outputError(e);
+            outputError(e);
         }                                                        /* End catch*/
     }                                                 /* End callJavaMethod*/
     
@@ -1271,7 +1279,7 @@ public class engine implements SoftWoehr, verbose {
             catch (Exception e) {
                 String err = "Trouble setting field " + s + " of object " + o;
                 announce(err);
-                myInterpreter.outputError(e);
+                outputError(e);
                 throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.NonVariable(s, null);
             }                                                      /* End catch*/
         }                                                           /* End if*/
@@ -1295,7 +1303,7 @@ public class engine implements SoftWoehr, verbose {
             catch (Exception e) {
                 String err = "Trouble getting field " + s + " of object " + o;
                 announce(err);
-                myInterpreter.outputError(e);
+                outputError(e);
                 throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.NonVariable(s, null);
             }                                                      /* End catch*/
         }                                                           /* End if*/
@@ -1356,7 +1364,7 @@ public class engine implements SoftWoehr, verbose {
         catch (Exception e) {
             String s = "Problem with compileToValue()";
             announce(s);
-            myInterpreter.outputError(e);
+            outputError(e);
             throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.CompileToValue(s, e);
         }                                                        /* End catch*/
     }
@@ -1719,7 +1727,7 @@ public class engine implements SoftWoehr, verbose {
             String s = "Problem opening a conditional branch in current definition."
             + getCurrentDefinition();
             announce(s);
-            myInterpreter.outputError(e);
+            outputError(e);
             throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
         }                                                        /* End catch*/
         p.compile(this);
@@ -1756,7 +1764,7 @@ public class engine implements SoftWoehr, verbose {
             String s = "Problem opening an unconditional branch in current definition."
             + getCurrentDefinition();
             announce(s);
-            myInterpreter.outputError(e);
+            outputError(e);
             throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
         }                                                        /* End catch*/
         p.compile(this);
@@ -1870,7 +1878,7 @@ public class engine implements SoftWoehr, verbose {
             String s = "Problem opening an unconditional branch in current definition."
             + getCurrentDefinition();
             announce(s);
-            myInterpreter.outputError(e);
+            outputError(e);
             throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
         }                                                        /* End catch*/
         pushControl(new ControlFlowElement(p, this, cParameterizedPrimitive));
@@ -1970,7 +1978,7 @@ public class engine implements SoftWoehr, verbose {
                 String s = "Problem creating a conditional branch in current definition."
                 + getCurrentDefinition();
                 announce(s);
-                myInterpreter.outputError(e);
+                outputError(e);
                 throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
             }                                                      /* End catch*/
             p.compile(this);                                      /* Lay it down.*/
@@ -2060,7 +2068,7 @@ public class engine implements SoftWoehr, verbose {
             String s = "Problem opening an unconditional branch in current definition."
             + getCurrentDefinition();
             announce(s);
-            myInterpreter.outputError(e);
+            outputError(e);
             throw new com.SoftWoehr.FIJI.base.Exceptions.desktop.shell.OpenIfBranch(s, e);
         }                                                        /* End catch*/
         pushControl(new ControlFlowElement(p, this, cParameterizedPrimitive));
@@ -2219,7 +2227,7 @@ public class engine implements SoftWoehr, verbose {
     
     /** Do a newline on the output. */
     public void cr() {
-        myInterpreter.output("\n");
+        output("\n");
     }
     
     /** Set the interpreter verbose or non- at runtime. */
@@ -2231,16 +2239,16 @@ public class engine implements SoftWoehr, verbose {
     public void decompile() {
         Semantic s = (Semantic) pop();
         Semantic semantics[] = s.decompile();
-        myInterpreter.output(": " + s.getName() + " ");
+        output(": " + s.getName() + " ");
         for (int i = 0; i < semantics.length ; ++i) {
             Semantic x = semantics[i];
-            myInterpreter.output(x.getName() + " ");
+            output(x.getName() + " ");
             if (x.getClass() == cLiteral) {
                 myInterpreter
                 .output(((ParameterizedPrimitive.Literal)x).getObject() + " ");
             }                                                         /* End if*/
         }                                                          /* End for*/
-        myInterpreter.output(";\n");
+        output(";\n");
     }                                           /* public void decompile ()*/
     
     /** Execute a host command.
@@ -2271,7 +2279,7 @@ public class engine implements SoftWoehr, verbose {
                 myInterpreter.interpret(sourceCode);
             }                                                        /* End try*/
             catch (Exception e) {
-                myInterpreter.outputError(e);
+                outputError(e);
             }                                                      /* End catch*/
             finally {
                 fileInputStream  .close();
@@ -2279,7 +2287,7 @@ public class engine implements SoftWoehr, verbose {
             }                                                    /* End finally*/
         }                                                          /* End try*/
         catch (Exception e) {
-            myInterpreter.outputError(e);
+            outputError(e);
         }                                                        /* End catch*/
     }                                                 /* public void load()*/
     
@@ -2328,7 +2336,7 @@ public class engine implements SoftWoehr, verbose {
     
     /** List all the words in the accessed Wordlists. */
     public void words() {
-        myInterpreter.output(searchOrder.words());
+        output(searchOrder.words());
     }
     
     /** Pop the active Semantic of a wordlist entry in first
@@ -2342,7 +2350,7 @@ public class engine implements SoftWoehr, verbose {
         String name = (String)pop();
         result = searchOrder.forget(name);
         if (false == result) {
-            myInterpreter.output(name + " not found.\n");
+            output(name + " not found.\n");
         }                                                           /* End if*/
     }                                              /* public void forget ()*/
     
@@ -2356,7 +2364,7 @@ public class engine implements SoftWoehr, verbose {
         String name = (String)pop();
         result = searchOrder.discard(name);
         if (false == result) {
-            myInterpreter.output(name + " not found.\n");
+            output(name + " not found.\n");
         }                                                           /* End if*/
     }                                              /* public void discard()*/
     

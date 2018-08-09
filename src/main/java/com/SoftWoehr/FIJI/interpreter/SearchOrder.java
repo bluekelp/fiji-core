@@ -54,7 +54,7 @@ public class SearchOrder implements SoftWoehr, verbose {
     private ShutdownHelper shutdownHelper = new ShutdownHelper();
     
     /** Vector which holds the search order */
-    private Vector my_vector = new Vector();
+    private Vector<Wordlist> my_vector = new Vector<>();
     
     
     /** Arity/0 ctor. */
@@ -104,7 +104,7 @@ public class SearchOrder implements SoftWoehr, verbose {
         return result;
     }                                  /* public Semantic find(String name)*/
     
-    /** Pop the active Semantic of a wordlist entry by finding
+    /* Pop the active Semantic of a wordlist entry by finding
      * the first occurrence of same in the search order. Remove
      * the entry if no previous Semantic for the name exists.
      *
@@ -127,7 +127,7 @@ public class SearchOrder implements SoftWoehr, verbose {
         return rc;
     }                                  /* public void boolean (String name)*/
     
-    /** Discard utterly a wordlist entry by finding
+    /* Discard utterly a wordlist entry by finding
      * the first occurrence of same in the search order.
      *
      * @see com.SoftWoehr.desktop.shell.Wordlist.discard#
@@ -164,20 +164,16 @@ public class SearchOrder implements SoftWoehr, verbose {
         reinit();                                        /* Empty search order.*/
         int numWordlists = ((Long) z.pop()).intValue();
         for (int i = 0; i < numWordlists; ++i) {
-            my_vector.addElement(z.pop());                       /* Add wordlists to order.*/
+            my_vector.addElement((Wordlist)z.pop());                       /* Add wordlists to order.*/
         }                                                          /* End for*/
     }                                     /* public void setOrder(engine z)*/
     
     /** Return names of all words in the search order.
      * @return  */
     public String words() {
-        String result = "";
-        Wordlist w = null;
-        for (Enumeration e = my_vector.elements(); e.hasMoreElements();) {
-            w = (Wordlist) (e.nextElement());
-            result += w.words();
-        }                                                          /* End for*/
-        return result;
+        final StringBuilder sb = new StringBuilder();
+        my_vector.forEach(wl -> sb.append(wl.words()));
+        return sb.toString();
     }                                             /* public String words () */
     
     
