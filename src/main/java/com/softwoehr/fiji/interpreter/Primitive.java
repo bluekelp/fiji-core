@@ -63,7 +63,7 @@ class Primitive extends Semantic {
     , java.lang.NoSuchMethodException {
         this.setName(name);
         Class c = Class.forName("com.softwoehr.fiji.interpreter.Engine");
-        method = c.getMethod(methodName, new Class[0]);          /* All Arity/0*/
+        method = c.getMethod(methodName);
     }
 
     /** Arity/2 ctor. This creates
@@ -79,9 +79,8 @@ class Primitive extends Semantic {
     , java.lang.NoSuchMethodException {
         this.setName(name);
         Class c = Class.forName("com.softwoehr.fiji.interpreter.Engine");
-        method = c.getMethod(methodName, new Class[0]);          /* All Arity/0*/
-        compilationMethod = c.getMethod(compilationMethodName
-        , new Class[0]);  /* All Arity/0*/
+        method = c.getMethod(methodName);
+        compilationMethod = c.getMethod(compilationMethodName);
     }
 
     /** Execution semantics
@@ -90,15 +89,15 @@ class Primitive extends Semantic {
     public void execute(Engine anEngine)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute {
         try {
-            method.invoke(anEngine, new Object[0]);      /* zero-arity invocation*/
-        }                                                          /* End try*/
+            method.invoke(anEngine);
+        }
         catch (Exception e) {
             String s = "Problem executing method from FIJI primitive " + getName();
             System.out.println(s);
             e.printStackTrace(System.err);
             throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute(s, e);
-        }                                                        /* End catch*/
-    }                                                            /* execute*/
+        }
+    }
 
     /** Compilation semantics, the default behavior
      * being to append self to the current definition.
@@ -118,18 +117,18 @@ class Primitive extends Semantic {
         if (null == compilationMethod) {
             super.compile(e);
         }
-        else                                                           /* If we*/ {
+        else {
             try {
-                compilationMethod.invoke(e, new Object[0]);
-            }                                                        /* End try*/
+                compilationMethod.invoke(e);
+            }
             catch (Exception ex) {
                 String s = "Problem executing compilation method from FIJI primitive " + getName();
                 System.out.println(s);
                 ex.printStackTrace(System.err);
                 throw new com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile(s, ex);
-            }                                                      /* End catch*/
-        }                                                           /* End if*/
-    }                                                            /* compile*/
+            }
+        }
+    }
 
     /** Decompilation semantics.
      * A primitive just returns itself.
@@ -139,6 +138,4 @@ class Primitive extends Semantic {
         result[0] = this;
         return result;
     }
-}                                                 /* End of Primitive class*/
-
-/*  End of Primitive.java */
+}
