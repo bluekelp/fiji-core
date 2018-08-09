@@ -29,10 +29,13 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import java.util.*;
+import com.softwoehr.SoftWoehr;
+import com.softwoehr.util.GetArgs;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
 
-import  com.softwoehr.SoftWoehr;
-import  com.softwoehr.util.*;
+import java.util.Enumeration;
+import java.util.Stack;
 
 /** This is the Interpreter of Definitions.
  *
@@ -72,9 +75,6 @@ public class InnerInterpreter implements SoftWoehr, verbose {
     private boolean isverbose = false;
     /**  Helper for verbose mode. */
     private verbosity v = new verbosity(this);
-    
-    /** Does the work of notifying shutdown clients. */
-    private ShutdownHelper shutdownHelper = new ShutdownHelper();
     
     /** Nesting definitions. */
     private Stack returnStack;
@@ -122,20 +122,6 @@ public class InnerInterpreter implements SoftWoehr, verbose {
             result += " Stack empty.\n";
         }                                                           /* End if*/
         return result;
-    }
-    
-    /** The InnerInterpreter notifies subcomponents of shutdown then shuts itself down.
-     * @see com.softwoehr.SoftWoehr#
-     * @return <CODE>true</CODE> if okay to shutdown.
-     */
-    public int shutdown() {
-        shutdownHelper.shutdownClients();
-        // Your shutdown code for this object goes here.
-        // ...
-        
-        // ...
-        // Your shutdown code for this object went there.
-        return 0;
     }
     
     /** Reinitialize the InnerInterpreter, discarding previous state.

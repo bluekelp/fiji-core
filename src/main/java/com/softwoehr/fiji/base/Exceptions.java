@@ -29,7 +29,9 @@
 package com.softwoehr.fiji.base;
 
 import com.softwoehr.SoftWoehr;
-import  com.softwoehr.util.*;
+import com.softwoehr.util.GetArgs;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
 
 /** An Exception base class for SoftWoehr.
  *
@@ -47,9 +49,6 @@ public class Exceptions extends java.lang.Exception implements SoftWoehr, verbos
     private boolean isverbose = true;
     /**  Helper for verbose mode. */
     private verbosity v = new verbosity(this);
-    
-    /** Does the work of notifying shutdown clients. */
-    private ShutdownHelper shutdownHelper = new ShutdownHelper();
     
     private Throwable t;
     
@@ -404,19 +403,6 @@ public class Exceptions extends java.lang.Exception implements SoftWoehr, verbos
             result += "Embedded exception: " + t.toString();
         }                                                           /* End if*/
         return result;
-    }
-    
-    /** Some controller notifies subcomponents of shutdown then shuts itself down.
-     * @see com.softwoehr.SoftWoehr
-     */
-    public int shutdown() {
-        shutdownHelper.shutdownClients();
-        // Your shutdown code for this object goes here.
-        // ...
-        
-        // ...
-        // Your shutdown code for this object went there.
-        return 0;
     }
     
     protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/

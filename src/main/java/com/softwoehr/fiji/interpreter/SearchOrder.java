@@ -28,9 +28,13 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import java.util.*;
-import  com.softwoehr.SoftWoehr;
-import  com.softwoehr.util.*;
+import com.softwoehr.SoftWoehr;
+import com.softwoehr.util.GetArgs;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
+
+import java.util.Enumeration;
+import java.util.Vector;
 
 /** This class provides the SearchOrder entity used by
  * FIJI to collate Wordlists.
@@ -50,39 +54,14 @@ public class SearchOrder implements SoftWoehr, verbose {
     /**  Helper for verbose mode. */
     private verbosity v = new verbosity(this);
     
-    /** Does the work of notifying shutdown clients. */
-    private ShutdownHelper shutdownHelper = new ShutdownHelper();
-    
     /** Vector which holds the search order */
     private Vector<Wordlist> my_vector = new Vector<>();
-    
     
     /** Arity/0 ctor. */
     public SearchOrder() {
         reinit();
     }
-    
-    /** Finalize the object.
-     *
-     *@exception Throwable
-     */
-    protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
-        super.finalize();
-    }
-    
-    /** The SearchOrder notifies subcomponents of shutdown then shuts itself down.
-     * @see com.softwoehr.SoftWoehr#
-     * @return  */
-    public int shutdown() {
-        shutdownHelper.shutdownClients();
-        // Your shutdown code for this object goes here.
-        // ...
-        
-        // ...
-        // Your shutdown code for this object went there.
-        return 0;
-    }
-    
+
     /** Reinitialize the SearchOrder, discarding previous state. */
     public void reinit() {
         my_vector.setSize(0);

@@ -52,9 +52,6 @@ public class Variable extends Semantic implements SoftWoehr, verbose
   /**  Helper for verbose mode. */
   private verbosity v = new verbosity(this);
 
-  /** Does the work of notifying shutdown clients. */
-  private ShutdownHelper shutdownHelper = new ShutdownHelper();
-
   /**********************************************/
   /*% SoftWoehr default variables section ends. */
   /**********************************************/
@@ -84,24 +81,6 @@ public class Variable extends Semantic implements SoftWoehr, verbose
 
   public String toString () {
     return "A Variable named " + getName() + " whose value is " + datum ;
-    }
-
-  protected void finalize () throws Throwable
-    {           /* Called by garbage collector in case no longer referenced*/
-      super.finalize();
-    }
-
-  /** The Variable notifies subcomponents of shutdown then shuts itself down.
-    * @see com.softwoehr.SoftWoehr
-    */
-  public int shutdown() {
-    shutdownHelper.shutdownClients();
-    // Your shutdown code for this object goes here.
-    // ...
-
-    // ...
-    // Your shutdown code for this object went there.
-    return 0;
     }
 
   /* A method for the FIJI operator '@' to use. */

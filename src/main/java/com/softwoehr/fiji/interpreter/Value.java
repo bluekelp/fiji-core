@@ -28,8 +28,10 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import  com.softwoehr.SoftWoehr;
-import  com.softwoehr.util.*;
+import com.softwoehr.SoftWoehr;
+import com.softwoehr.util.GetArgs;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
 
  /** Value is a self-fetching Variable.
    *
@@ -51,9 +53,6 @@ public class Value extends Semantic implements SoftWoehr, verbose
   private boolean isverbose = true;
   /**  Helper for verbose mode. */
   private verbosity v = new verbosity(this);
-
-  /** Does the work of notifying shutdown clients. */
-  private ShutdownHelper shutdownHelper = new ShutdownHelper();
 
   /**********************************************/
   /*% SoftWoehr default variables section ends. */
@@ -86,28 +85,6 @@ public class Value extends Semantic implements SoftWoehr, verbose
   public String toString () {
     return "A Value named " + getName() + " whose value is " + datum;
     }
-
-  protected void finalize () throws Throwable
-    {           /* Called by garbage collector in case no longer referenced*/
-      super.finalize();
-    }
-
-  /** The Value notifies subcomponents of shutdown then shuts itself down.
-    * @see com.softwoehr.SoftWoehr
-    */
-  public int shutdown() {
-    shutdownHelper.shutdownClients();
-    // Your shutdown code for this object goes here.
-    // ...
-
-    // ...
-    // Your shutdown code for this object went there.
-    return 0;
-    }
-
-  /** Reinitialize the Value, discarding previous state. */
-  //public void reinit() {
-  //  }
 
   /** Execution semantics are to push own datum. */
   public void execute (Engine e) {

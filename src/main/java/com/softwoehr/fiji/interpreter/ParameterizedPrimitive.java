@@ -28,8 +28,10 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import  com.softwoehr.SoftWoehr;
-import  com.softwoehr.util.*;
+import com.softwoehr.SoftWoehr;
+import com.softwoehr.util.GetArgs;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
 
 /** ParameterizedPrimitive is an on-the-fly Primitive which
  * we declare to provide special runtimes to be compiled by
@@ -51,9 +53,6 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
     private boolean isverbose = true;
     /**  Helper for verbose mode. */
     private verbosity v = new verbosity(this);
-    
-    /** Does the work of notifying shutdown clients. */
-    private ShutdownHelper shutdownHelper = new ShutdownHelper();
     
     /** The object that this prim implicitly operates upon. */
     private Object myObject;
@@ -264,23 +263,6 @@ public class ParameterizedPrimitive extends Primitive implements SoftWoehr, verb
         s += " with a declared Class of " + getObjectClass().toString();
         return s;
     }
-    
-    /** The ParameterizedPrimitive notifies subcomponents of shutdown then shuts itself down.
-     * @see com.softwoehr.SoftWoehr#
-     * @return  */
-    public int shutdown() {
-        shutdownHelper.shutdownClients();
-        // Your shutdown code for this object goes here.
-        // ...
-        
-        // ...
-        // Your shutdown code for this object went there.
-        return 0;
-    }
-    
-    /** Reinitialize the ParameterizedPrimitive, discarding previous state. */
-    // public void reinit() {
-    //  }
     
     /** Invoke Engine method on has'd Object.
      * @param e  */

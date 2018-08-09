@@ -29,8 +29,10 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import  com.softwoehr.SoftWoehr;
-import  com.softwoehr.util.*;
+import com.softwoehr.SoftWoehr;
+import com.softwoehr.util.GetArgs;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
 
 /** ControlFlowElement wrappers a Semantic pushed on the control flow
  * stack along with information about the context when the entry
@@ -56,9 +58,6 @@ public class ControlFlowElement implements SoftWoehr, verbose {
     private boolean isverbose = true;
     /**  Helper for verbose mode. */
     private verbosity v = new verbosity(this);
-    
-    /** Does the work of notifying shutdown clients. */
-    private ShutdownHelper shutdownHelper = new ShutdownHelper();
     
     /** The Semantic this entry represents. */
     public Semantic element;
@@ -101,20 +100,7 @@ public class ControlFlowElement implements SoftWoehr, verbose {
     protected void finalize() throws Throwable {           /* Called by garbage collector in case no longer referenced*/
         super.finalize();
     }
-    
-    /** The ControlFlowElement notifies subcomponents of shutdown then shuts itself down.
-     * @see com.softwoehr.SoftWoehr#
-     * @return  */
-    public int shutdown() {
-        shutdownHelper.shutdownClients();
-        // Your shutdown code for this object goes here.
-        // ...
-        
-        // ...
-        // Your shutdown code for this object went there.
-        return 0;
-    }
-    
+
     /** Reinitialize the ControlFlowElement, discarding previous state.
      * @param s
      * @param e  */

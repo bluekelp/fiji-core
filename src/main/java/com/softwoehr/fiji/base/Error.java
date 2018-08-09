@@ -27,8 +27,11 @@
  */
 
 package com.softwoehr.fiji.base;
+
 import com.softwoehr.SoftWoehr;
-import  com.softwoehr.util.*;
+import com.softwoehr.util.GetArgs;
+import com.softwoehr.util.verbose;
+import com.softwoehr.util.verbosity;
 
 /** An Error class for SoftWoehr
  *
@@ -48,9 +51,6 @@ public class Error extends java.lang.Error implements SoftWoehr, verbose {
     private boolean isverbose = true;
     /**  Helper for verbose mode. */
     private verbosity v = new verbosity(this);
-    
-    /** Does the work of notifying shutdown clients. */
-    private ShutdownHelper shutdownHelper = new ShutdownHelper();
     
     private Throwable t;
     
@@ -288,19 +288,6 @@ public class Error extends java.lang.Error implements SoftWoehr, verbose {
      * @return  */
     public String toString()
     {return super.toString();}
-    
-    /** The XZZY notifies subcomponents of shutdown then shuts itself down.
-     * @see com.softwoehr.SoftWoehr#
-     * @return  */
-    public int shutdown() {
-        shutdownHelper.shutdownClients();
-        // Your shutdown code for this object goes here.
-        // ...
-        
-        // ...
-        // Your shutdown code for this object went there.
-        return 0;
-    }
     
     /**
      * @throws Throwable  */
