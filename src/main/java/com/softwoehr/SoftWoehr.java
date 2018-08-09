@@ -34,13 +34,5 @@ package com.softwoehr;
   */
 public interface SoftWoehr {
 
-  /** Versioning string returned. */
-  public String rcsId();
-
-  /** Shutdown children and then ready self for shutdown.
-    * Significance of int return is TBD.
-    */
-  public int shutdown ();
-
   }                                          /* End of interface SoftWoehr.*/
 /*  End of SoftWoehr.java */
