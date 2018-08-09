@@ -54,21 +54,13 @@ import com.softwoehr.util.*;
  * @author $Author: jwoehr $
  * @version $Revision: 1.2 $
  */
-public class Engine implements SoftWoehr, verbose {
+public class Engine implements verbose {
     
     /** Interpreting, not compiling. */
     public static final boolean INTERPRETING = false;
     
     /** Compiling, not interpreting. */
     public static final boolean COMPILING = true;
-    
-    /** Revision level */
-    private static final String rcsid = "$Id: Engine.java,v 1.2 2001/08/25 19:26:03 jwoehr Exp $";
-    
-    /** Implements com.SoftWoehr.SoftWoehr
-     * @return The RCS id
-     */
-    public String rcsId() {return rcsid;}
     
     /**  Flags whether we are in verbose mode. */
     public boolean isverbose = false;
