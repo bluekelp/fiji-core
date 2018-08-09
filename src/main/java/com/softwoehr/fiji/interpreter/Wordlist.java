@@ -145,7 +145,6 @@ public class Wordlist extends Semantic {
     public static Wordlist defaultWordlist() {
         Wordlist defaultList = new Wordlist("FIJI");
         try {
-            defaultList.put(new Primitive("arf"          , "arf"                  ));
             defaultList.put(new Primitive("noop"         , "noop"                 ));
             defaultList.put(new Primitive("depth"        , "depth"                ));
             defaultList.put(new Primitive("dup"          , "dup"                  ));
