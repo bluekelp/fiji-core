@@ -65,11 +65,17 @@ public class Engine {
         if (e != null) {
             interpreter.outputError(e);
         }
+        if (s == null && e != null) {
+            s = e.getMessage();
+        }
+        else if (s == null) {
+            s = "runtime error";
+        }
         return new Err(s, e);
     }
 
     private RuntimeException error(Exception e) {
-        return error(null, e);
+        return error(e.getMessage(), e);
     }
 
     private RuntimeException error(String s) {
