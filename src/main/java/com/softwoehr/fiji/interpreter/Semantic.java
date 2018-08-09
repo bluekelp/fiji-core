@@ -35,18 +35,18 @@ package com.softwoehr.fiji.interpreter;
  */
 public class Semantic {
     private String myName;
-    
+
     /** Arity/0 ctor. */
     public Semantic() {
         this("Anonymous Semantic");
     }
-    
+
     /** Arity/1 ctor.
      * @param name  */
     public Semantic(String name) {
         myName = name;
     }
-    
+
     /**
      * @return  */
     public String toString()
@@ -57,13 +57,13 @@ public class Semantic {
     public String getName() {
         return myName;
     }
-    
+
     /** Set string id.
      * @param s  */
     public void setName(String s) {
         myName = s;
     }
-    
+
     /** Execution semantics, the default behavior
      * being to push self to stack.
      * @param e
@@ -74,7 +74,7 @@ public class Semantic {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
         e.push(this);
     }
-    
+
     /** Compilation semantics, the default behavior
      * being to append self to the current definition.
      * @param e
@@ -82,7 +82,7 @@ public class Semantic {
      * throws BadDefinitionCompile
      * throws BadPrimitiveExecute
      * throws BadDefinitionExecute  */
-    
+
     public void compile(Engine e)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
@@ -90,7 +90,7 @@ public class Semantic {
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute {
         e.getCurrentDefinition().append(this);
     }
-    
+
     /** Decompilation semantics. The default is to
      * push a Sematic array with 'this' as only entry.
      * @return  */
@@ -98,7 +98,7 @@ public class Semantic {
         Semantic decompilation [] = new Semantic[1];
         decompilation[0] = this;
         return decompilation;
-    }    
+    }
 }                                                  /* End of Semantic class*/
 
 /*  End of Semantic.java */

@@ -295,7 +295,6 @@ public class Wordlist extends Semantic {
             defaultList.put(new Primitive("index"        , "index"                ));
             defaultList.put(new Primitive("verbose"      , "runtimeVerbose"       ));
             defaultList.put(new Primitive("decompile"    , "decompile"            ));
-            defaultList.put(new Primitive("system"       , "system"               ));
             defaultList.put(new Primitive("interpret"    , "interpret"            ));
             defaultList.put(new Primitive("load"         , "load"                 ));
             defaultList.put(new Primitive("version"      , "version"              ));

@@ -199,6 +199,7 @@ public class Engine {
     }
 
     /** Reinit Engine like just came up. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void cold() {
         warm();
         searchOrder = new SearchOrder();
@@ -208,6 +209,7 @@ public class Engine {
     }
 
     /** Reinit Engine but preserve some state. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void warm() {
         stack = new Stack<>();
         innerInterpreter = new InnerInterpreter(this);
@@ -221,6 +223,7 @@ public class Engine {
     /** Set state INTERPRETING/COMPILING.
      * @param state <CODE>Engine.INTERPRETING</CODE> if interpreting; <CODE>Engine.COMPILING</CODE> if compiling.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void setState(boolean state) {
         this.state = state;
     }
@@ -228,28 +231,22 @@ public class Engine {
     /** Get state INTERPRETING/COMPILING.
      * @return state <CODE>Engine.INTERPRETING</CODE> if interpreting; <CODE>Engine.COMPILING</CODE> if compiling.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public boolean getState() {
         return state;
-    }
-
-    /** Returns verbosity of the debugging output.
-     * @return <CODE>true</CODE> iff verbose.
-     */
-    public boolean isVerbose() {
-        return isverbose;
     }
 
     /** Sets verbosity of the debugging output.
      * @param tf <CODE>true</CODE> iff verbose.
      */
-    public void    setVerbose  (boolean tf) {
+    private void    setVerbose  (boolean tf) {
         isverbose = tf;
     }
 
     /** Outputs to verbose stream if verbose.
      * @param s Message to announce
      */
-    public void    announce    (String s)   { if (isverbose) output(s);}
+    void    announce    (String s)   { if (isverbose) output(s);}
 
     /** Find a semantic by name in one of the wordlists
      * in the array of same currently searched by this Engine.
@@ -257,13 +254,14 @@ public class Engine {
      * @param name name of the semantic
      * @return The Semantic object of that name.
      */
-    public Semantic findSemantic(String name) {
+    Semantic findSemantic(String name) {
         return searchOrder.find(name);
     }
 
     /** Push a reference to an object onto the stack.
      * @param o The obj to push
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void push(Object o) {
         stack.push(o);
     }
@@ -271,6 +269,7 @@ public class Engine {
     /** Pop a reference to an object from the stack.
      * @return The obj popped.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public Object pop() {
         return stack.pop();
     }
@@ -278,7 +277,7 @@ public class Engine {
     /** Peek at TOS.
      * @return The object from the top of the stack, which still resides there.
      */
-    public Object peek() {
+    private Object peek() {
         return stack.peek();
     }
 
@@ -288,15 +287,18 @@ public class Engine {
     /********************************/
 
     /** ARF */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void arf() {
         output("\nHi there from arf!\n");
     }
 
     /** noop           --  */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void noop() {
     }
 
     /** depth      xn .. x1 -- n */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void depth() {
         push(new Long(stack.size()));
     }
@@ -304,6 +306,7 @@ public class Engine {
     /** dup          o -- o o
      * throws StackUnderflow If stack is empty.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dup()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow {
         if (stack.size() > 0) {
@@ -319,6 +322,7 @@ public class Engine {
     /** drop          o --
      * throws StackUnderflow If stack is empty.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void drop()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow {
         if (stack.size() > 0) {
@@ -334,6 +338,7 @@ public class Engine {
     /** swap      o1 o2 -- o2 o1
      * throws StackUnderflow If stack is empty.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void swap()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow {
         int sz = stack.size();
@@ -350,6 +355,7 @@ public class Engine {
     /** over        o1 o2 -- o1 o2 o1
      * throws StackUnderflow If stack is too shallow for operation.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void over()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow {
         int sz = stack.size();
@@ -366,6 +372,7 @@ public class Engine {
     /** rot        o1 o2 o3 -- o2 o3 o1
      * throws StackUnderflow If stack is too shallow for operation.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void rot()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow {
         int sz = stack.size();
@@ -384,6 +391,7 @@ public class Engine {
     /** roll        om .. o((m-n)+1) om-n  m -- .. o((m-n)+1) om
      * throws StackUnderflow If stack is too shallow for operation.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void roll()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow {
         int sz = stack.size();
@@ -411,6 +419,7 @@ public class Engine {
     /** pick      om .. om-n m -- om .. om-n om
      * throws StackUnderflow If stack is too shallow for operation.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void pick()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow {
         int sz = stack.size();
@@ -435,6 +444,7 @@ public class Engine {
     }
 
     /** .s        o1 .. oN -- o1 .. oN */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dot_s() {
         if (stack.size() > 0) {
             for (Enumeration e = stack.elements(); e.hasMoreElements();) {
@@ -454,6 +464,7 @@ public class Engine {
     }
 
     /** .c        o1 .. oN -- o1 .. oN */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dot_c() {
         if (stack.size() > 0) {
             for (Enumeration e = stack.elements(); e.hasMoreElements();) {
@@ -474,6 +485,7 @@ public class Engine {
     /** Primitive to display all stack entries and their classes.
      * .sc        o1 .. oN -- o1 .. oN
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dot_sc() {
         if (stack.size() > 0) {
             for (Enumeration e = stack.elements(); e.hasMoreElements();) {
@@ -492,6 +504,7 @@ public class Engine {
     }
 
     /** .         o1 -- */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dot() {
         if (stack.size() > 0) {
             Object o = pop();
@@ -510,6 +523,7 @@ public class Engine {
     /** Display destructively all stack entries.
      * ..  o1 oN --
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dotdot() {
         String s = "";
         Object o = null;
@@ -533,6 +547,7 @@ public class Engine {
     /** Print out the inner Interpreter state.
      * .r --        R: --
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dot_r() {
         output(innerInterpreter.toString());
     }
@@ -540,6 +555,7 @@ public class Engine {
     /** Trigger a quit of the input Interpreter loop
      * quit      o1 ... oN -- o1 ... oN
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void quit() {
         myInterpreter.setQuitFlag(true);
     }
@@ -549,6 +565,7 @@ public class Engine {
      * throws StackUnderflow if no name on stack
      * throws NotClassName if name on stack not a class name
      * throws NotClassInstance of tos is a builtin type and can't be tested for String-ness */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void classForName()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassName
@@ -589,6 +606,7 @@ public class Engine {
      * ()        o stringClassName|Class -- javaParam
      * throws NotClassName If argument not a class name.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void castParam()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NotClassName {
         Object o = peek();
@@ -617,6 +635,7 @@ public class Engine {
      * throws StackUnderflow If stack empty
      * throws NonReflectedType If type argument indicates a non-reflected type.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void classToPrimitiveType()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NonReflectedType {
@@ -646,6 +665,7 @@ public class Engine {
      * throws StackUnderflow If stack empty.
      * throws NonReflectedType If type argument indicates non-reflected type.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void  stackEntryToPrimitive()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NonReflectedType {
@@ -661,6 +681,7 @@ public class Engine {
      * throws NonReflectedType If type argument indicates non-reflected type.
      * throws NotClassName  If argument not a class name.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void stackEntryToPrimParam()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NonReflectedType
@@ -678,6 +699,7 @@ public class Engine {
      * throws StackUnderflow  If stack empty.
      * throws NotClassName   If argument not a class name.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void longToIntParam()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NonReflectedType
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
@@ -689,6 +711,7 @@ public class Engine {
     /** FIND in the searchOrder.
      * find   s -- semantic
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void find() {
         push(findSemantic((String)pop()));
     }
@@ -698,6 +721,7 @@ public class Engine {
      * throws BadPrimitiveExecute If execution of primitive fails.
      * throws BadDefinitionExecute If execution of definition fails.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void execute()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveExecute
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionExecute
@@ -713,6 +737,7 @@ public class Engine {
      * throws BadPrimitiveExecute If execution of primitive fails.
      * throws BadDefinitionExecute If execution of definition fails.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compile()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadDefinitionCompile
@@ -725,6 +750,7 @@ public class Engine {
      * Shouldn't be used unless a definition
      * is under composition.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void leftBracket() {
         setState(INTERPRETING);
     }
@@ -732,6 +758,7 @@ public class Engine {
     /** Set compile state. Shouldn't be used
      * unless a definition is under composition.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void rightBracket() {
         setState(COMPILING);
     }
@@ -739,6 +766,7 @@ public class Engine {
     /** Test input base.
      * base? -- L
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void pushBase() {
         push(new Long(myInterpreter.getBase()));
     }
@@ -746,6 +774,7 @@ public class Engine {
     /** Set input base.
      * base L --
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void popBase() {
         myInterpreter.setBase(((Long)pop()).intValue());
     }
@@ -753,23 +782,27 @@ public class Engine {
     /** Test compile state.
      * state   --- t|f
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doState() {
         push(new Boolean(getState()));
     }
 
     /** Makes current definition immediate.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void setCurrentImmediate() {
         currentDefinition.setImmediate(true);
     }
 
     /** Tests Definition on top of stack for immediacy.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void isImmediate() {
         push(new Boolean(((Definition)pop()).getImmediate()));
     }
 
     /** >class   o1 -- c1 */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void getStackEntryClass() {
         push(pop().getClass());
     }
@@ -777,6 +810,7 @@ public class Engine {
     /** Transform a stack entry into its representative string.
      * toString      o1 -- s1
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void stackEntryToString() {
         push(pop().toString());
     }
@@ -784,6 +818,7 @@ public class Engine {
     /** Push a javaArgs object to accumulate arguments.
      * (      -- javaArgs
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void javaArgs() {
         push(new JavaArgs());
     }
@@ -795,6 +830,7 @@ public class Engine {
      * been converted by castParam().
      * ,     o --
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void accumulateArg() {
         Object o = pop();  /* The actual argument, possibly already a JavaParam*/
         Class c = null;
@@ -810,6 +846,7 @@ public class Engine {
     /** Resove and make the call.
      * )     o1 methodname  javaArgs -- o2
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void callJava() {
         JavaArgs javaArgs = (JavaArgs) pop();
         String methodName = (String)   pop();
@@ -827,10 +864,10 @@ public class Engine {
      * @param methodName Name of method.
      * @param javaArgs The arg array to pass to the method.
      */
-    public void callJavaMethod(
-    Object o
-    , String methodName
-    , JavaArgs javaArgs
+    private void callJavaMethod(
+            Object o
+            , String methodName
+            , JavaArgs javaArgs
     ) {
         Method method     = null;          /* The method we'll invoke.         */
         try {                              /* Resolve the method.*/
@@ -860,6 +897,7 @@ public class Engine {
      * @param o The object on which to call the constructor.
      * @param javaArgs The arg array to pass to the method.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void callJavaConstructor( Object o
     , JavaArgs javaArgs
     ) {
@@ -887,6 +925,7 @@ public class Engine {
      * throws NoSuchFieldException Field doesn't exist.
      * @return The Field instance.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public Field findField(Object o, String fieldName)
     throws java.lang.NoSuchFieldException {
         Class c;                         /* The class we'll find the field for.*/
@@ -931,6 +970,7 @@ public class Engine {
     /** Parse a string up to the next doublequote or EOL
      * "      lexeme --   -- s
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doubleQuote() {
         lexeme("\"\n\r", true);
     }
@@ -938,6 +978,7 @@ public class Engine {
     /** Parse a string up to the next backtick or EOL
      * `      lexeme --   -- s
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void backTick() {
         lexeme("`\n\r", true);
     }
@@ -949,27 +990,32 @@ public class Engine {
     }
 
     /** Signal Interpreter that bye is requested. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void bye() {
         myInterpreter.setKillFlag(true);
     }
 
     /** System exit. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void sysexit() {
         int rc = ((Long)pop()).intValue();
         System.exit(rc);
     }
 
     /** Leave boolean true on stack */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void pushTrue() {
         push(new Boolean(true));
     }
 
     /** Leave boolean false on stack */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void pushFalse() {
         push(new Boolean(false));
     }
 
     /** Leave null on stack */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void pushNull() {
         push(null);
     }
@@ -979,6 +1025,7 @@ public class Engine {
     /**************************/
 
     /** Invert the boolean on top of stack. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void not() {
         push( new Boolean(
         ((Boolean) pop()).booleanValue() == false
@@ -987,6 +1034,7 @@ public class Engine {
     }                                                 /* public void not ()*/
 
     /** AND two booleans on top of stack. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void and() {
         boolean lhs = ((Boolean) pop()).booleanValue();
         boolean rhs = ((Boolean) pop()).booleanValue();
@@ -994,6 +1042,7 @@ public class Engine {
     }                                                 /* public void and ()*/
 
     /** OR two booleans on top of stack. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void or() {
         boolean lhs = ((Boolean) pop()).booleanValue();
         boolean rhs = ((Boolean) pop()).booleanValue();
@@ -1001,6 +1050,7 @@ public class Engine {
     }                                                  /* public void or ()*/
 
     /** XOR two booleans on top of stack. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void xor() {
         boolean lhs = ((Boolean) pop()).booleanValue();
         boolean rhs = ((Boolean) pop()).booleanValue();
@@ -1008,6 +1058,7 @@ public class Engine {
     }                                                 /* public void xor ()*/
 
     /** Compare two objects for equality. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void isEqual() {
         Object a = pop();
         Object b = pop();
@@ -1025,6 +1076,7 @@ public class Engine {
     }                                             /* public void isEqual ()*/
 
     /** Compare two objects for inequality. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void isUnequal() {
         Object a = pop();
         Object b = pop();
@@ -1045,6 +1097,7 @@ public class Engine {
      * two strings for greater-than.
      * > o1 o2 -- Boolean
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void greaterThan() {
         Object o = pop();
         final Class c  = o.getClass();
@@ -1068,6 +1121,7 @@ public class Engine {
      * two strings for less-than
      * < o1 o2 -- Boolean
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void lessThan() {
         Object o = pop();
         final Class c  = o.getClass();
@@ -1094,6 +1148,7 @@ public class Engine {
     /** Add two numbers or two strings.
      * Should also work on ints, doubles, floats, etc., but doesn't yet.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void add() {
         Object o = pop();
         final Class c  = o.getClass();
@@ -1112,6 +1167,7 @@ public class Engine {
      * *  l1 l2 -- l1/l2
      * Should work on some other classes.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void mul() {
         Long multiplier   = (Long) pop();
         Long multiplicand = (Long) pop();
@@ -1122,6 +1178,7 @@ public class Engine {
      * /  l1 l2 -- l1/l2
      *  Should work on some other classes.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void div() {
         Long divisor = (Long) pop();
         Long dividend = (Long) pop();
@@ -1132,6 +1189,7 @@ public class Engine {
      * -  l1 l2 -- (l1 - l2)
      *  Should work on some other classes.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void sub() {
         Long subtrahend = (Long) pop();
         Long sum        = (Long) pop();
@@ -1142,6 +1200,7 @@ public class Engine {
      * %  l1 l2 -- l1%l2
      *  Should work on some other classes.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void mod() {
         Long divisor = (Long) pop();
         Long dividend = (Long) pop();
@@ -1156,6 +1215,7 @@ public class Engine {
      * throws StackUnderflow If stack depth < 2.
      * throws NotClassName If second-on-stack is not the String name of a Class.
      * throws NotClassInstance If second-on-stack is not a class type. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void array()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NonReflectedType
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
@@ -1182,6 +1242,7 @@ public class Engine {
      * throws NotClassName If second-on-stack is not the String name of a Class.
      * throws NotClassInstance If second-on-stack is not a class type
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dimarray()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NonReflectedType
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.StackUnderflow
@@ -1213,7 +1274,7 @@ public class Engine {
      * throws BadName If no valid name found.
      * @return The name.
      */
-    public String parseValidName()
+    private String parseValidName()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadName {
         String s = myInterpreter.nextLexeme();
         if (null != s) {
@@ -1234,6 +1295,7 @@ public class Engine {
     /** Create a new variable and add it to the current wordlist.
      * throws BadName  if no valid name found.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newVariable()
     throws  com.softwoehr.fiji.base.Exceptions.desktop.shell.BadName {
         String s = parseValidName();
@@ -1243,6 +1305,7 @@ public class Engine {
     /** Store an object into a variable.
      * throws NonVariable If object for store isn't a variable.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void store()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NonVariable {
         Object o = pop();
@@ -1267,6 +1330,7 @@ public class Engine {
     /** Fetch an object from its storage in a variable.
      * throws NonVariable If object for store isn't a variable.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void fetch()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NonVariable {
         Object o = pop();
@@ -1293,6 +1357,7 @@ public class Engine {
     /** Create a new value and add it to the current wordlist.
      * throws BadName If no valid name found.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newValue()
     throws  com.softwoehr.fiji.base.Exceptions.desktop.shell.BadName {
         String s = parseValidName();
@@ -1303,6 +1368,7 @@ public class Engine {
      * throws NonValue If target is not a Value
      * throws NameNotFound If name not found in wordlist(s).
      * throws BadName If no valid name found.  */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void toValue()
     throws  com.softwoehr.fiji.base.Exceptions.desktop.shell.NonValue
     ,  com.softwoehr.fiji.base.Exceptions.desktop.shell.NameNotFound
@@ -1315,6 +1381,7 @@ public class Engine {
      * @param p ParamterizedPrimitive to received value.
      * throws NonValue  If p is a non-Value.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void runtimeTo(ParameterizedPrimitive p)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NonValue {
         if (!p.validate()) {
@@ -1329,6 +1396,7 @@ public class Engine {
      * throws CompileToValue If the compile-to-value-operation fails.
      * throws NonValue If target is not a Value
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileToValue()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.CompileToValue
     ,  com.softwoehr.fiji.base.Exceptions.desktop.shell.NonValue {
@@ -1355,7 +1423,7 @@ public class Engine {
      * throws BadName If no valid name found.
      * @return The Value.
      */
-    public Value parseValue()
+    private Value parseValue()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.NameNotFound
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.NonValue
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadName {
@@ -1375,13 +1443,13 @@ public class Engine {
         return (Value) aSemantic;
     }
 
-    /*************/
+    //*************/
   /* Compiling */
-    /*************/
+    //*************/
 
     /** Return the current definition under composition.
      * @return  the current definition. */
-    public Definition getCurrentDefinition() {
+    Definition getCurrentDefinition() {
         return currentDefinition;
     }
 
@@ -1389,7 +1457,7 @@ public class Engine {
      * stack and make the new definition the current definition.
      * @param d the current definition.
      */
-    public void pushCurrentDefinition(Definition d) {
+    private void pushCurrentDefinition(Definition d) {
         pushControl
         (new ControlFlowElement( getCurrentDefinition()/* null if no current def.*/
         , this
@@ -1401,6 +1469,7 @@ public class Engine {
     /** An interpret-time action for compile-only words, it throws.
      * throws CompileOnly If a compile-only Semantic is invoked outside compile mode.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileOnly()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.CompileOnly {
         String s = "Interpretive use of a compile-only word.";
@@ -1411,7 +1480,7 @@ public class Engine {
     /** Set up Engine for compilation.
      * @param d The definition into which Semantics will be compiled.
      */
-    public void commenceDefinition(Definition d) {
+    private void commenceDefinition(Definition d) {
     /* Save current definition, usually null, on control flow stack. */
         pushCurrentDefinition(d);
         d.commence();                                   /* Init the definition.*/
@@ -1420,6 +1489,7 @@ public class Engine {
 
     /** Finish compilation and link new definition into current wordlist.
      * throws ControlFlowStackImbalance If definition didn't balance out during compilation. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void concludeDefinition()
     throws  com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance {
         getCurrentDefinition().complete();
@@ -1447,6 +1517,7 @@ public class Engine {
     /** Finish compilation and leave token on the stack. Don't link
      * into any wordlist.
      * throws ControlFlowStackImbalance If definition didn't balance out during compilation.  */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void concludeAnonymousDefinition()
     throws  com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance {
         getCurrentDefinition().complete();
@@ -1474,6 +1545,7 @@ public class Engine {
      * Immediacy applied by setImmediate().
      * @param name Name of the new definition.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newDefinition(String name) {
         Definition d = new Definition(name);     /* Need nesting stack of same.*/
         commenceDefinition(d);                 /* Init engined for compilation.*/
@@ -1484,6 +1556,7 @@ public class Engine {
      *
      * NOTE that we're not dealing with immediacy yet.
      * throws BadName If no valid name found.  */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newDefinition()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.BadName {
         String name = parseValidName();
@@ -1493,6 +1566,7 @@ public class Engine {
     /** Create a new anonmous Definition in the current wordlist.
      * NOTE that we're not dealing with immediacy yet.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newAnonymousDefinition() {
         Definition d = new Definition();     /* Need nesting stack of same.*/
         commenceDefinition(d);                 /* Init engined for compilation.*/
@@ -1505,6 +1579,7 @@ public class Engine {
     /** Runtime for pushing a compiled literal on the stack.
      * @param l The literal to push.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doLiteral(ParameterizedPrimitive.Literal l) {
         push(l.getObject());
     }
@@ -1520,7 +1595,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
-    public void compileLiteral(Object o)
+    void compileLiteral(Object o)
     throws java.lang.NoSuchMethodException
     , java.lang.ClassNotFoundException
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BadPrimitiveCompile
@@ -1539,6 +1614,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileDoubleQuote()
     throws java.lang.NoSuchMethodException
     , java.lang.ClassNotFoundException
@@ -1559,6 +1635,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileBackTick()
     throws java.lang.NoSuchMethodException
     , java.lang.ClassNotFoundException
@@ -1570,11 +1647,12 @@ public class Engine {
         compileLiteral(pop());
     }
 
-    /********************/
+    //********************/
   /* Control flow     */
-    /********************/
+    //********************/
 
     /** Exit the currently executing Definition.*/
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doExit() {
         innerInterpreter.exitCurrentDefinition();
     }
@@ -1582,21 +1660,21 @@ public class Engine {
     /** Execute a control flow change within the currently executing definition.
      * @param delta delta by which to inc/dec the instruction pointer.
      */
-    public void bump(Integer delta) {
+    private void bump(Integer delta) {
         innerInterpreter.bump(delta.intValue());
     }
 
     /** Save a control flow entry on the control flow stack.
      * @param e the control flow entry
      */
-    public void pushControl(ControlFlowElement e) {
+    private void pushControl(ControlFlowElement e) {
         controlFlowStack.push(e);
     }
 
     /** Retrieve a control flow entry from the control flow stack.
      * @return the control flow entry
      */
-    public ControlFlowElement popControl() {
+    private ControlFlowElement popControl() {
         return (ControlFlowElement) controlFlowStack.pop();
     }
 
@@ -1606,7 +1684,7 @@ public class Engine {
      * @exception com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance If the control flow stack wasn't balanced.
      * @return the control flow entry
      */
-    public ControlFlowElement popParamPrimControl()
+    private ControlFlowElement popParamPrimControl()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance {
         ControlFlowElement c = null;
         if (0 < controlFlowStack.size()) {
@@ -1627,7 +1705,7 @@ public class Engine {
      * @param p Parameter to a primitive.
      * throws InvalidParameterObject self-explanatory
      */
-    public void doUnconditionalBranch(ParameterizedPrimitive.Branch p)
+    private void doUnconditionalBranch(ParameterizedPrimitive.Branch p)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.InvalidParameterObject {
         if (!p.validate()) {
             String s = "A branch had a non-Integer value.";
@@ -1647,6 +1725,7 @@ public class Engine {
      * @param p parameter for primitive
      * throws InvalidParameterObject self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doUnconditionalBranch(ParameterizedPrimitive.UnconditionalBranch p)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.InvalidParameterObject {
         doUnconditionalBranch((ParameterizedPrimitive.Branch) p);
@@ -1659,6 +1738,7 @@ public class Engine {
      * throws InvalidParameterObject self-explanatory
      * throws ConditionalNonBoolean self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doConditionalBranch(ParameterizedPrimitive.ConditionalBranch p)
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.InvalidParameterObject
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.ConditionalNonBoolean {
@@ -1685,6 +1765,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileConditionalBranch()
     throws java.lang.NoSuchMethodException
     , java.lang.ClassNotFoundException
@@ -1723,6 +1804,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileBranch()
     throws java.lang.NoSuchMethodException
     , java.lang.ClassNotFoundException
@@ -1761,6 +1843,7 @@ public class Engine {
      * throws ControlFlowStackImbalance self-explanatory
      * throws BranchResolution self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void resolveBranch()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution {
@@ -1808,6 +1891,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileAndResolveBranch()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution
@@ -1841,6 +1925,7 @@ public class Engine {
      * throws ClassNotFoundException self-explanatory
      * throws OpenIfBranch self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void pushUnconditionalBranch()
     throws java.lang.NoSuchMethodException
     , java.lang.ClassNotFoundException
@@ -1876,6 +1961,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileUnconditionalBackwardsBranch()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution
@@ -1924,6 +2010,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileConditionalBackwardsBranch()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution
@@ -1984,6 +2071,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void resolveTwoBranches()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution
@@ -2005,6 +2093,7 @@ public class Engine {
     /** The runtime for 'do', i.e., push the indices to control stack.
      * @param p The <CODE>Do</CODE> Semantic we are going to run.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doDo(ParameterizedPrimitive.Do p) {
         int index = ((Long)pop()).intValue();
         announce("'do' index is " + new Integer(index));
@@ -2025,6 +2114,7 @@ public class Engine {
      * throws BadPrimitiveExecute self-explanatory
      * throws BadDefinitionExecute self-explanatory
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileDo()
     throws java.lang.NoSuchMethodException
     , java.lang.ClassNotFoundException
@@ -2059,6 +2149,7 @@ public class Engine {
      * embedded object, the Integer stored indicating the bump value.
      * @param p The <code>Loop</code> Semantic we are going to execute.
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void loop(ParameterizedPrimitive.Loop p) {
         boolean done = innerInterpreter.loop();
         if (!done) {
@@ -2070,6 +2161,7 @@ public class Engine {
     /** Runtime for '+loop'. Called from a ParameterizedPrimitive having
      * embedded object, the Integer stored indicating the bump value.
      * @param p  */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void plusLoop(ParameterizedPrimitive.PlusLoop p) {
         int increment = ((Long)pop()).intValue();/* Get loop increment from stack.*/
         boolean done = innerInterpreter.plusLoop(increment);
@@ -2093,6 +2185,7 @@ public class Engine {
      * throws BadDefinitionCompile
      * throws BadPrimitiveExecute
      * throws BadDefinitionExecute  */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compileLoop()
     throws com.softwoehr.fiji.base.Exceptions.desktop.shell.ControlFlowStackImbalance
     , com.softwoehr.fiji.base.Exceptions.desktop.shell.BranchResolution
@@ -2147,6 +2240,7 @@ public class Engine {
      * throws BadDefinitionCompile
      * throws BadPrimitiveExecute
      * throws BadDefinitionExecute  */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void compilePlusLoop()
     throws java.lang.NoSuchMethodException
     , java.lang.ClassNotFoundException
@@ -2191,11 +2285,13 @@ public class Engine {
     }                                      /* public void compilePlusLoop()*/
 
     /** Return a loop index. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void index() {
         push(new Long(innerInterpreter.ithIndex(((Long)pop()).intValue())));
     }                                               /* public void index ()*/
 
     /** Perform a leave at runtime */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doLeave() {
         innerInterpreter.leaveLoop();
     }
@@ -2205,16 +2301,19 @@ public class Engine {
     /*************/
 
     /** Do a newline on the output. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void cr() {
         output("\n");
     }
 
     /** Set the Interpreter verbose or non- at runtime. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void runtimeVerbose() {
         setVerbose(((Boolean)pop()).booleanValue());
     }
 
     /** Decompile and print out. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void decompile() {
         Semantic s = (Semantic) pop();
         Semantic semantics[] = s.decompile();
@@ -2230,20 +2329,14 @@ public class Engine {
         output(";\n");
     }                                           /* public void decompile ()*/
 
-    /** Execute a host command.
-     * throws IOException  */
-    public void system()
-    throws java.io.IOException {
-        String s = (String) pop();
-        Runtime.getRuntime().exec(s);
-    }
-
     /** Interpret a string as fiji input. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void interpret() {
         myInterpreter.interpret((String)pop());
     }                                           /* public void interpret ()*/
 
     /** Load FIJI source from a file. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void load() {
         String fileName = (String) pop();
         File file = new File(fileName);
@@ -2277,6 +2370,7 @@ public class Engine {
     }
 
     /** Push the version of FIJI */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void version() {
         push(fijiVersion());
     }
@@ -2287,6 +2381,7 @@ public class Engine {
 
     /** Create a new Wordlist and add it to the current wordlist.
      * throws BadName If no valid name found.  */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newWordlist()
     throws  com.softwoehr.fiji.base.Exceptions.desktop.shell.BadName {
         String s = parseValidName();
@@ -2294,26 +2389,31 @@ public class Engine {
     }
 
     /** Fetch the search order to stack. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void getOrder() {
         searchOrder.getOrder(this);
     }                                             /* public void getOrder()*/
 
     /** Set search order from stack. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void setOrder() {
         searchOrder.setOrder(this);
     }                                             /* public void setOrder()*/
 
     /** Set current Wordlist to the Wordlist on the top of the stack. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void setCurrent() {
         currentWordlist = (Wordlist) pop();
     }
 
     /** Get current Wordlist. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void getCurrent() {
         push(currentWordlist);
     }
 
     /** List all the words in the accessed Wordlists. */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void words() {
         output(searchOrder.words());
     }
@@ -2324,6 +2424,7 @@ public class Engine {
      *
      * see com.SoftWoehr.desktop.shell.SearchOrder.forget
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void forget() {
         boolean result;
         String name = (String)pop();
@@ -2338,6 +2439,7 @@ public class Engine {
      *
      * see com.SoftWoehr.desktop.shell.SearchOrder.discard
      */
+    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void discard() {
         boolean result;
         String name = (String)pop();
