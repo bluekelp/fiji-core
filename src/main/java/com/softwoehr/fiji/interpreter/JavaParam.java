@@ -28,9 +28,6 @@
 
 package com.softwoehr.fiji.interpreter;
 
-import  com.softwoehr.*;
-import  com.softwoehr.util.*;
-
 /** Represents a parameter to a Java call.
  * The problem this class addresses is that
  * the "naive" means for deciding the signature
@@ -47,19 +44,8 @@ import  com.softwoehr.util.*;
  * @author $Author: jwoehr $
  * @version $Revision: 1.1.1.1 $
  */
-public class JavaParam implements SoftWoehr, verbose {
-    
-    /** Revision level */
-    private static final String rcsid = "$Id: JavaParam.java,v 1.1.1.1 2001/08/21 02:39:18 jwoehr Exp $";
-    /** Implements com.SoftWoehr.SoftWoehr
-     * @return  */
-    public String rcsId() {return rcsid;}
-    
-    /**  Flags whether we are in verbose mode. */
-    private boolean isverbose = false;
-    /**  Helper for verbose mode. */
-    private verbosity v = new verbosity(this);
-    
+public class JavaParam {
+
     /** The actual object passed as a parameter. */
     private Object realObject;
     
@@ -131,47 +117,6 @@ public class JavaParam implements SoftWoehr, verbose {
         signatureClass = c;
     }
     
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @return  */
-    public boolean isVerbose()              {return isverbose;}
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param tf  */
-    public void    setVerbose  (boolean tf) {isverbose = tf;  }
-    
-    /**
-     * @see com.softwoehr.util.verbose#
-     * @see com.softwoehr.util.verbosity#
-     * @param s  */
-    public void    announce    (String s)   {v.announce(s);   }
-    
-    /** Demonstrate <code>JavaParam</code>.
-     * @param argv  */
-    public static void main(String argv[]) {
-        
-        GetArgs myArgs = new GetArgs(argv);/* Assimilate the command line.     */
-        
-    /* GPL'ed SoftWoehr announces itself. */
-        System.out.println("JavaParam, Copyright (C) 1999 Jack J. Woehr.");
-        System.out.println("JavaParam comes with ABSOLUTELY NO WARRANTY;");
-        System.out.println("Please see the file COPYING and/or COPYING.LIB");
-        System.out.println("which you should have received with this software.");
-        System.out.println("This is free software, and you are welcome to redistribute it");
-        System.out.println("under certain conditions enumerated in COPYING and/or COPYING.LIB.");
-        
-        // Test code goes here.
-        // -------------------
-        
-        GetArgs.main(argv);       /* Delete this stub when you write some code.*/
-        System.out.println("Not implemented.");
-        // -------------------
-        
-        return;
-    }
 }                                                 /* End of JavaParam class*/
 
 /*  End of JavaParam.java */

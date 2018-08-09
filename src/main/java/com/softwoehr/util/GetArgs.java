@@ -28,9 +28,7 @@
 
 package com.softwoehr.util;
 
-import  com.softwoehr.*;
-import  java.io.*;
-import  java.util.*;
+import java.util.Vector;
 
 /** Parses arguments and options from a string
   * e.g., from a command line. GetArgs views
@@ -75,18 +73,13 @@ import  java.util.*;
   *
   * @author $Author: jwoehr $
   * @version $Revision: 1.1.1.1 $
-  * @see com.softwoehr.Argument
+  * see com.softwoehr.Argument
   */
-public class GetArgs implements SoftWoehr, verbose
+public class GetArgs implements verbose
 {
   /*****************************************/
   /*% SoftWoehr default variables section. */
   /*****************************************/
-
-  /** Revision level */
-  private static final String rcsid = "$Id: GetArgs.java,v 1.1.1.1 2001/08/21 02:44:17 jwoehr Exp $";
-  /** Implements com.SoftWoehr.SoftWoehr */
-  public String rcsId() {return rcsid;}
 
   /**  Flags whether we are in verbose mode. */
   private boolean isverbose = true;
@@ -222,18 +215,6 @@ public class GetArgs implements SoftWoehr, verbose
     return result;
     }
 
-  /** shutdown() here does nothing.
-    * @see com.softwoehr.SoftWoehr
-  */
-  public int shutdown () { return 0; }
-
-  /** Calls super.finalize() */
-  protected void finalize () throws Throwable
-    {           /* Called by garbage collector in case no longer referenced*/
-      super.finalize();
-    }
-
-
   /** Return string of option introducers.
     */
   public String getOptionIntroducers() { return optionIntroducers; }
@@ -309,120 +290,7 @@ public class GetArgs implements SoftWoehr, verbose
     * @see com.softwoehr.util.verbosity
     */
    public void    announce    (String s)   {v.announce(s);   }
-
-  /********************************************/
-  /*% SoftWoehr default methods section ends. */
-  /********************************************/
-
-  /*********/
-  /*% Main */
-  /*********/
-
-  /** Demo GetArgs by displaying any opts or args passed in. */
-  public static void main (String argv[]) {
-
-    int i;
-    Argument a;
-    GetArgs g = new GetArgs(argv);
-    boolean quitFlag = false;
-    InputStreamReader isr = new InputStreamReader(System.in);
-    BufferedReader br = new BufferedReader(isr);
-    StringTokenizer st = new StringTokenizer(""); /* Holds next pass of input. */
-    String ss[]; /* Holds next pass of input. */
-
-    /* GPL'ed SoftWoehr announces itself. */
-    System.out.println("GetArgs, Copyright (C) 1988 Jack J. Woehr.");
-    System.out.println("GetArgs comes with ABSOLUTELY NO WARRANTY;");
-    System.out.println("Please see the file COPYING and/or COPYING.LIB");
-    System.out.println("which you should have received with this software.");
-    System.out.println("This is free software, and you are welcome to redistribute it");
-    System.out.println("under certain conditions enumerated in COPYING and/or COPYING.LIB.");
-
-    if (0 == argv.length)
-      {
-      g.announce("Usage: GetArgs [-options args args -options args ...]");
-      g.announce(" ... Just analyzes the options, but there are two special");
-      g.announce(" ... options, -o and -q. -q quits. -o takes its argument");
-      g.announce(" ... and makes it the option introducers string.");
-      return;
-      }                                                           /* End if*/
-
-    /* Loop taking arguments. */
-    while (!quitFlag)
-      {
-      System.out.println("Entire command line, \"normalized\":\n");
-      System.out.println(g.toString() + "\n");
-      System.out.println("Options:");
-      System.out.println("--------");
-      for (i = 0; i < g.optionCount() ; i++)
-        {
-        a =  g.nthOption(i);
-        System.out.println("  option   is " + a.option  );
-        System.out.println("  argument is " + a.argument);
-        System.out.println("  position is " + a.position);
-        System.out.println("--------");
-
-        /* See if user wants to quit. */
-        if (a.option.length() > 1)
-          {
-          if (a.option.substring(1,2).equals("q"))
-            {
-            quitFlag = true;
-            }                                                     /* End if*/
-          }
-
-        /* See if user wants to change option string. */
-        if (a.option.length() > 1 && a.option.substring(1,2).equals("o"))
-          {
-          if (a.argument != null)
-            {
-            g.setOptionIntroducers(a.argument);
-            }                                                     /* End if*/
-          }                                                       /* End if*/
-        }                                                        /* End for*/
-
-      /* Now show the arguments. */
-      System.out.println("Arguments");
-      System.out.println("---------");
-      for (i = 0; i < g.argumentCount() ; i++)
-        {
-        a =  g.nthArgument(i);
-        System.out.println("  argument is " + a.argument);
-        System.out.println("  position is " + a.position);
-        System.out.println("---------");
-        }                                                        /* End for*/
-
-      /* Get another line from user if we're not done. */
-      if (!quitFlag)
-        {
-        /* Get a new line. */
-        try
-          {
-          st = new StringTokenizer(br.readLine());
-          }                                                      /* End try*/
-        catch (Exception e)
-          {
-          e.printStackTrace(System.err);
-          }                                                    /* End catch*/
-        /* Process the line/ */
-        ss = new String [st.countTokens()];
-        for (int j = 0; j < ss.length; j++) {
-          ss[j] = st.nextToken();
-          }
-        g.reinit(ss);                                  /* arg-ize new input*/
-        }                                                         /* End if*/
-      }                                                        /* End while*/
-    /* We're done, clean up. */
-    try
-      {
-      br.close();
-      }                                                          /* End try*/
-    catch (Exception e)
-      {
-        e.printStackTrace(System.err);
-      }                                                        /* End catch*/
-    }                                                        /* End of main*/
-  }                                                 /* End of GetArgs class*/
+}
 
 /* End of GetArgs.java */
 

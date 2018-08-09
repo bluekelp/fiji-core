@@ -29,7 +29,6 @@
 package com.softwoehr.fiji.base;
 
 import com.softwoehr.SoftWoehr;
-import com.softwoehr.util.GetArgs;
 import com.softwoehr.util.verbose;
 import com.softwoehr.util.verbosity;
 
@@ -431,29 +430,6 @@ public class Exceptions extends java.lang.Exception implements SoftWoehr, verbos
      * @see com.softwoehr.util.verbosity
      */
     public void    announce    (String s)   {v.announce(s);   }
-  
-    /** Demonstrate <code>Exceptions</code>. */
-    public static void main(String argv[]) {
-        
-        GetArgs myArgs = new GetArgs(argv);/* Assimilate the command line.     */
-        
-    /* GPL'ed SoftWoehr announces itself. */
-        System.out.println("Exceptions, Copyright (C) 1988 Jack J. Woehr.");
-        System.out.println("Exceptions comes with ABSOLUTELY NO WARRANTY;");
-        System.out.println("Please see the file COPYING and/or COPYING.LIB");
-        System.out.println("which you should have received with this software.");
-        System.out.println("This is free software, and you are welcome to redistribute it");
-        System.out.println("under certain conditions enumerated in COPYING and/or COPYING.LIB.");
-        
-        // Test code goes here.
-        // -------------------
-        
-        GetArgs.main(argv);       /* Delete this stub when you write some code.*/
-        
-        // -------------------
-        
-        return;
-    }
 }                                                     /* End of Exceptions class*/
 
 /*  End of Exceptions.java */

@@ -29,7 +29,6 @@
 package com.softwoehr.fiji.base;
 
 import com.softwoehr.SoftWoehr;
-import com.softwoehr.util.GetArgs;
 import com.softwoehr.util.verbose;
 import com.softwoehr.util.verbosity;
 
@@ -318,30 +317,6 @@ public class Error extends java.lang.Error implements SoftWoehr, verbose {
      * @see com.softwoehr.util.verbosity#
      * @param s  */
     public void    announce    (String s)   {v.announce(s);   }
-    
-    /** Demonstrate <code>Error</code>.
-     * @param argv  */
-    public static void main(String argv[]) {
-        
-        GetArgs myArgs = new GetArgs(argv);/* Assimilate the command line.     */
-        
-    /* GPL'ed SoftWoehr announces itself. */
-        System.out.println("Error, Copyright (C) 1988 Jack J. Woehr.");
-        System.out.println("Error comes with ABSOLUTELY NO WARRANTY;");
-        System.out.println("Please see the file COPYING and/or COPYING.LIB");
-        System.out.println("which you should have received with this software.");
-        System.out.println("This is free software, and you are welcome to redistribute it");
-        System.out.println("under certain conditions enumerated in COPYING and/or COPYING.LIB.");
-        
-        // Test code goes here.
-        // -------------------
-        
-        GetArgs.main(argv);       /* Delete this stub when you write some code.*/
-        
-        // -------------------
-        
-        return;
-    }
 }                                                     /* End of Error class*/
 
 /*  End of Error.java */
