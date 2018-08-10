@@ -33,6 +33,7 @@ import java.io.PrintStream;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 import java.util.StringTokenizer;
+import java.util.function.Function;
 
 /**
  * A class to interpret input of a stream of FIJI commands.
@@ -45,6 +46,7 @@ public class Interpreter {
 
     private PrintStream err;
     private PrintStream out;
+    Function<String, String> loader;
 
     private Engine engine;
 
@@ -68,9 +70,10 @@ public class Interpreter {
 
     private String defaultDelimiters = " \t\n\r";
 
-    public Interpreter(PrintStream err, PrintStream out) throws NoSuchMethodException, ClassNotFoundException {
+    public Interpreter(PrintStream err, PrintStream out, Function<String, String> loader) throws NoSuchMethodException, ClassNotFoundException {
         this.err = err;
         this.out = out;
+        this.loader = loader;
         reinit();
     }
 

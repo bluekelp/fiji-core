@@ -81,13 +81,13 @@ public class Wordlist extends Semantic {
         }
         else {
             entry.push(s);
-        }                                                           /* End if*/
-    }                                        /* public void put(Semantic s)*/
+        }
+    }
 
     /** Find a WordlistEntry by name in a wordlist. */
     private WordlistEntry findEntry(String name) {
         return (WordlistEntry)wordlist.get(name);
-    }                             /* public Semantic findEntry(String name)*/
+    }
 
     /** Find a Semantic by name in a wordlist.
      * @param name
@@ -97,9 +97,9 @@ public class Wordlist extends Semantic {
         WordlistEntry entry = findEntry(name);
         if (null != entry) {
             s = entry.getSemantic();
-        }                                                           /* End if*/
+        }
         return s;
-    }                                  /* public Semantic find(String name)*/
+    }
 
     /** 'Forget' the active Semantic for a name, popping the previous
      * Semantic in its place. If no previous Semantic
@@ -111,9 +111,9 @@ public class Wordlist extends Semantic {
             Semantic s = entry.pop();
             if (null == s) {
                 wordlist.remove(name);
-            }                                                         /* End if*/
-        }                                                           /* End if*/
-    }                                   /* public void forget (String name)*/
+            }
+        }
+    }
 
     /** Utterly discard a wordlist entry.
      * @param name  */
@@ -131,9 +131,9 @@ public class Wordlist extends Semantic {
             if (null != entry) {
                 result += entry.getName() + " ";
             }
-        }                                                          /* End for*/
+        }
         return result;
-    }                                             /* public String words ()*/
+    }
 
     /** Create a default wordlist for initial Engine.
      * Each invocation of this method results in
@@ -171,7 +171,7 @@ public class Wordlist extends Semantic {
             defaultList.put(new Primitive("'"            , "lexeme"               ));
             defaultList.put(new Primitive("class"        , "classForName"         ));
             defaultList.put(new Primitive("bye"          , "bye"                  ));
-            defaultList.put(new Primitive("sysexit"      , "sysexit"              ));
+//            defaultList.put(new Primitive("sysexit"      , "sysexit"              ));
             defaultList.put(new Primitive("true"         , "pushTrue"             ));
             defaultList.put(new Primitive("null"         , "pushNull"             ));
             defaultList.put(new Primitive("false"        , "pushFalse"            ));
@@ -179,7 +179,7 @@ public class Wordlist extends Semantic {
             defaultList.put(new Primitive("primitive"    , "classToPrimitiveType" ));
             defaultList.put(new Primitive(">primitive"   , "stackEntryToPrimitive"));
             defaultList.put(new Primitive("(primitive)"  , "stackEntryToPrimParam"));
-            defaultList.put(new Primitive("Long>intparam", "longToIntParam"       ));
+            defaultList.put(new Primitive("l>i"          , "longToIntParam"       ));
             defaultList.put(new Primitive("find"         , "find"                 ));
             defaultList.put(new Primitive("execute"      , "execute"              ));
             defaultList.put(new Primitive("compile"      , "compile"              ));
@@ -305,14 +305,14 @@ public class Wordlist extends Semantic {
             defaultList.put(new Primitive("words"        , "words"                ));
             defaultList.put(new Primitive("forget"       , "forget"               ));
             defaultList.put(new Primitive("discard"      , "discard"              ));
-            defaultList.put(defaultList);                    /* Add self to list!*/
-        }                                                          /* End try*/
+            defaultList.put(defaultList);                    /* Add self to list!*/ // TODO why?
+        }
         catch (Exception e) {
             e.printStackTrace(System.err);
-        }                                                        /* End catch*/
+        }
         return defaultList;
     }
-}                                                  /* End of Wordlist class*/
+}
 
 /** The entries in a Wordlist are composite entities, an active defintion
  * for an entry and a stack of previous definitions which were overridden
@@ -350,11 +350,11 @@ class WordlistEntry {
      * @param s  */
     public void push(Semantic s) {
         if (null == semanticStack) {
-            semanticStack = new Stack();                    /* Create as needed.*/
-        }                                                           /* End if*/
+            semanticStack = new Stack();
+        }
         semanticStack.push(semantic);
         semantic = s;
-    }                              /* public void pushSemantic (Semantic s)*/
+    }
 
     /** Pop the Semantic stack to restore an active Semantic,
      * discarding that which was the active Semantic. Returns
@@ -368,9 +368,8 @@ class WordlistEntry {
             semantic = (Semantic)semanticStack.pop();        /* Restore previous.*/
             if (semanticStack.empty()) /* Don't keep empty stacks, memory impact.*/ {
                 semanticStack = null;        /* Chuck away if empty, memory impact.*/
-            }                                                         /* End if*/
-        }                                                           /* End if*/
+            }
+        }
         return semantic;   /* Lets caller know if this entry is dead (== null).*/
-    }                                     /* public Semantic popSemantic ()*/
-}                                             /* End of WordlistEntry class*/
-/*  End of Wordlist.java */
+    }
+}

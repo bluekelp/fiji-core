@@ -19,6 +19,7 @@ import com.softwoehr.util.Argument;
 import com.softwoehr.util.GetArgs;
 
 import java.io.*;
+import java.util.function.Function;
 
 /** This class merely serves as a launcher for the FIJI
  * interpreter running at the command line.
@@ -29,6 +30,26 @@ public class Console {
       Console f = new Console();
       f.runner(argv);
     }
+
+    private String load(String fn) throws IOException {
+      File file = new File(fn);
+      long length = file.length();
+      char input[] = new char[(int) length];
+      FileInputStream fileInputStream = new FileInputStream(file);
+      InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+      inputStreamReader.read(input, 0, (int) length);
+      return new String(input);
+    }
+
+    private String safeLoad(String fn) {
+      try {
+        return load(fn);
+      } catch (IOException e) {
+        return "\" error\" .";
+      }
+    }
+
+  private Function<String, String> loader = this::safeLoad;
 
   private RuntimeException error(String s) {
     return error(s, null);
@@ -53,20 +74,11 @@ public class Console {
       Interpreter i;
       InputStreamReader isr;
       BufferedReader br;
-      GetArgs args = new GetArgs(argv);/* Assimilate the command line.     */
+      GetArgs args = new GetArgs(argv);
 
-      /* Create the Interpreter instance. */
       try {
-        i = new Interpreter(System.err, System.out);
-      }                                                          /* End try*/
-
-      catch (Exception e) {
-        e.printStackTrace(System.err);
-
-        /*  Does java reflect to which class main() belongs to without
-         *  exhaustively enumerating candidate classes and testing them?
-         *  The stack trace.
-         */
+        i = new Interpreter(System.err, System.out, loader);
+      } catch (Exception e) {
         throw error(e);
       }
 
@@ -86,23 +98,13 @@ public class Console {
             throw error(s, null);
           }
         }
-        else if (a.option.equals("-o")) {
-          if (a.argument != null) {
-            setOutputStreamEncoding(a.argument);
-          }
-          else {
-            String s = "Bad output stream encoding proposed: " + a.option;
-            throw error(s, null);
-          }
-        }
         else if (a.option.equals("-h") || a.option.equals("--")) {
           usage();
           return;
         }
         else {
-          String s = "Bad option " + a.option + " " + a.argument;
           usage();
-          throw error(s);
+          throw error("Bad option " + a.option + " " + a.argument);
         }
       }
 
@@ -165,22 +167,9 @@ public class Console {
       }
     }
 
-  /** Set output stream encoding to a given codepage.
-   * One must subsequently do a <code>setOutput()</code> to make
-   * the codepage take effect.
-   *
-   * @param codepage  */
-  private void setOutputStreamEncoding(String codepage) {
-    outputStreamEncoding = codepage;
-  }
-
-  // Encoding used by OutputStreamWriter
-  private String outputStreamEncoding;
-
   private void usage() {
     System.err.println("Usage:");
     System.err.println(" java com.softwoehr.fiji.Main [-b base] [-o output_codepage] [file file ...]");
-    System.err.println(" -o output_codepage .. for VM/ESA with Java 1.1.4 use Cp1407.");
     System.err.println(" -b base            .. where base is numeric input base, e.g. 8 16 0x10 etc.");
     System.err.println(" file file ...      .. these files will be loaded as FIJI source code.");
   }

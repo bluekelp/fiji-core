@@ -31,10 +31,7 @@ package com.softwoehr.fiji.interpreter;
 
 import com.softwoehr.fiji.errors.Err;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.*;
 import java.util.Enumeration;
 import java.util.Stack;
@@ -949,12 +946,12 @@ public class Engine {
         interpreter.setKillFlag();
     }
 
-    // System exit.
-    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
-    public void sysexit() {
-        int rc = ((Long) pop()).intValue();
-        System.exit(rc); // TODO consider removing -- unsafe for embedded use
-    }
+//    // System exit.
+//    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
+//    public void sysexit() {
+//        int rc = ((Long) pop()).intValue();
+//        System.exit(rc); // TODO consider removing -- unsafe for embedded use
+//    }
 
     // Leave boolean true on stack
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
@@ -2095,15 +2092,8 @@ public class Engine {
     // Load FIJI source from a file.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void load() throws IOException {
-        String fileName = (String) pop();
-        File file = new File(fileName);
-        long length = file.length();
-        char input[] = new char[(int) length];
-        FileInputStream fileInputStream = new FileInputStream(file);
-        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-        inputStreamReader.read(input, 0, (int) length);
-        String sourceCode = new String(input);
-        interpreter.interpret(sourceCode);
+        String s = interpreter.loader.apply((String) pop());
+        interpreter.interpret(s != null ? "" : s);
     }
 
     public static String fijiVersion() {
