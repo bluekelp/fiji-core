@@ -23,6 +23,9 @@ import java.util.Stack;
  */
 public class Engine {
 
+    @SuppressWarnings("WeakerAccess")
+    public static final String VERSION = "1.3";
+
     private RuntimeException error(String s, Exception e) throws RuntimeException {
         announce(s);
         if (e != null) {
@@ -2062,7 +2065,7 @@ public class Engine {
     }
 
     public static String fijiVersion() {
-        return "1.2";
+        return VERSION;
     }
 
     // Push the version of FIJI
