@@ -70,7 +70,7 @@ java.util.Stack class new ( ) to rstack
       java.lang.Long class
         new ( rstack size ( ) longValue ( ) (primitive) , )      \ -- depth \
       0 do
-        rstack elementAt ( 0 index Long>intparam , )
+        rstack elementAt ( 0 index l>i , )
         dup getClass ( ) swap
         " `" swap toString ( ) + "  /*"  +    \ -- Class String     \
              swap toString ( ) + " */` " +    \ -- String           \

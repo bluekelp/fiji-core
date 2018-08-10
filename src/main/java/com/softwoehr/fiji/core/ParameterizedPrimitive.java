@@ -1,4 +1,4 @@
-package com.softwoehr.fiji.interpreter;
+package com.softwoehr.fiji.core;
 
 /**
  * ParameterizedPrimitive is an on-the-fly Primitive which
@@ -146,7 +146,7 @@ public class ParameterizedPrimitive extends Primitive {
         setName(name);
         Class signature[] = new Class[1];
         signature[0] = this.getClass();
-        Class c = Class.forName("com.softwoehr.fiji.interpreter.Engine");
+        Class c = Class.forName("com.softwoehr.fiji.core.Engine");
         method = c.getMethod(methodName, signature);
     }
 

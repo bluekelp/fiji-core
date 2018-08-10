@@ -1,7 +1,7 @@
 package com.softwoehr.fiji;
 
-import com.softwoehr.fiji.interpreter.Engine;
-import com.softwoehr.fiji.interpreter.Interpreter;
+import com.softwoehr.fiji.core.Engine;
+import com.softwoehr.fiji.core.Interpreter;
 import com.softwoehr.util.Argument;
 import com.softwoehr.util.GetArgs;
 

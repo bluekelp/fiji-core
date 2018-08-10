@@ -1,6 +1,4 @@
-package com.softwoehr.fiji.interpreter;
-
-import com.softwoehr.fiji.errors.FijiError;
+package com.softwoehr.fiji.core;
 
 import java.io.IOException;
 import java.lang.reflect.*;
@@ -104,11 +102,11 @@ public class Engine {
         cLong = Class.forName("java.lang.Long");
         cClass = Class.forName("java.lang.Class");
         cBoolean = Class.forName("java.lang.Boolean");
-        cJavaParam = Class.forName("com.softwoehr.fiji.interpreter.JavaParam");
-        cVariable = Class.forName("com.softwoehr.fiji.interpreter.Variable");
-        cValue = Class.forName("com.softwoehr.fiji.interpreter.Value");
-        cDefinition = Class.forName("com.softwoehr.fiji.interpreter.Definition");
-        cParameterizedPrimitive = Class.forName("com.softwoehr.fiji.interpreter.ParameterizedPrimitive");
+        cJavaParam = Class.forName("com.softwoehr.fiji.core.JavaParam");
+        cVariable = Class.forName("com.softwoehr.fiji.core.Variable");
+        cValue = Class.forName("com.softwoehr.fiji.core.Value");
+        cDefinition = Class.forName("com.softwoehr.fiji.core.Definition");
+        cParameterizedPrimitive = Class.forName("com.softwoehr.fiji.core.ParameterizedPrimitive");
 
                 /* Since name resolution by forName() won't work this one.*/
         cLiteral =  new ParameterizedPrimitive.Literal("").getClass();

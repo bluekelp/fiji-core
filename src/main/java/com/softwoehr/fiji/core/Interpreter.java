@@ -1,4 +1,4 @@
-package com.softwoehr.fiji.interpreter;
+package com.softwoehr.fiji.core;
 
 import java.io.IOException;
 import java.io.PrintStream;

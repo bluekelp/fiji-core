@@ -1,4 +1,4 @@
-package com.softwoehr.fiji.interpreter;
+package com.softwoehr.fiji.core;
 
 // Value is a self-fetching Variable.
 public class Value extends Semantic

@@ -1,4 +1,4 @@
-package com.softwoehr.fiji.interpreter;
+package com.softwoehr.fiji.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Enumeration;

@@ -1,4 +1,4 @@
-package com.softwoehr.fiji.interpreter;
+package com.softwoehr.fiji.core;
 
 /** ControlFlowElement wrappers a Semantic pushed on the control flow
  * stack along with information about the context when the entry

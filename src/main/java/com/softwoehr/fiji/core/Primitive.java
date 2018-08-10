@@ -1,4 +1,4 @@
-package com.softwoehr.fiji.interpreter;
+package com.softwoehr.fiji.core;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,14 +17,14 @@ class Primitive extends Semantic {
 
     Primitive(String name, String methodName) throws java.lang.ClassNotFoundException, java.lang.NoSuchMethodException {
         this.setName(name);
-        Class c = Class.forName("com.softwoehr.fiji.interpreter.Engine");
+        Class c = Class.forName("com.softwoehr.fiji.core.Engine");
         method = c.getMethod(methodName);
     }
 
     // creates a named, resolved primitive
     Primitive(String name, String methodName, String compilationMethodName) throws java.lang.ClassNotFoundException, java.lang.NoSuchMethodException {
         this.setName(name);
-        Class c = Class.forName("com.softwoehr.fiji.interpreter.Engine");
+        Class c = Class.forName("com.softwoehr.fiji.core.Engine");
         method = c.getMethod(methodName);
         compilationMethod = c.getMethod(compilationMethodName);
     }

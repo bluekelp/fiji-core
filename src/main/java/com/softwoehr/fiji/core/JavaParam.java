@@ -1,4 +1,4 @@
-package com.softwoehr.fiji.interpreter;
+package com.softwoehr.fiji.core;
 
 /** Represents a parameter to a Java call.
  * The problem this class addresses is that
