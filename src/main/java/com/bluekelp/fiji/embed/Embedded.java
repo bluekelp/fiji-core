@@ -8,27 +8,32 @@ import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public class Embedded {
-    public void run(String... ss) {
-        run(deafStream(), deafStream(), ss);
+    private PrintStream errorStream;
+    private Interpreter interpreter;
+
+    public Embedded(PrintStream out, PrintStream err) {
+        this(out, err, x -> "");
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void run(PrintStream outputStream, PrintStream errorStream, String... ss)
-    {
-        Interpreter i;
-
-        this.errorStream = errorStream;
+    public Embedded(PrintStream out, PrintStream err, Function<String, String> loader) {
+        this.errorStream = err;
 
         try {
-            i = new Interpreter(errorStream, outputStream, loader);
+            interpreter = new Interpreter(errorStream, out, loader);
         } catch (Exception e) {
             throw error(e);
         }
+    }
 
+    public boolean run(String... ss)
+    {
         for (String s : ss) {
-            if (i.interpret(s))
-                break;
+            if (interpreter.interpret(s))
+                return false;
         }
+
+        return true;
     }
 
     /**
@@ -37,20 +42,11 @@ public class Embedded {
     @SuppressWarnings("WeakerAccess")
     public PrintStream deafStream() {
         OutputStream deaf = new OutputStream() {
-            public void write(int b) {
-            }
+            public void write(int b) { }
         };
 
         return new PrintStream(deaf);
     }
-
-    private PrintStream errorStream;
-
-    private String load(String fn) {
-        return "";
-    }
-
-    private Function<String, String> loader = this::load;
 
     private RuntimeException error(String s) {
         return error(s, null);
@@ -69,5 +65,4 @@ public class Embedded {
         }
         return new RuntimeException(s, e);
     }
-
 }
