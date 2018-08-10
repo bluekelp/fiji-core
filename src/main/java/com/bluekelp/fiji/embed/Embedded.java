@@ -12,6 +12,7 @@ public class Embedded {
         run(deafStream(), deafStream(), ss);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void run(PrintStream outputStream, PrintStream errorStream, String... ss)
     {
         Interpreter i;
