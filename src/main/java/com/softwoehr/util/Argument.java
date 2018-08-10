@@ -1,29 +1,3 @@
-/* Argument.java ... an option parsed.       */
-/* jack j. woehr jax@well.com jwoehr@ibm.net */
-/* http://www.well.com/user/jax/rcfb         */
-/* P.O. Box 51, Golden, Colorado 80402-0051  */
-/*********************************************/
-/* Copyright *C* 1998, All Rights Reserved.  */
-/*                                           */
-/*       This Program is Free                */
-/*            Softwoehr                      */
-/*                                           */
-/* Permission to distribute this Softwoehr   */
-/* with copyright notice attached is granted.*/
-/*                                           */
-/* Permission to modify for personal use at  */
-/* at home or for your personal use on the   */
-/* job is granted, but you may not publicly  */
-/* make available modified versions of this  */
-/* program without asking and getting the    */
-/* permission of the author, Jack Woehr.     */
-/*                                           */
-/* The permission will usually be granted if */
-/* granted reciprocally by you for the mods. */
-/*                                           */
-/* THERE IS NO GUARANTEE, NO WARRANTY AT ALL */
-/*********************************************/
-
 package com.softwoehr.util;
 
 /** Holds an argument parsed from a command line.
@@ -33,9 +7,6 @@ package com.softwoehr.util;
   * the argument to the option, if any. In any
   * case, records the position in the command
   * line that the arg or opt-arg pair came in.
-  * @author $Author: jwoehr $
-  * @version $Revision: 1.1.1.1 $
-  * @see GetArgs
   */
 public class Argument
 {

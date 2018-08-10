@@ -1,16 +1,3 @@
-/*
- * Console.java
- * Copyright *C* 2001 Jack J. Woehr
- * All Rights Reserved
- * PO Box 51, Golden, Colorado 80402-0051 USA
- * http://www.softwoehr.com
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * Free Software NO WARRANTY NO GUARANTEE
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
- * Created on October 15, 2000, 7:48 PM
- */
-
 package com.softwoehr.fiji;
 
 import com.softwoehr.fiji.interpreter.Engine;
@@ -21,10 +8,7 @@ import com.softwoehr.util.GetArgs;
 import java.io.*;
 import java.util.function.Function;
 
-/** This class merely serves as a launcher for the FIJI
- * interpreter running at the command line.
- * @author  jax
- */
+// launcher for the FIJI interpreter running at the command line.
 public class Console {
     public static void main(String argv[]) {
       Console f = new Console();
@@ -37,7 +21,7 @@ public class Console {
       char input[] = new char[(int) length];
       FileInputStream fileInputStream = new FileInputStream(file);
       InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-      inputStreamReader.read(input, 0, (int) length);
+      int n = inputStreamReader.read(input, 0, (int) length);
       return new String(input);
     }
 

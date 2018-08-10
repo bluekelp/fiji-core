@@ -1,35 +1,6 @@
-/* Engine.java ...  an execution Engine.     */
-//********************************************/
-/* Copyright *C* 1999, 2001                  */
-/* All Rights Reserved.                      */
-/* Jack J. Woehr jax@softwoehr.com           */
-/* http://www.well.com/user/jax/rcfb         */
-/* P.O. Box 51, Golden, Colorado 80402-0051  */
-//********************************************/
-/*                                           */
-/*    This Program is Free SoftWoehr.        */
-/*                                           */
-/* THERE IS NO GUARANTEE, NO WARRANTY AT ALL */
-//********************************************/
-/*
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
-
 package com.softwoehr.fiji.interpreter;
 
-import com.softwoehr.fiji.errors.Err;
+import com.softwoehr.fiji.errors.FijiError;
 
 import java.io.IOException;
 import java.lang.reflect.*;
@@ -51,9 +22,6 @@ import java.util.Stack;
  * <p>The descriptions of the methods below often contains a Forth-like
  * stack diagram referring to the effect of the operation on the object
  * stack maintained by the Engine.
- *
- * @author $Author: jwoehr $
- * @version $Revision: 1.2 $
  */
 public class Engine {
 
@@ -68,7 +36,7 @@ public class Engine {
         else if (s == null) {
             s = "runtime error";
         }
-        return new Err(s, e);
+        return new FijiError(s, e);
     }
 
     private RuntimeException error(Exception e) {
@@ -178,7 +146,7 @@ public class Engine {
     private SearchOrder searchOrder;
 
     // where new defs are added
-    private Wordlist currentWordlist;
+    private Dictionary currentWordlist;
 
     // Open Engine on an input Interpreter and initialize cold.
     public Engine(Interpreter i) throws NoSuchMethodException, ClassNotFoundException {
@@ -192,7 +160,7 @@ public class Engine {
     public void cold() {
         warm();
         searchOrder = new SearchOrder();
-        Wordlist w = Wordlist.defaultWordlist();
+        Dictionary w = Dictionary.defaultWordlist();
         searchOrder.add(w);
         currentWordlist = searchOrder.nthElement(0);                    /* == w*/
     }
@@ -2109,13 +2077,13 @@ public class Engine {
     // Wordlists
 
     /**
-     * Create a new Wordlist and add it to the current wordlist.
+     * Create a new Dictionary and add it to the current wordlist.
      * throws BadName If no valid name found.
      */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newWordlist() {
         String s = parseValidName();
-        currentWordlist.put(new Wordlist(s));
+        currentWordlist.put(new Dictionary(s));
     }
 
     // Fetch the search order to stack.
@@ -2130,13 +2098,13 @@ public class Engine {
         searchOrder.setOrder(this);
     }
 
-    // Set current Wordlist to the Wordlist on the top of the stack.
+    // Set current Dictionary to the Dictionary on the top of the stack.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void setCurrent() {
-        currentWordlist = (Wordlist) pop();
+        currentWordlist = (Dictionary) pop();
     }
 
-    // Get current Wordlist.
+    // Get current Dictionary.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void getCurrent() {
         push(currentWordlist);

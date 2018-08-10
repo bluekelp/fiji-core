@@ -1,69 +1,33 @@
-/* Wordlist.java ...  lists of semantics     */
-/*********************************************/
-/* Copyright *C* 1999, All Rights Reserved.  */
-/* Jack J. Woehr jax@well.com jwoehr@ibm.net */
-/* http://www.well.com/user/jax/rcfb         */
-/* P.O. Box 51, Golden, Colorado 80402-0051  */
-/*********************************************/
-/*                                           */
-/*    This Program is Free SoftWoehr.        */
-/*                                           */
-/* THERE IS NO GUARANTEE, NO WARRANTY AT ALL */
-/*********************************************/
-/*
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */
-
 package com.softwoehr.fiji.interpreter;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 /** This is a word list of Semantics. They
  * are keyed by their names. If a Semantic of an
  * existing name is keyed in, the previous is lost.
- * @author $Author: jwoehr $
- * @version $Revision: 1.1.1.1 $
  */
-public class Wordlist extends Semantic {
-    private Hashtable wordlist;
+public class Dictionary extends Semantic {
+    private Map<String, Entry> dict;
 
-    /** Arity/0 ctor. */
-    public Wordlist() {
-        reinit("Anonymous Wordlist.");
+    public Dictionary() {
+        reinit("Anonymous Dictionary.");
     }
 
-    /** Arity/1 ctor.
-     * @param name  */
-    public Wordlist(String name) {
+    public Dictionary(String name) {
         reinit(name);
     }
 
-    /** Reinit discarding previous state.
-     * @param name  */
-    public void reinit(String name) {
+    // Reinit discarding previous state.
+    private void reinit(String name) {
         setName(name);
-        wordlist=new Hashtable();
+        dict = new HashMap<>();
     }
 
-    /** Do a string dump wordlist's name.
-     * @return  */
+    // Do a string dump dict's name.
     public String toString() {
-        String result = "A Wordlist named " + getName();
-        return result;
+        return "A Dictionary named " + getName();
     }
 
     /** Add a Semantic in, comes with its own key. If key
@@ -71,30 +35,28 @@ public class Wordlist extends Semantic {
      * (so that it can later be restored if the user 'forget's
      * the active Semantic) and set the active Semantic to the
      * Semantic presented to this method.
-     * @param s  */
-    public void put(Semantic s) {
+     */
+    void put(Semantic s) {
         String name = s.getName();
-        WordlistEntry entry = findEntry(name);
+        Entry entry = findEntry(name);
         if (null == entry) {
-            entry = new WordlistEntry(s);
-            wordlist.put(name, entry);
+            entry = new Entry(s);
+            dict.put(name, entry);
         }
         else {
             entry.push(s);
         }
     }
 
-    /** Find a WordlistEntry by name in a wordlist. */
-    private WordlistEntry findEntry(String name) {
-        return (WordlistEntry)wordlist.get(name);
+    // Find a Entry by name in a dict.
+    private Entry findEntry(String name) {
+        return dict.get(name);
     }
 
-    /** Find a Semantic by name in a wordlist.
-     * @param name
-     * @return  */
-    public Semantic find(String name) {
+    // Find a Semantic by name in a dict.
+    Semantic find(String name) {
         Semantic s = null;
-        WordlistEntry entry = findEntry(name);
+        Entry entry = findEntry(name);
         if (null != entry) {
             s = entry.getSemantic();
         }
@@ -103,47 +65,43 @@ public class Wordlist extends Semantic {
 
     /** 'Forget' the active Semantic for a name, popping the previous
      * Semantic in its place. If no previous Semantic
-     * is stacked, remove the entry from the Wordlist.
-     * @param name  */
-    public void forget(String name) {
-        WordlistEntry entry = (WordlistEntry)wordlist.get(name);
+     * is stacked, remove the entry from the Dictionary.
+     */
+    void forget(String name) {
+        Entry entry = dict.get(name);
         if (null != entry) {
             Semantic s = entry.pop();
             if (null == s) {
-                wordlist.remove(name);
+                dict.remove(name);
             }
         }
     }
 
-    /** Utterly discard a wordlist entry.
-     * @param name  */
-    public void discard(String name) {
-        wordlist.remove(name);
+    // Utterly discard a dict entry.
+    void discard(String name) {
+        dict.remove(name);
     }
 
-    /** Return a string of all words in the wordlist.
-     * @return  */
+    // Return a string of all words in the dict.
     public String words() {
-        String result = "";
-        WordlistEntry entry = null;
-        for (Enumeration e = wordlist.elements(); e.hasMoreElements();) {
-            entry = (WordlistEntry) (e.nextElement());
+        StringBuilder sb = new StringBuilder();
+        for (Entry entry : dict.values()) {
             if (null != entry) {
-                result += entry.getName() + " ";
+                sb.append( entry.getName() + " ");
             }
         }
-        return result;
+        return sb.toString();
     }
 
-    /** Create a default wordlist for initial Engine.
+    /** Create a default dict for initial Engine.
      * Each invocation of this method results in
      * a unique instance. Alternatively, the
      * list could be a static member, but then
      * it had better be read-only to Interpreter
      * instances due to its being shared.
-     * @return  */
-    public static Wordlist defaultWordlist() {
-        Wordlist defaultList = new Wordlist("FIJI");
+     */
+    static Dictionary defaultWordlist() {
+        Dictionary defaultList = new Dictionary("FIJI");
         try {
             defaultList.put(new Primitive("noop"         , "noop"                 ));
             defaultList.put(new Primitive("depth"        , "depth"                ));
@@ -171,7 +129,7 @@ public class Wordlist extends Semantic {
             defaultList.put(new Primitive("'"            , "lexeme"               ));
             defaultList.put(new Primitive("class"        , "classForName"         ));
             defaultList.put(new Primitive("bye"          , "bye"                  ));
-//            defaultList.put(new Primitive("sysexit"      , "sysexit"              ));
+            //defaultList.put(new Primitive("sysexit"      , "sysexit"              ));
             defaultList.put(new Primitive("true"         , "pushTrue"             ));
             defaultList.put(new Primitive("null"         , "pushNull"             ));
             defaultList.put(new Primitive("false"        , "pushFalse"            ));
@@ -299,7 +257,7 @@ public class Wordlist extends Semantic {
             defaultList.put(new Primitive("version"      , "version"              ));
             defaultList.put(new Primitive("getorder"     , "getOrder"             ));
             defaultList.put(new Primitive("setorder"     , "setOrder"             ));
-            defaultList.put(new Primitive("wordlist"     , "newWordlist"          ));
+            defaultList.put(new Primitive("dict"     , "newWordlist"          ));
             defaultList.put(new Primitive("setcurrent"   , "setCurrent"           ));
             defaultList.put(new Primitive("getcurrent"   , "getCurrent"           ));
             defaultList.put(new Primitive("words"        , "words"                ));
@@ -314,43 +272,40 @@ public class Wordlist extends Semantic {
     }
 }
 
-/** The entries in a Wordlist are composite entities, an active defintion
+/**
+ * The entries in a Dictionary are composite entities, an active defintion
  * for an entry and a stack of previous definitions which were overridden
  * by redefinition of the same name. Thus when we 'forget' a definition,
- * the previous definition of that same name in this same wordlist is
+ * the previous definition of that same name in this same dict is
  * restored to visibility.
  */
-class WordlistEntry {
-    /** Create a WordlistEntry on a Semantic.
-     * @param s  */
-    public WordlistEntry(Semantic s) {
+class Entry {
+    // Create a Entry on a Semantic.
+    Entry(Semantic s) {
         semantic = s;
         semanticStack = null;/* Only have a stack if one needed, memory impact.*/
     }
 
-    /** The active Semantic of a word. */
+    // The active Semantic of a word.
     private Semantic semantic;
 
-    /** The stack of previous Semantics of this same word. */
-    private Stack semanticStack;
+    // The stack of previous Semantics of this same word.
+    private Stack<Semantic> semanticStack;
 
-    /** Get the Semantic to which this entry refers.
-     * @return  */
+    // Get the Semantic to which this entry refers.
     public Semantic getSemantic() {
         return semantic;
     }
 
-    /** Get the name of the semantic to which this entry refers.
-     * @return  */
+    // Get the name of the semantic to which this entry refers.
     public String getName() {
         return semantic.getName();
     }
 
-    /** Change the active Semantic.
-     * @param s  */
+    // Change the active Semantic.
     public void push(Semantic s) {
         if (null == semanticStack) {
-            semanticStack = new Stack();
+            semanticStack = new Stack<>();
         }
         semanticStack.push(semantic);
         semantic = s;
@@ -360,8 +315,8 @@ class WordlistEntry {
      * discarding that which was the active Semantic. Returns
      * that Semantic which becomes the active Semantic as a
      * a result of this operation.
-     * @return  */
-    public Semantic pop() {
+     */
+    Semantic pop() {
         semantic = null;                         /* Throw away active Semantic.*/
         if (null != semanticStack)/* If we have a stack of previous Semantic(s) ...*/ {
             // .. then it's a non-empty stack, since we chuck our empties.
