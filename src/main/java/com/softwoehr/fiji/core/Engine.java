@@ -120,7 +120,7 @@ public class Engine {
      * The inner Interpreter has the return stack and
      * the current definition under interpretation.
      */
-    InnerInterpreter innerInterpreter;
+    InnerInterpreter inner;
 
     /**
      * A ref to the current definition under composition. The
@@ -143,8 +143,8 @@ public class Engine {
 
     private SearchOrder searchOrder;
 
-    // where new defs are added
-    private Dictionary currentWordlist;
+    // where new words are added
+    private Dictionary activeDict;
 
     // Open Engine on an input Interpreter and initialize cold.
     public Engine(Interpreter i) throws NoSuchMethodException, ClassNotFoundException {
@@ -158,16 +158,15 @@ public class Engine {
     public void cold() {
         warm();
         searchOrder = new SearchOrder();
-        Dictionary w = Dictionary.defaultWordlist();
-        searchOrder.add(w);
-        currentWordlist = searchOrder.nthElement(0);                    /* == w*/
+        Dictionary d = Dictionary.defaultWordlist();
+        searchOrder.add(d);
+        activeDict = searchOrder.nthElement(0); // == d
     }
 
-    // Reinit Engine but preserve some state.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void warm() {
         stack = new Stack<>();
-        innerInterpreter = new InnerInterpreter(this);
+        inner = new InnerInterpreter(this);
         controlFlowStack = new Stack();
         state = INTERPRETING;
         if (null != interpreter) {     /* Interpreter calls Engine.warm() when it wants to reset self.*/
@@ -478,7 +477,7 @@ public class Engine {
      */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void dot_r() {
-        output(innerInterpreter.toString());
+        output(inner.toString());
     }
 
     /**
@@ -1188,7 +1187,7 @@ public class Engine {
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newVariable() {
         String s = parseValidName();
-        currentWordlist.put(new Variable(s));
+        activeDict.put(new Variable(s));
     }
 
     /**
@@ -1240,7 +1239,7 @@ public class Engine {
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newValue() {
         String s = parseValidName();
-        currentWordlist.put(new Value(s));
+        activeDict.put(new Value(s));
     }
 
     /**
@@ -1370,8 +1369,8 @@ public class Engine {
             if (c.elementClass() != cDefinition) {
                 throw error("Control flow throw error concluding a Definition.");
             }
-            currentWordlist.put(getCurrentDefinition());   /* Link into wordlist.*/
-            currentDefinition/* This is really mooted by innerInterpreter.getCurrentDefinition()*/
+            activeDict.put(getCurrentDefinition());   /* Link into wordlist.*/
+            currentDefinition/* This is really mooted by inner.getCurrentDefinition()*/
                     = (Definition) c.element;/* Pop back next outer definition, maybe null.*/
             state = c.state;                          /* Pop back previous state.*/
         } else {
@@ -1503,7 +1502,7 @@ public class Engine {
     // Exit the currently executing Definition.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doExit() {
-        innerInterpreter.exitCurrentDefinition();
+        inner.exitCurrentDefinition();
     }
 
     /**
@@ -1512,7 +1511,7 @@ public class Engine {
      * @param delta delta by which to inc/dec the instruction pointer.
      */
     private void bump(Integer delta) {
-        innerInterpreter.bump(delta);
+        inner.bump(delta);
     }
 
     /**
@@ -1595,7 +1594,7 @@ public class Engine {
         if (!(cBoolean == o.getClass())) {
             String s =
                     "Non-Boolean at 'if' in '" + getCurrentDefinition() + "'";
-            s += "\n" + innerInterpreter.toString();/* Throw something, it's not a boolean.*/
+            s += "\n" + inner.toString();/* Throw something, it's not a boolean.*/
             throw error(s);
         }
 
@@ -1859,7 +1858,7 @@ public class Engine {
         announce("'do' limit is " + limit);
         int egress = (Integer) p.getObject();
         announce("'do' egress is " + egress);
-        innerInterpreter.startLoop(limit, index, egress);
+        inner.startLoop(limit, index, egress);
     }
 
     /**
@@ -1900,7 +1899,7 @@ public class Engine {
      */
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void loop(ParameterizedPrimitive.Loop p) {
-        boolean done = innerInterpreter.loop();
+        boolean done = inner.loop();
         if (!done) {
             Integer i = (Integer) p.getObject();
             bump(i);
@@ -1914,7 +1913,7 @@ public class Engine {
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void plusLoop(ParameterizedPrimitive.PlusLoop p) {
         int increment = ((Long) pop()).intValue();/* Get loop increment from stack.*/
-        boolean done = innerInterpreter.plusLoop(increment);
+        boolean done = inner.plusLoop(increment);
         if (!done) {
             Integer i = (Integer) p.getObject();
             bump(i);
@@ -2009,13 +2008,13 @@ public class Engine {
     // Return a loop index.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void index() {
-        push((long) innerInterpreter.ithIndex(((Long) pop()).intValue()));
+        push((long) inner.ithIndex(((Long) pop()).intValue()));
     }
 
     // Perform a leave at runtime
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void doLeave() {
-        innerInterpreter.leaveLoop();
+        inner.leaveLoop();
     }
 
     // Utilities
@@ -2081,7 +2080,7 @@ public class Engine {
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void newWordlist() {
         String s = parseValidName();
-        currentWordlist.put(new Dictionary(s));
+        activeDict.put(new Dictionary(s));
     }
 
     // Fetch the search order to stack.
@@ -2099,13 +2098,13 @@ public class Engine {
     // Set current Dictionary to the Dictionary on the top of the stack.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void setCurrent() {
-        currentWordlist = (Dictionary) pop();
+        activeDict = (Dictionary) pop();
     }
 
     // Get current Dictionary.
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
     public void getCurrent() {
-        push(currentWordlist);
+        push(activeDict);
     }
 
     // List all the words in the accessed Wordlists.

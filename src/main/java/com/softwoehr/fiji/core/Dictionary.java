@@ -256,7 +256,7 @@ public class Dictionary extends Semantic {
             defaultList.put(new Primitive("version"      , "version"              ));
             defaultList.put(new Primitive("getorder"     , "getOrder"             ));
             defaultList.put(new Primitive("setorder"     , "setOrder"             ));
-            defaultList.put(new Primitive("dict"     , "newWordlist"          ));
+            defaultList.put(new Primitive("dict"         , "newWordlist"          ));
             defaultList.put(new Primitive("setcurrent"   , "setCurrent"           ));
             defaultList.put(new Primitive("getcurrent"   , "getCurrent"           ));
             defaultList.put(new Primitive("words"        , "words"                ));

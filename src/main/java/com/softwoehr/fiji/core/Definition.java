@@ -67,7 +67,7 @@ public class Definition extends Semantic {
     }
 
     public void execute(Engine e) throws InvocationTargetException, IllegalAccessException {
-        e.innerInterpreter.interpret(this);
+        e.inner.interpret(this);
     }
 
     public void compile(Engine e) throws InvocationTargetException, IllegalAccessException {
