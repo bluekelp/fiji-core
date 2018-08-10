@@ -65,7 +65,7 @@ public class Interpreter {
         base = i;
     }
 
-    public int getBase() {
+    int getBase() {
         return base;
     }
 
@@ -123,12 +123,13 @@ public class Interpreter {
         return st != null ? st.countTokens() : 0;
     }
 
-    public void output(String s) {
+    void output(String s) {
         out.print(s);
     }
 
     void outputError(Exception e) {
-        e.printStackTrace(err);
+        if (e != null && err != null)
+            e.printStackTrace(err);
     }
 
     // Issue the prompt as appropriate

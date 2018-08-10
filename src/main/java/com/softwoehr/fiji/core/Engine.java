@@ -26,11 +26,13 @@ public class Engine {
     @SuppressWarnings("WeakerAccess")
     public static final String VERSION = "1.3";
 
+    public void printError(Exception e) {
+        interpreter.outputError(e);
+    }
+
     private RuntimeException error(String s, Exception e) throws RuntimeException {
         announce(s);
-        if (e != null) {
-            interpreter.outputError(e);
-        }
+        printError(e);
         if (s == null && e != null && e.getMessage() != null) {
             s = e.getMessage();
         }
@@ -161,7 +163,7 @@ public class Engine {
     public void cold() {
         warm();
         searchOrder = new SearchOrder();
-        Dictionary d = Dictionary.defaultWordlist();
+        Dictionary d = Dictionary.defaultWordlist(this::printError);
         searchOrder.add(d);
         activeDict = searchOrder.nthElement(0); // == d
     }
@@ -913,13 +915,6 @@ public class Engine {
     public void bye() {
         interpreter.setKillFlag();
     }
-
-//    // System exit.
-//    @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive
-//    public void sysexit() {
-//        int rc = ((Long) pop()).intValue();
-//        System.exit(rc); // TODO consider removing -- unsafe for embedded use
-//    }
 
     // Leave boolean true on stack
     @SuppressWarnings({"unused", "WeakerAccess"}) // referenced in WordList and called as a primitive

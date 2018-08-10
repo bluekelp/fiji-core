@@ -1,5 +1,7 @@
 package com.softwoehr.fiji.core;
 
+import java.io.PrintStream;
+
 /**
  * ParameterizedPrimitive is an on-the-fly Primitive which
  * we declare to provide special runtimes to be compiled by
@@ -8,8 +10,8 @@ package com.softwoehr.fiji.core;
  */
 public class ParameterizedPrimitive extends Primitive {
     /** The object that this prim implicitly operates upon. */
-    private Object myObject;
-    private Class  myObjectClass;
+    private Object object;
+    private Class objClass;
 
     private static Class intClassInstance;
     private static Class intClass() throws ClassNotFoundException {
@@ -131,18 +133,11 @@ public class ParameterizedPrimitive extends Primitive {
      * and an object class referring to the datum to allow validation
      * of dynamically initialized ParameterizedPrimitive's.
      */
-    ParameterizedPrimitive(String name
-            , String methodName
-            , Object object
-            , Class objectClass
-    ) throws java.lang.ClassNotFoundException , java.lang.NoSuchMethodException {
-        reinit(name, methodName, object, objectClass);
-    }
-
-    private void reinit(String name, String methodName, Object o, Class objectClass) throws java.lang.ClassNotFoundException, java.lang.NoSuchMethodException
+    ParameterizedPrimitive(String name, String methodName, Object object, Class objectClass)
+        throws java.lang.ClassNotFoundException , java.lang.NoSuchMethodException
     {
-        myObject = o;
-        myObjectClass = objectClass;
+        this.object = object;
+        objClass = objectClass;
         setName(name);
         Class signature[] = new Class[1];
         signature[0] = this.getClass();
@@ -167,24 +162,24 @@ public class ParameterizedPrimitive extends Primitive {
             method.invoke(e, argArray);
         }
         catch (Exception ex) {
-            ex.printStackTrace(System.err);
+            e.printError(ex);
         }
     }
 
     public Object getObject() {
-        return myObject;
+        return object;
     }
 
     public void setObject(Object o) {
-        myObject = o;
+        object = o;
     }
 
     private Class getObjectClass() {
-        return myObjectClass;
+        return objClass;
     }
 
     public void setObjectClass(Class o) {
-        myObjectClass = o;
+        objClass = o;
     }
 
     /**
@@ -200,11 +195,11 @@ public class ParameterizedPrimitive extends Primitive {
      */
     boolean validate() {
         boolean result;
-        if (null == myObject || null == myObjectClass) {
+        if (null == object || null == objClass) {
             result = false;
         }
         else {
-            result= myObject.getClass().equals(myObjectClass);
+            result= object.getClass().equals(objClass);
         }
         return result;
     }

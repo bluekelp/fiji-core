@@ -2,6 +2,7 @@ package com.softwoehr.fiji.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /** This is a word list of Semantics. They
  * are keyed by their names. If a Semantic of an
@@ -99,7 +100,7 @@ public class Dictionary extends Semantic {
      * it had better be read-only to Interpreter
      * instances due to its being shared.
      */
-    static Dictionary defaultWordlist() {
+    static Dictionary defaultWordlist(Consumer<Exception> errorHandler) {
         Dictionary defaultList = new Dictionary("FIJI");
         try {
             defaultList.put(new Primitive("noop"         , "noop"                 ));
@@ -128,7 +129,6 @@ public class Dictionary extends Semantic {
             defaultList.put(new Primitive("'"            , "lexeme"               ));
             defaultList.put(new Primitive("class"        , "classForName"         ));
             defaultList.put(new Primitive("bye"          , "bye"                  ));
-            //defaultList.put(new Primitive("sysexit"      , "sysexit"              ));
             defaultList.put(new Primitive("true"         , "pushTrue"             ));
             defaultList.put(new Primitive("null"         , "pushNull"             ));
             defaultList.put(new Primitive("false"        , "pushFalse"            ));
@@ -265,7 +265,7 @@ public class Dictionary extends Semantic {
             defaultList.put(defaultList);                    /* Add self to list!*/ // TODO why?
         }
         catch (Exception e) {
-            e.printStackTrace(System.err);
+            errorHandler.accept(e);
         }
         return defaultList;
     }
