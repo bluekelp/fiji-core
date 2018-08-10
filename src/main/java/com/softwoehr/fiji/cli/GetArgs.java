@@ -48,13 +48,13 @@ import java.util.List;
  * object also.
  */
 public class GetArgs {
-    public List<Argument> options, arguments; // YOLO - direct access ftw!
+    List<Argument> options, arguments; // YOLO - direct access ftw!
 
     /**
      * Arity/1 constructor. The arity/0 exists uselessly.
      * If you must use GetArgs/0 be sure to call reinit/1.
      */
-    public GetArgs(String argv[]) {
+    GetArgs(String argv[]) {
         /* Reinitialize the object, discarding previous state.
          * Creates two arrays, one of options and their
          * (possibly null) arguments, the other of plain arguments.

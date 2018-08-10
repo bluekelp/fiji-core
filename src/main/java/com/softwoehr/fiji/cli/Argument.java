@@ -11,20 +11,20 @@ package com.softwoehr.fiji.cli;
 public class Argument
 {
   /** The "option", that is, dash-letter, e.g., -a -b etc. */
-  public String option;
+  String option;
 
   /** The argument to the option, e.g., "-o full" where
     * "full" is the argument to the option "-o".
     */
-  public String argument;
+  String argument;
 
   /** The position among the options-and-arguments in which
     * this option-and-argument appears.
     */
-  public int position;
+  int position;
 
   /** Create an Argument from an option, argument and position. */
-  public Argument (String option, String argument, int position) {
+  Argument(String option, String argument, int position) {
     this.option   = option;
     this.argument = argument;
     this.position = position;
