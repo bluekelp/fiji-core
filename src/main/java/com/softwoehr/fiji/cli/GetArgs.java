@@ -1,4 +1,6 @@
-package com.softwoehr.util;
+package com.softwoehr.fiji.cli;
+
+import com.softwoehr.fiji.cli.Argument;
 
 import java.util.ArrayList;
 import java.util.List;

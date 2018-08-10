@@ -1,4 +1,4 @@
-package com.softwoehr.util;
+package com.softwoehr.fiji.cli;
 
 /** Holds an argument parsed from a command line.
   * If it's a plain argument, records the argument

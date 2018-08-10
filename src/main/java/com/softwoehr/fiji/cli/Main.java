@@ -1,17 +1,15 @@
-package com.softwoehr.fiji;
+package com.softwoehr.fiji.cli;
 
 import com.softwoehr.fiji.core.Engine;
 import com.softwoehr.fiji.core.Interpreter;
-import com.softwoehr.util.Argument;
-import com.softwoehr.util.GetArgs;
 
 import java.io.*;
 import java.util.function.Function;
 
 // launcher for the FIJI interpreter running at the command line.
-public class Console {
+public class Main {
     public static void main(String argv[]) {
-      Console f = new Console();
+      Main f = new Main();
       f.runner(argv);
     }
 
